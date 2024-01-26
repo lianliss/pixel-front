@@ -6,7 +6,7 @@ const routes = {
     path: '/',
     title: 'Dashboard',
     icon: 'control',
-    lib: 'Dashboard',
+    lib: 'Exchanger',
   },
   dashboard: {
     path: '/dashboard/',
