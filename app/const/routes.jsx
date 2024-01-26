@@ -4,8 +4,8 @@ import React from 'react';
 const routes = {
   home: {
     path: '/',
-    title: 'Dashboard',
-    icon: 'control',
+    title: 'Exchange',
+    icon: 'exchange',
     lib: 'Exchanger',
   },
   dashboard: {
@@ -13,6 +13,7 @@ const routes = {
     title: 'Dashboard',
     icon: 'control',
     lib: 'Dashboard',
+    disabled: true,
   },
   bridge: {
     path: '/bridge/',

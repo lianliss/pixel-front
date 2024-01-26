@@ -18,7 +18,7 @@ const sections = [
     isAvailable: account => true,
     menu: [
       routes.dashboard,
-      routes.exchange,
+      routes.home,
       routes.bridge,
       routes.p2p,
       {
