@@ -1,0 +1,32 @@
+.WalletIcon {
+  display: inline-flex;
+  align-items: center;
+
+  .isvg {
+    display: inline-flex;
+    align-items: center;
+    width: inherit;
+    height: inherit;
+  }
+
+  svg,
+  img {
+    width: inherit;
+    height: inherit;
+  }
+
+  &__empty {
+    width: inherit;
+    height: inherit;
+    background: rgba(149, 149, 149, 0.5);
+    border-radius: 50%;
+
+    circle {
+      display: none;
+    }
+
+    path {
+      fill: var(--royal-blue);
+    }
+  }
+}

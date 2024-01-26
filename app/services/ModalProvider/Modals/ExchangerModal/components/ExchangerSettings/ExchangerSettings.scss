@@ -1,0 +1,66 @@
+.ExchangerModal__Settings {
+  .settings-toggler {
+    width: 100%;
+    margin-top: 25px;
+
+    &.isActive {
+      border-radius: var(--radius-button) var(--radius-button) 0 0;
+    }
+  }
+
+  .dropdown-icon {
+    width: 9px;
+    height: 5px;
+    margin-left: 7px;
+    transition: transform 0.2s;
+  }
+
+  .isActive .dropdown-icon {
+    transform: rotate(180deg);
+  }
+
+  .settings-icon {
+    width: 13px;
+    height: 13px;
+    fill: #3071ee;
+    margin-right: 5px;
+  }
+
+  &__container {
+    overflow: hidden;
+
+    & > * {
+      transition: all 0.3s;
+      transition-timing-function: ease-in;
+      border-radius: 0;
+    }
+
+    &:not(.isActive) > * {
+      margin-top: -100%;
+      height: 0;
+    }
+  }
+
+  .SwapSettings {
+    background: var(--alice-blue);
+    border-radius: 0 0 15px 15px;
+    padding: 5px 13px 29px;
+
+    .SectionBlock {
+      border-radius: 0;
+      background: transparent;
+      margin-bottom: 20px;
+      padding: 0;
+    }
+  }
+}
+
+.adaptive .ExchangerModal__Settings {
+  .Button {
+    width: auto;
+  }
+
+  .settings-toggler {
+    width: 100%;
+  }
+}

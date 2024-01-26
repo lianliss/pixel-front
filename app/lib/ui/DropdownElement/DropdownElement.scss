@@ -1,0 +1,17 @@
+.DropdownElement {
+  &__content {
+    width: 100%;
+  }
+
+  &__dropElement {
+    width: 100%;
+  }
+
+  .dropdown-icon {
+    transition: 0.2s;
+  }
+
+  &.active .dropdown-icon {
+    transform: rotate(180deg);
+  }
+}

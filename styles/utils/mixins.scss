@@ -1,0 +1,78 @@
+@mixin absolute($padding: 0) {
+    position: absolute;
+    top: $padding;
+    right: $padding;
+    bottom: $padding;
+    left: $padding;
+}
+
+@mixin column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin scrollbar($size: $size-scrollbar) {
+    &::-webkit-scrollbar {
+        width: $size;
+        height: $size;
+    }
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: $color-scrollbar;
+        border: 0 none #ffffff;
+        border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: lighten($color-scrollbar, 10%);
+    }
+    &::-webkit-scrollbar-thumb:active {
+        //background: #000000;
+    }
+    &::-webkit-scrollbar-track {
+        background: $color-scrollbar-bg;
+        border: 0 none #ffffff;
+        border-radius: 50px;
+    }
+    &::-webkit-scrollbar-track:hover {
+    }
+    &::-webkit-scrollbar-track:active {
+    }
+    &::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+}
+
+@mixin text-glow($color: $color-text-on-primary) {
+    text-shadow:
+            0 -1px 0 $color,
+            1px -1px 0 $color,
+            1px 0 0 $color,
+            1px 1px 0 $color,
+            0 1px 0 $color,
+            -1px 1px 0 $color,
+            -1px 0 0 $color,
+            -1px -1px 0 $color;
+}
+
+@mixin media($width,$option:0){
+    @if $option == 0{
+        @media (max-width:$width){
+            @content;
+        }
+    } @else if $option == 1{
+        @media (min-width:$width + 1px){
+            @content;
+        }
+    }
+}
+
+@mixin portrait(){
+    @media (orientation: portrait){
+        @content;
+    }
+}

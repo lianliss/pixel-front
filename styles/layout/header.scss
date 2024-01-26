@@ -1,0 +1,99 @@
+.header {
+    width: 100%;
+    background: $bg-page;
+    border-bottom: 1px solid $color-border;
+    padding: 4px 16px;
+    height: var(--size-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,.15);
+    z-index: 10;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+
+    &-round.bp5-button:not([class*=bp5-intent-]) {
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+
+        &.header-menu-icon {
+            margin-left: -9px;
+        }
+        .bp5-icon:not([class*=bp5-intent-]) {
+            color: var(--color-icon-header);
+            transition: color 0.15s ease;
+        }
+        &:hover {
+            .bp5-icon:not([class*=bp5-intent-]) {
+                color: var(--color-text);
+            }
+        }
+    }
+
+    &-logo {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        img {
+            height: 32px;
+        }
+        span {
+            font-family: $font-primary;
+            font-size: 28px;
+            line-height: 1em;
+            color: $color-logo;
+            margin-left: 8px;
+        }
+        small {
+            margin-left: 12px;
+        }
+    }
+    &-left {
+
+    }
+    &-center {
+        display: flex;
+        align-items: center;
+
+        &-price {
+            display: inline-block;
+            opacity: 0.75;
+            margin-right: 40px;
+
+            span {
+                opacity: 0.6;
+            }
+        }
+    }
+    &-right {
+        display: flex;
+        align-items: center;
+
+        .bp5-button {
+            margin: 0 8px;
+        }
+        &-button {
+            &.balance {
+                color: $color-logo;
+
+                .bp5-icon {
+                    color: $color-logo;
+                    opacity: 0.5;
+                    margin-right: 0;
+
+                    svg {
+                        fill: $color-logo;
+                    }
+                }
+                .bp5-button-text {
+                    color: $color-logo;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,151 @@
+.ExchangerModal {
+  .Modal__box {
+    max-width: 515px;
+    width: 100%;
+  }
+
+  &__container {
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: var(--radius-panel);
+    padding: 40px 38px;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  &__Currency__container {
+    margin-top: 20px;
+
+    & > span {
+      margin-bottom: 15.5px;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--cool-gray);
+    }
+  }
+
+  &-List {
+    color: var(--black-gunmetal);
+
+    &Item {
+      font-size: 14px;
+      line-height: 110%;
+      letter-spacing: -0.01em;
+
+      &__title {
+        font-weight: 500;
+        opacity: 0.5;
+        display: flex;
+        align-items: center;
+      }
+
+      &__value {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .CustomButton.swap {
+    background: #e5ebfc;
+    border-radius: 50%;
+    width: 19px;
+    height: 19px;
+    margin-left: 8px;
+
+    &:active {
+      background: #d1dbf6;
+    }
+  }
+
+  &__rate {
+    margin-top: 25px;
+  }
+
+  .Button.exchange {
+    margin-top: 30px;
+    width: 100%;
+
+    .Button__label {
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+
+  .DexDescription {
+    padding: 17px 23px 20px;
+    margin-top: 30px;
+  }
+
+  .AnswerPopup {
+    margin-left: 7px;
+  }
+
+  .DexRoute {
+    margin-top: 30px;
+    margin-bottom: 0;
+  }
+
+  .Number {
+    word-break: break-word;
+  }
+}
+
+.adaptive .ExchangerModal {
+  &__container {
+    padding: 50px 20px 40px;
+    border-radius: 18px;
+  }
+
+  h3 {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  &__Currency__container {
+    margin-top: 15px;
+    
+    & > span {
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 17px;
+    }
+  }
+
+  &-List {
+    &Item {
+      font-size: 12px;
+    }
+  }
+
+  .CustomButton.swap {
+    width: 17px;
+    height: 17px;
+    margin-left: 5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .Button.exchange {
+    margin-top: 16px;
+  }
+
+  .DexDescription {
+    padding: 18px 8px 23px;
+    margin-top: 20px;
+  }
+
+  .DexRoute {
+    margin-top: 22px;
+    margin-bottom: 0;
+  }
+}

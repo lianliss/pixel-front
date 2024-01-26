@@ -1,0 +1,88 @@
+.DexRoute {
+  width: 100%;
+  margin: 24px 0;
+
+  h3 {
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+
+    .AnswerPopup {
+      margin-left: 9px;
+    }
+
+    span {
+      position: relative;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .HoverPopup {
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+
+      &__children {
+        background: rgba(45, 49, 63, 0.21);
+        width: 14px;
+        height: 14px;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 2em;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  &-container {
+    display: flex;
+    padding: 21px 19px;
+    border: 1px solid var(--light-gray);
+    border-radius: 20px;
+    margin-top: 10px;
+    // background: var(--secondary-background);
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  &-symbol {
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+  &-arrow {
+    margin: 0 12px;
+  }
+  &-logo {
+    width: 30px;
+    height: 30px;
+    //background-color: var(--light-gray);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+}
+
+.adaptive .DexRoute {
+  margin: 24px 0;
+
+  h3 {
+    text-align: center;
+    padding: 0;
+  }
+  &-container {
+    margin: 10px auto 0;
+  }
+}

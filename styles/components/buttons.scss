@@ -1,0 +1,66 @@
+.bp5-dark {
+  .bp5-button.pixel-button {
+    &:not([class*=bp5-intent-]) {
+      background-color: var(--color-main);
+      border-radius: var(--radius-button);
+      padding: 6px 10px;
+      box-shadow: 0 9px 24px 0 rgba(66, 118, 246, 0.4);
+      transition: box-shadow, background-color 0.15s ease;
+
+      &.bp5-outlined {
+        background-color: transparent;
+        box-shadow: 0 0 0 0 rgba(66, 118, 246, 0);
+      }
+      &:hover, &:focus {
+        background-color: var(--color-main-hover);
+        box-shadow: 0 9px 24px 0 rgba(255, 255, 255, 0.4);
+      }
+      &.bp5-disabled {
+        cursor: default;
+        box-shadow: none;
+        color: var(--color-text-disabled);
+        background-color: var(--color-main-disabled);
+      }
+      &.bp5-minimal {
+        padding: 0 10px;
+        min-height: 28px;
+        border-radius: 14px;
+        box-shadow: 0 4px 14px 0 #C97FFF80;
+
+        .bp5-button-text {
+          font-size: 12px;
+        }
+        img {
+          height: 12px;
+        }
+        &:hover, &:focus {
+          background-color: var(--color-main-hover);
+          box-shadow: 0 4px 14px 0 rgba(255, 255, 255, 0.4);
+        }
+        &.bp5-disabled {
+          color: var(--color-text-disabled);
+          background-color: var(--color-main-disabled);
+        }
+      }
+      &.pixel-button-primary {
+        background-color: var(--color-primary);
+        box-shadow: 0 9px 24px 0 rgba(26, 165, 129, 0.4);
+
+        &:hover, &:focus {
+          background-color: var(--color-primary-hover);
+        }
+        &.bp5-disabled {
+          color: var(--color-text-disabled);
+          background-color: var(--color-primary-disabled);
+          box-shadow: none;
+        }
+      }
+      .bp5-icon {
+        color: var(--color-text);
+      }
+    }
+    &.bp5-large {
+      min-width: 140px;
+    }
+  }
+}

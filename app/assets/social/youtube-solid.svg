@@ -1,0 +1,8 @@
+<svg width="21" height="15" viewBox="0 0 21 15" fill="currentColor"
+  xmlns="http://www.w3.org/2000/svg">
+  <linearGradient id="youtube-solid-gradient" gradientTransform="rotate(90)">
+    <stop class="stop-color-1" stop-color="currentColor" offset="0%"/>
+    <stop class="stop-color-2" stop-color="currentColor" offset="100%"/>
+  </linearGradient>
+  <path d="M20.5339 2.33333C20.3008 1.40476 19.5782 0.690476 18.6693 0.428571C17.0377 0 10.4883 0 10.4883 0C10.4883 0 3.93896 0 2.28413 0.452381C1.37514 0.690476 0.675916 1.42857 0.419534 2.35714C0 4.02381 0 7.5 0 7.5C0 7.5 0 10.9762 0.442841 12.6667C0.675916 13.5952 1.39845 14.3095 2.30744 14.5714C3.93896 15 10.4883 15 10.4883 15C10.4883 15 17.0377 15 18.6926 14.5476C19.6016 14.3095 20.3008 13.5714 20.5572 12.6429C21 10.9762 21 7.47619 21 7.47619C21 7.47619 20.9767 4.02381 20.5339 2.33333ZM8.39068 10.7143V4.28571L13.8446 7.5L8.39068 10.7143Z" fill="url(#youtube-solid-gradient)"/>
+</svg>

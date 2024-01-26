@@ -1,0 +1,2 @@
+module.exports = [{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"address[]","name":"tokens","type":"address[]"}],"name":"getBalances","outputs":[{"internalType":"uint256[256]","name":"","type":"uint256[256]"}],"stateMutability":"view","type":"function"}];
+// https://bscscan.com/address/0xd98B8A68254aEB7d3BdF1DC53936BE2718292A03

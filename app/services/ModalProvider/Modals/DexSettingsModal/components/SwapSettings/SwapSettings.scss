@@ -1,0 +1,207 @@
+.SwapSettings {
+  width: 100%;
+  box-sizing: border-box;
+
+  &__close {
+    position: absolute;
+    display: flex;
+    right: 32px;
+    top: 16px;
+    background-size: 14px;
+    width: 14px + 12 * 2;
+    height: 14px + 12 * 2;
+    color: var(--text-black);
+    cursor: pointer;
+    z-index: 2;
+
+    .isvg {
+      display: block;
+      margin: auto;
+
+      svg {
+        display: block;
+
+        path {
+          fill: var(--text-black);
+        }
+      }
+    }
+
+    &:hover {
+      .isvg svg path {
+        fill: var(--primary-orange);
+      }
+    }
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .SectionBlock {
+    margin-bottom: 27px;
+
+    &__title {
+      display: flex;
+      align-items: center;
+
+      .isvg {
+        margin-left: 6px;
+      }
+    }
+  }
+
+  .transaction-speed__content {
+    display: flex;
+
+    .Button {
+      width: auto;
+      flex: 1 1 auto !important;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .slippage {
+    &__content {
+      display: flex;
+    }
+
+    .Button {
+      margin-right: 5px;
+
+      &:last-of-type {
+        margin-right: 20px;
+      }
+    }
+
+    .Input {
+      padding-right: 22px !important;
+      padding-left: 12px;
+      box-sizing: border-box;
+
+      &__container {
+        margin-left: auto;
+        max-width: 170px;
+        width: 100%;
+      }
+    }
+  }
+
+  .deadline {
+    &__title {
+      display: flex;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 180%;
+      color: var(--cool-gray);
+
+      .isvg {
+        margin-left: 7px;
+      }
+    }
+
+    .Input {
+      padding-right: 70px !important;
+    }
+  }
+
+  .Input {
+    height: 44px;
+    background: none;
+    border-radius: 10px;
+    border: 1px solid #dfe3f0;
+
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: -0.01em;
+
+    &__container {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    &__icon {
+      position: absolute;
+      right: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 100%;
+      letter-spacing: -0.01em;
+      color: #dfe3f0;
+      user-select: none;
+    }
+  }
+
+  .Button {
+    transition: background 0.2s;
+
+    &__label {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 100%;
+      transition: color 0.2s;
+    }
+
+    &.active {
+      background: #3071ee;
+      pointer-events: none;
+
+      .Button__label {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.adaptive .SwapSettings {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+
+  &__close {
+    right: 18px;
+  }
+
+  .SectionBlock {
+    margin-bottom: 10px;
+  }
+
+  .transaction-speed {
+    padding-bottom: 10px;
+
+    &__content {
+      display: flex;
+      // flex-wrap: wrap;
+    }
+
+    .Button {
+      padding: 0 10px;
+      margin-bottom: 5px;
+
+      &:not(:last-child) {
+        margin-right: 3px;
+      }
+    }
+  }
+
+  .slippage {
+    &__content {
+      flex-wrap: wrap;
+    }
+
+    .Input {
+      &__container {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px 0 0;
+      }
+    }
+  }
+}

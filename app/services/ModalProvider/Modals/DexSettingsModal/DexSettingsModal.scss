@@ -1,0 +1,29 @@
+.SwapSettings {
+  &__wrap {
+    .Modal__box {
+      transform: translateX(83px);
+      background: #fff;
+      padding: 23px 32px 43px;
+      max-width: 445px;
+      border-radius: 25px;
+    }
+    z-index: 5;
+  }
+
+  &-Bottom {
+    padding: 0;
+  }
+}
+
+.adaptive .SwapSettings {
+  &__wrap {
+    display: flex;
+    left: 0;
+    padding: 0 16px;
+    padding: 23px 19px 37px;
+
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}

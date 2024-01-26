@@ -1,0 +1,8 @@
+<svg width="19" height="14" viewBox="0 0 19 14" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <linearGradient id="m-solid-gradient" gradientTransform="rotate(90)">
+    <stop class="stop-color-1" stop-color="currentColor" offset="0%"/>
+    <stop class="stop-color-2" stop-color="currentColor" offset="100%"/>
+  </linearGradient>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0288 0H13.2335L9.82182 8.5856L5.94462 0H0.821273V0.426621L2.62631 2.63234L2.60167 11.1518L0.817383 13.5871L0.821273 13.9903H5.86034L5.8733 13.6195L3.76224 11.1518L3.818 4.25714L8.26964 13.9903H8.80649L12.7602 4.02632V12.1308L11.1393 13.6636V13.9903H18.0288V13.5987L16.4494 12.101L16.4273 1.79726L18.0288 0.429215V0Z" fill="url(#m-solid-gradient)"/>
+</svg>

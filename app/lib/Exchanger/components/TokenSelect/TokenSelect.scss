@@ -1,0 +1,352 @@
+.TokenSelect {
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 400px;
+
+  .SwitchTabs {
+    display: none;
+  }
+  &__wrap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    max-width: 445px;
+    z-index: 20;
+
+    .CabinetBlock {
+      box-shadow: 0px 34px 70px rgba(199, 201, 207, 0.7);
+    }
+  }
+
+  .Modal & {
+    &__wrap {
+      .CabinetBlock {
+        box-shadow: none;
+      }
+    }
+  }
+
+  h2 {
+    font-weight: 600 !important;
+    font-size: 24px !important;
+    text-align: left !important;
+  }
+
+  &__close {
+    position: absolute;
+    display: flex;
+    cursor: pointer;
+    right: 25px;
+    top: 16px;
+    background-size: 14px;
+    width: 14px + 12 * 2;
+    height: 14px + 12 * 2;
+    color: var(--text-black);
+    z-index: 2;
+
+    .isvg {
+      display: block;
+      margin: auto;
+
+      svg {
+        display: block;
+
+        path {
+          fill: var(--text-black);
+        }
+      }
+    }
+
+    &:hover {
+      .isvg svg path {
+        fill: var(--primary-orange);
+      }
+    }
+  }
+
+  &__search {
+    border: 1px solid #dfe3f0;
+    border-radius: var(--radius-panel);
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 20px;
+    padding: 0 14px;
+
+    input {
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      outline: none;
+      flex-grow: 1;
+      background: transparent;
+    }
+    span.isvg {
+      margin-left: 6px;
+
+      svg {
+        transform: scale(0.8);
+
+        path {
+          fill: #dfe3f0;
+        }
+      }
+    }
+  }
+
+  .SwitchTabs {
+    &__item {
+      &,
+      &.active {
+        span {
+          font-size: 11px;
+          line-height: 16px;
+          font-weight: 500;
+        }
+      }
+
+      &.active {
+        span {
+          font-weight: 600;
+          color: var(--color-primary);
+        }
+      }
+    }
+  }
+
+  &__fiat {
+    $gap: 6px;
+    $number-of-elements: 4;
+
+    margin: 20px 0 20px;
+    padding: 0;
+    background: none;
+
+    &__content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px $gap;
+    }
+
+    &__item {
+      $width: calc(100% / $number-of-elements);
+      $gaps: calc($gap * 3 / 4);
+
+      flex: 0 0 calc($width - $gaps);
+      //background: #f7f8fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 110%;
+      letter-spacing: -0.01em;
+      height: 30px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      cursor: pointer;
+
+      .WalletIcon {
+        margin-right: 4px;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+
+      &.active {
+        color: var(--color-primary);
+        background: var(--blue-light-gradient);
+      }
+    }
+  }
+
+  &__list {
+    margin: 0 -12px;
+
+    h3 {
+      margin: 12px 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .react-scrollable-list {
+      height: 400px;
+      overflow-y: scroll;
+      --scroll-size: 6px;
+
+      &::-webkit-scrollbar {
+        width: var(--scroll-size);
+        height: var(--scroll-size);
+      }
+      &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--primary-blue-opacity);
+        border: 0 none #ffffff;
+        border-radius: 2px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary-background);
+      }
+      // &::-webkit-scrollbar-thumb:active {
+      //   background: #000000;
+      // }
+      &::-webkit-scrollbar-track {
+        background: var(--secondary-background);
+        border: 0 none #ffffff;
+        border-radius: 50px;
+      }
+      // &::-webkit-scrollbar-track:hover {
+      // }
+      // &::-webkit-scrollbar-track:active {
+      // }
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    }
+  }
+  &__token {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7.5px 12px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--secondary-background);
+    }
+    &-left {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      position: relative;
+    }
+    &-icon {
+      border-radius: 50%;
+      background: var(--secondary-background);
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &-name {
+      margin-left: 8px;
+      display: flex;
+      flex-direction: column;
+
+      span {
+        &:last-child {
+          font-size: 12px;
+        }
+
+        &:first-child {
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+    }
+    &-right {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+    &-price {
+      font-size: 10px;
+      font-weight: 500;
+      color: #cdcfd7;
+    }
+    &-balance {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  &-small {
+    max-width: 342px;
+    width: 100vw;
+    box-sizing: border-box;
+
+    .TokenSelect {
+      padding: 26px 26px 30px;
+      box-sizing: border-box;
+
+      &__close {
+        right: 20px;
+      }
+
+      &__token {
+        padding: 9px 12px 9px 12px;
+      }
+
+      &__search {
+        border: 1px solid var(--azureish-white);
+        border-radius: 10px;
+        margin: 16px 0 24px;
+
+        input {
+          &::placeholder {
+            color: var(--cool-gray);
+          }
+        }
+      }
+
+      &__list {
+        margin: 0 -12px;
+
+        h3 {
+          margin: 0px 12px 9px;
+        }
+
+        .react-scrollable-list {
+          height: 353px;
+        }
+      }
+    }
+  }
+}
+
+.adaptive .TokenSelect {
+  padding: 24px 15px;
+
+  &__wrap {
+    left: 0;
+    right: 0;
+    transform: none;
+    max-width: 100%;
+
+    .CabinetBlock {
+      border-radius: var(--radius-panel-large) !important;
+    }
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    span {
+      &:first-child {
+        font-size: 16px !important;
+      }
+    }
+  }
+  &__close {
+    right: 15px;
+    top: 18px;
+  }
+
+  &__search {
+    height: 43px;
+  }
+
+  .react-scrollable-list {
+    height: 233px;
+  }
+}

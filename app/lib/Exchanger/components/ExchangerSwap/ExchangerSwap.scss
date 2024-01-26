@@ -1,0 +1,560 @@
+.ExchangerSwap {
+    margin-bottom: 20px;
+    position: static;
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    &__rate {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+        font-size: 16px;
+    }
+    &__dropdown {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--azureish-white);
+        border-radius: 20px;
+        padding: 16px 8px;
+        position: relative;
+        background: var(--secondary-background);
+        cursor: pointer;
+
+        &-rate {
+            position: absolute;
+            top: 100%;
+            margin-top: 6px;
+            left: 12px;
+            font-size: 11px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+    }
+    &__track {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: -4px;
+        text-decoration: none;
+        font-size: 12px;
+        color: var(--primary-blue);
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    &__icon {
+        cursor: pointer;
+        border-radius: 50%;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        width: 41px;
+        height: 41px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .isvg,
+        svg,
+        img {
+            width: 100%;
+        }
+    }
+
+    &__select {
+        margin-left: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 110%;
+        cursor: pointer;
+
+        // Medium text in select (subtitle)
+        & > span {
+            color: #cdcfd7;
+            margin-bottom: 4px;
+        }
+    }
+
+    &__currency {
+        display: flex;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 110%;
+        letter-spacing: -0.01em;
+
+        // Select icon
+        .bp5-icon {
+            margin-left: 6px;
+            transform: translateY(2px);
+        }
+    }
+
+    &__balance {
+        text-align: right;
+        margin-top: -6px;
+        position: relative;
+
+        &-number {
+            font-size: 40px;
+            font-weight: 600;
+            line-height: 48px;
+        }
+        &-price {
+            opacity: 0.5;
+            position: absolute;
+            bottom: 100%;
+            right: 6px;
+            font-size: 12px;
+            margin-bottom: -6px;
+
+            &:before {
+                content: "$";
+            }
+        }
+    }
+    &__actions {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &-buy {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+
+            time {
+                margin-top: 10px;
+                font-size: 12px;
+                opacity: 0.65;
+                text-align: right;
+            }
+        }
+    }
+    &__reservation {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            time {
+                opacity: 0.65;
+                font-size: 12px;
+            }
+        }
+    }
+    &__swap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        padding-top: 40px;
+        border-top: 1px solid var(--light-gray);
+    }
+    &__fiat-amount {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        align-items: flex-end;
+        justify-content: center;
+        flex-grow: 1;
+
+        .Input__wrapper,
+        .DappInput__wrapper {
+            .Input__indicator,
+            .DappInput__indicator {
+                opacity: 0.5;
+                pointer-events: none;
+            }
+        }
+        & > span {
+
+
+            &.ExchangerSwap__link {
+                cursor: pointer;
+                font-weight: 400;
+                padding-right: 16px;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: var(--color-primary);
+                }
+            }
+        }
+    }
+    &__coin {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &-amount {
+            font-size: 24px;
+            font-weight: 600;
+
+            span {
+                opacity: 0.4;
+            }
+        }
+        &-price {
+            font-size: 12px;
+        }
+        &-track {
+            color: var(--primary-blue);
+            font-size: 12px;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+    &__limits {
+        margin-top: 40px;
+        font-size: 12px;
+        line-height: 1.6em;
+
+        &-row {
+            display: flex;
+
+            span {
+                &:first-child {
+                    font-weight: 600;
+                    margin-right: 6px;
+                }
+            }
+        }
+    }
+
+    &.adaptive {
+        margin-bottom: 10px;
+        padding: 43px 18px 32px;
+
+        .ContentBox__content {
+            padding: 0;
+        }
+        .ExchangerSwap {
+            &__dropdown {
+                position: absolute;
+                z-index: 1;
+                background: none;
+                border: none;
+                padding: 13px 8px;
+
+                &-rate {
+                    display: none;
+                }
+            }
+            &__currency {
+                span.isvg {
+                    right: -12px;
+                }
+            }
+            &__fiat-amount {
+                .Input__wrapper,
+                .DappInput__wrapper {
+                    input.Input, input.DappInput {
+                        padding: 26px 19px 26px 9px;
+                        --input-height: 30px;
+                    }
+                }
+            }
+            &__icon {
+                width: 26px;
+                height: 26px;
+            }
+        }
+    }
+
+    .error-orange {
+        color: var(--orange-error) !important;
+    }
+}
+
+.SwapForm {
+    margin-bottom: var(--gap-size);
+    border-radius: var(--radius-panel-large);
+    border: none;
+
+    .ContentBox__content {
+        width: 100%;
+        padding: 33px 43px 32px;
+        box-sizing: border-box;
+    }
+}
+
+.SwapForm__formWrapper {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.SwapForm__form {
+    flex: 1;
+    background: var(--color-bg);
+    border-radius: var(--radius-panel);
+
+    &__control {
+        &:not(:last-child) {
+            margin-bottom: 65px;
+        }
+    }
+}
+
+.SwapForm__form__label {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    margin-bottom: 16px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.SwapForm__form__control {
+    margin-bottom: 26px;
+    display: flex;
+    justify-content: space-between;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+    .SwapForm__input {
+        text-align: right;
+    }
+
+    .Dropdown {
+        border-radius: 20px;
+        border: 1px solid var(--azureish-white);
+
+        &__header {
+            padding: 16px 8px;
+        }
+
+        &__options {
+            border-radius: inherit;
+            border: 1px solid var(--azureish-white);
+        }
+
+        .Dropdown__option {
+            &__title {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 16px;
+                color: #1c212e;
+            }
+        }
+    }
+
+    .Input, .DappInput {
+        --input-height: 32px;
+        border-radius: 20px;
+        font-size: 24px;
+    }
+}
+
+.SwapForm__form__control__meta {
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--gray);
+    margin: 7px 14px 0;
+
+    &.right {
+        text-align: right;
+    }
+    &.active {
+        cursor: pointer;
+
+        &:hover {
+            color: var(--primary-blue);
+        }
+    }
+}
+
+.SwapForm__separator {
+    position: relative;
+    width: 104px;
+    margin: 32px 0 40px;
+    display: flex;
+
+    &:before {
+        position: absolute;
+        content: '';
+        display: block;
+        width: 1px;
+        height: 100%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        background: var(--black);
+        transform-origin: left center;
+        opacity: 0.2;
+        z-index: -1;
+
+        @media (min-resolution: 2dppx) {
+            transform: scaleX(0.5);
+        }
+
+        @media (min-resolution: 3dppx) {
+            transform: scaleX(0.32);
+        }
+    }
+}
+
+.ExchangerSwap__switchButton {
+    position: relative;
+    margin: auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-blue-gradient);
+    color: var(--white);
+    display: flex;
+    border: 8px solid var(--primary-background);
+    cursor: pointer;
+
+    .bp5-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &:hover {
+        background: var(--dark-blue);
+    }
+
+    &::after {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        content: '';
+        height: 24px;
+        width: 24px;
+        display: block;
+        filter: invert(1);
+        background: url('styles/svg/loading.svg');
+        animation: Button__loader_anim 1s infinite linear;
+        z-index: 1;
+        opacity: 0;
+        transform: scale(0.3);
+        transition: 0.3s ease;
+    }
+
+    &.loading {
+        pointer-events: none;
+
+        .isvg {
+            opacity: 0;
+            transform: scale(0.3);
+        }
+
+        &::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+}
+
+.SwapForm__submitWrapper {
+    display: flex;
+
+    .Button {
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+}
+
+@media screen and (max-width: 2000px) {
+    .ExchangerSwap {
+        &__switchButton {
+            width: 40px;
+            height: 40px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+
+                transform: rotate(90deg);
+            }
+
+            &:hover {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    .SwapForm {
+        box-shadow: 0 34px 70px rgba(199, 201, 207, 0.25);
+
+        .ContentBox__content {
+            width: 100%;
+            padding: 43px 18px 32px;
+            box-sizing: border-box;
+        }
+
+        &__formWrapper {
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 33px;
+        }
+
+        &__form {
+            width: 100%;
+        }
+
+        &__form__control {
+            margin-bottom: 0;
+
+            &:not(:last-child) {
+                margin-bottom: 0;
+            }
+
+            &__meta {
+                margin-top: 8px;
+                font-size: 12px;
+            }
+        }
+
+        &__separator {
+            margin: 23px 0;
+        }
+
+        &__switchButton {
+            background: #e5ebfc;
+            width: 40px;
+            height: 40px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+
+                transform: rotate(90deg);
+            }
+        }
+
+        &__submitWrapper {
+            .Button {
+                width: 100%;
+                height: 65px;
+            }
+        }
+    }
+}

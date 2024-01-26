@@ -1,0 +1,102 @@
+.Liquidity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+
+  &.remove {
+    padding: 32px 32px 14.8px !important;
+  }
+  
+  // Containers
+  &__header {
+    width: 100%;
+    margin-bottom: 48px;
+  }
+
+  &__body {
+    width: 100%;
+  }
+
+  &__footer {
+    margin-top: 48px;
+    text-align: center;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  // Components
+  &__title {
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  .default-text,
+  .default-text-light {
+    margin-bottom: 24px;
+    font-size: 12px;
+  }
+
+  .default-text {
+    color: var(--cool-dark-gray);
+    margin-bottom: 16px;
+
+    &-light {
+      color: var(--cool-gray);
+    }
+
+    &-dark {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--dark-gunmetal);
+    }
+  }
+
+  .default-text-dark {
+  }
+
+  &__subtitle {
+    display: inline-flex;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--dark-gunmetal);
+
+    .isvg {
+      margin-left: 8px;
+    }
+  }
+
+  // <Button />
+  .Button {
+    width: 100%;
+
+    span {
+      //margin-left: 8px;
+    }
+  }
+}
+
+@media screen and (max-width: 2000px) {
+  .Liquidity {
+    &.remove {
+      padding: 32px !important;
+    }
+    
+    &__header {
+      margin-bottom: 32px;
+    }
+
+    &__footer {
+      margin-top: 32px;
+    }
+  }
+}

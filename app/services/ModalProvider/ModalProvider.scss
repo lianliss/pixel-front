@@ -1,0 +1,14 @@
+.modal-provider {
+  min-width: 400px;
+  margin-top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  outline: none;
+}
+
+.bp5-portal {
+  .bp5-card {
+    background: var(--color-panel);
+    border-radius: var(--radius-wrapper);
+  }
+}

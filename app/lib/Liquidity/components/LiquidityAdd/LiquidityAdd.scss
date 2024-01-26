@@ -1,0 +1,160 @@
+.LiquidityAdd {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  // Containers
+  &.Liquidity__header {
+    margin-bottom: 24px;
+  }
+
+  // Components
+  // Icon between Inputs
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 29px auto 0;
+    background: #e5ebfc;
+    cursor: default;
+    user-select: none;
+
+    // Gradient text in icon
+    span {
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 110%;
+      letter-spacing: -0.01em;
+      background: var(--blue-light-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+  }
+
+  // Result box
+  &__result {
+    display: flex;
+    justify-content: space-between;
+    border-radius: var(--radius-panel);
+    background: var(--alice-blue);
+    padding: 30px 39px;
+    width: 100%;
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  // Items in Result box
+  &__item {
+    display: flex;
+    flex-direction: column;
+
+    span:first-child {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--dark-black);
+    }
+
+    span:last-child {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      color: var(--cool-gray);
+    }
+  }
+
+  // Default light text
+  .default-text-light {
+    margin: 32px 0 12px;
+  }
+
+  // <DexSwapInput />
+  .DexSwapInput {
+    &__label {
+      padding-left: 0;
+      margin-bottom: 12px;
+    }
+
+    &__select {
+      & > span {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 110%;
+        letter-spacing: -0.01em;
+      }
+    }
+
+    &__title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 110%;
+      letter-spacing: -0.01em;
+      color: var(--dark-black);
+      opacity: 0.5;
+    }
+  }
+
+  // Close icon
+  .close {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    cursor: pointer;
+  }
+
+  // <Input />
+  .Input {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 110%;
+  }
+
+  .Input__wrapper {
+    --input-height: 40px;
+  }
+}
+
+.LiquidityAdd {
+  &.Liquidity__header {
+    margin-bottom: 20px;
+  }
+
+  &__icon {
+    margin: 16px auto;
+  }
+
+  &__result {
+    padding: 24px 15.5px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__item {
+    padding: 0 10px;
+    margin-bottom: 24px;
+  }
+
+  .DexSwapInput {
+    &__container {
+      padding: 14px 15px;
+    }
+  }
+
+  &__import__footer {
+    margin: 50px 0 30px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 110%;
+  }
+
+  &__import__default_text {
+    margin: 10px;
+  }
+}

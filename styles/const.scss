@@ -1,0 +1,71 @@
+// Fonts
+$font-bebas: 'Bebas Neue', sans-serif;
+$font-montserrat: 'Montserrat', sans-serif;
+$font-secular: 'Secular One', sans-serif;
+
+$font-text: $font-montserrat;
+$font-primary: $font-bebas;//$font-secular;
+$fz-default: 12px;
+
+// Backgrounds
+$bg-page: rgb(0, 21, 41);
+$bg-panel: rgb(35, 48, 68);
+$bg-section: #f9f9f9;
+
+$color1: #FFE39F;
+$color2: #EEB46C;
+$color3: #D78742;
+$color4: #BC5B22;
+$color5: #9E2B0E;
+
+// Colors
+$color-logo: #ffb30e;
+$color-primary: rgb(166, 44, 255);
+$color-primary-bg: rgba($color-primary, 0.3);
+$color-primary-hover: lighten($color-primary, 15%);
+$color-button-primary: #3a7bd4;
+$color-button-primary-hover: #1250a6;
+$color-editable: #30789f;
+$color-editable-hove: lighten($color-editable, 15%);
+$color-red: #f55753;
+$color-yellow: #f5db38;
+$color-cyan: #00ddf5;
+$color-green: #a5ee00;
+$color-dark-green: #85c900;
+$color-black: #000000;
+$color-gray: lighten(desaturate($color-primary, 20%), 5%);
+$color-border: rgb(91, 90, 153);
+$color-hover-bg: #253141;
+$color-border-active: rgba(255,255,255,1);
+$color-scrollbar: rgba(91, 90, 153, 0.2);
+$color-scrollbar-bg: rgba(0,0,0,0);
+$color-disabled: #243040;
+
+// Text Colors
+$color-text: #ffffff;
+$color-text-plus: #a5ee00;
+$color-text-minus: #f55753;
+$color-text-leverage: $color-yellow;
+$color-text-unactive: rgba(255,255,255,0.5);
+$color-text-dark: #242424;
+$color-text-gray: #6C6B7D;
+$color-text-on-primary: #ffffff;
+$color-text-lightgray: #a5a4b6;
+$color-text-disabled: #5e636b;
+
+// Radiuses
+$radius-panel: 8px;
+$radius-input: 4px;
+
+// Font Sizes
+$font-size-forms: 12px;
+$font-weight-forms: 400;
+
+// Sizes
+$size-filter: 180px;
+$size-scrollbar: 6px;
+$size-text: 640px;
+$size-sidebar: 272px;
+
+// Paddings
+$padding-filter: 20px;

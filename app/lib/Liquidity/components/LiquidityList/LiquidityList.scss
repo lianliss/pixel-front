@@ -1,0 +1,74 @@
+.LiquidityList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--alice-blue);
+  border-radius: var(--radius-panel);
+  list-style: none;
+  margin: 0;
+  padding: 8px 16px;
+  box-sizing: border-box;
+
+  &__item {
+    &__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+  }
+
+  &.empty {
+    li {
+      margin: 24px 0;
+      text-align: center;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--cool-gray);
+    }
+  }
+
+  .ItemContent {
+    span {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    &__body {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 100%;
+      letter-spacing: -0.01em;
+      color: var(--cool-gray);
+
+      div {
+        display: flex;
+        align-items: center;
+      }
+
+      & > div {
+        justify-content: space-between;
+        padding: 8px 0;
+      }
+
+      // <WalletIcon />
+      .WalletIcon {
+        margin-left: 4px;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+
+      // <Button />
+      .Button {
+        width: calc(50% - 6px);
+      }
+    }
+  }
+}

@@ -1,0 +1,90 @@
+.LiquidityRemove {
+  &.Liquidity__header {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 24px 16px;
+    margin-bottom: 24px;
+    background: var(--alice-blue);
+    border-radius: var(--radius-panel);
+    box-sizing: border-box;
+
+    &:last-child {
+      padding: 20px 16px 30px;
+      margin: 32px 0 0;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    cursor: pointer;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .icon__wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+
+    .isvg {
+      margin: 0 auto;
+    }
+  }
+
+  &__prices {
+    padding: 14px 16px 12px;
+    margin-bottom: 24px;
+
+    .LiquidityRemove__item {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  // <LiquidityRange />
+  .LiquidityRange {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 2000px) {
+  .LiquidityRemove {
+    &__item {
+      &:not(:last-child) {
+        margin-bottom: 16px !important;
+      }
+    }
+
+    &__result {
+      margin-bottom: 32px;
+      padding: 18px 16px;
+
+      &:last-child {
+        padding: 12px 16px 21px;
+      }
+    }
+  }
+}
