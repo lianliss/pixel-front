@@ -17,7 +17,7 @@ function WalletIcon({ currency, size, marginLeft, marginRight, className }) {
   const context = React.useContext(Web3Context);
   const { tokens } = context;
   const defaultSymbol = _.isObject(currency) ? '' : currency;
-  const symbol = _.get(currency, 'symbol', defaultSymbol).toUpperCase();
+  const symbol = _.get(currency, 'symbol', defaultSymbol);
 
   React.useEffect(() => {
     try {
@@ -45,7 +45,7 @@ function WalletIcon({ currency, size, marginLeft, marginRight, className }) {
         <img src={icon} onError={() => setIcon(null)} />
       ) : (
         <span className="WalletIcon__empty">
-          <Icon icon={"help"} />
+          <Icon icon={"help"} size={size} />
         </span>
       )}
     </span>

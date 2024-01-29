@@ -10,8 +10,8 @@ function Button(_props) {
   ];
   if (props.primary) {
     classNames.push('pixel-button-primary');
-    delete props.primary;
   }
+  delete props.primary;
   const iconSize = props.minimal
     ? 12
     : props.large

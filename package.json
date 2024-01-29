@@ -32,7 +32,7 @@
     "@ethersproject/contracts": "^5.6.1",
     "@ethersproject/providers": "^5.6.6",
     "@ethersproject/solidity": "^5.6.0",
-    "@lianliss/v2-sdk": "^4.0.0",
+    "@lianliss/v2-sdk": "^4.0.1",
     "@narfex/sdk": "^2.4.7",
     "@reduxjs/toolkit": "^1.9.5",
     "@svgr/webpack": "6.1.2",

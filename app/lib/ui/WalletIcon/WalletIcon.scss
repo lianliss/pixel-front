@@ -1,6 +1,8 @@
 .WalletIcon {
   display: inline-flex;
   align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
 
   .isvg {
     display: inline-flex;

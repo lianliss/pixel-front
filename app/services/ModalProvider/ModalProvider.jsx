@@ -42,6 +42,7 @@ function ModalProvider(props) {
   }}>
     {props.children}
     <Overlay isOpen={isOpen}
+             className={'bp5-overlay-scroll-container'}
              portalClassName={"bp5-dark"}
              onClose={onClose}>
       <Card className={"modal-provider"}>

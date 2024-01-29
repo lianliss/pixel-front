@@ -2,18 +2,24 @@
 
 const APP_DOM_LOADED_STATES = ['complete', 'loaded', 'interactive'];
 
-const banner = '%cStore';
+const banner = '%cHello Pixel';
 const bannerStyle = [
-    'background:#1e82dd',
-    'color: #fff',
+    'background:#001529',
+    'color: #A62CFF',
     'width: 100%',
-    'padding:15px 20px 20px 20px',
+    'padding:20px 40px',
     'margin: -5px 0',
     'text-transform: uppercase',
     'font-size: 18px',
     '-webkit-font-smoothing',
 ].join(';');
-const printBanner = () => console.log(banner, bannerStyle);
+let isBannerReady = false;
+const printBanner = () => {
+    if (!isBannerReady) {
+        console.log(banner, bannerStyle);
+        isBannerReady = true;
+    }
+};
 
 const runOnDomReady = (action = () => {}) => {
     printBanner();

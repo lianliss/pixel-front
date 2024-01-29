@@ -29,6 +29,10 @@ const processError = error => {
   }
 };
 
+function Container({children}) {
+  return <div className={"LiquidityConfirmModal"}>{children}</div>
+}
+
 function LiquidityConfirmModal(props) {
   const {
     selectedTokens,
@@ -49,24 +53,30 @@ function LiquidityConfirmModal(props) {
     accountAddress,
     getBSCScanLink,
     addTokenToWallet,
+    getPairAddress,
   } = context;
   const { wrapToken, defaultSymbol } = network;
   const { routerAddress } = network.contractAddresses;
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(true);
   const [pair, setPair] = React.useState(null);
-  const adaptive = useSelector((store) => store.default.adaptive);
-  const Component = BottomSheetModal;
+  const adaptive = useSelector((store) => store.App.adaptive);
+  const Component = Container;
   const [slippageTolerance, setSlippageTolerance] = React.useState(0.9);
   const [isTransaction, setIsTransaction] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
 
   React.useEffect(() => {
     getReserves(pairAddress).then(data => {
-      setPair(data[2]);
-    });
+      console.log('reserves', data);
+      setIsLoading(false);
+      if (data && data[2]) {
+        setPair(data[2]);
+      }
+    }).catch(error => setIsLoading(false));
   }, [pairAddress]);
 
-  if (!pair) return (<Component
+  if (!!isLoading) return (<Component
     className="LiquidityConfirmModal"
     prefix="LiquidityConfirmModal"
     skipClose
@@ -74,21 +84,31 @@ function LiquidityConfirmModal(props) {
   >
     <Spinner />
   </Component>);
-
-  const totalSupply = wei.from(pair.totalSupply);
-  const reserve0 = wei.from(pair[
-    selectedTokens[0].symbol === defaultSymbol ? defaultSymbol : selectedTokens[0].symbol
-    ]);
-  const reserve1 = wei.from(pair[
-    selectedTokens[1].symbol === defaultSymbol ? defaultSymbol : selectedTokens[1].symbol
-    ]);
-  const lpTokens = Math.min(amount0 * totalSupply / reserve0, amount1 * totalSupply / reserve1);
+  
+  const totalSupply = !!pair
+    ? wei.from(pair.totalSupply)
+    : 0;
+  const reserve0 = !!pair
+    ? wei.from(pair[
+      selectedTokens[0].symbol === defaultSymbol
+        ? wrapToken.symbol
+        : selectedTokens[0].symbol
+    ])
+    : 0;
+  const reserve1 = !!pair ? wei.from(pair[
+    selectedTokens[1].symbol === defaultSymbol
+      ? wrapToken.symbol
+      : selectedTokens[1].symbol
+    ]) : 0;
+  const lpTokens = !!reserve0 && !!reserve1
+    ? Math.min(amount0 * totalSupply / reserve0, amount1 * totalSupply / reserve1)
+    : 0;
   const isBNB = !selectedTokens[0].address || !selectedTokens[1].address;
 
   const addToken = () => {
     addTokenToWallet({
       address: pairAddress,
-      symbol: `${selectedTokens[0].symbol}-${selectedTokens[1].symbol}`,
+      symbol: 'UNI-V2',//`${selectedTokens[0].symbol}-${selectedTokens[1].symbol}`,
       decimals: 18,
     })
   };
@@ -129,7 +149,7 @@ function LiquidityConfirmModal(props) {
     } catch (error) {
       console.error('[LiquidityConfirmModal][supply]', error);
       setErrorText(processError(error));
-      toaster.error('Transaction declined');
+      toaster.error(processError(error));
     }
     setIsTransaction(false);
   };
@@ -138,10 +158,13 @@ function LiquidityConfirmModal(props) {
     setIsTransaction(true);
     setErrorText('');
     try {
+      const pr = getPairAddress('0x1a7b46656B2b8b29B1694229e122d066020503D0', '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED');
+      console.log('PR', pr);
       const routerContract = new (web3.eth.Contract)(
         require('const/ABI/PancakeRouter'),
         routerAddress,
       );
+      console.log('routerContract', routerContract, routerAddress);
       let method = 'addLiquidityETH';
       const tokenIndex = Number(!selectedTokens[0].address);
       const token = selectedTokens[tokenIndex];
@@ -170,7 +193,7 @@ function LiquidityConfirmModal(props) {
     } catch (error) {
       console.error('[LiquidityConfirmModal][supplyBNB]', error);
       setErrorText(processError(error));
-      toaster.error('Transaction declined');
+      toaster.error(processError(error));
     }
     setIsTransaction(false);
   };
@@ -247,12 +270,12 @@ function LiquidityConfirmModal(props) {
           </div>
         </div>
       </div>
-      <div className="LiquidityConfirmModal__row">
+      <div className="LiquidityConfirmModal__row center">
         <Button
-          size="extra_large"
-          type="lightBlue"
+          large
+          primary
           disabled={isTransaction}
-          state={isTransaction ? 'loading' : ''}
+          loading={isTransaction}
           onClick={() => {
             if (isBNB) {
               supplyBNB();

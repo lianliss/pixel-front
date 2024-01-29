@@ -106,8 +106,8 @@ export const CONTRACT_ADDRESSES = {
   [SONGBIRD]: {
     factoryAddress: '0xa6FfF50C671023eCbd83F4a259bB0fDA20faEbC4',
     factoryInitCodeHash:
-      '0x0968bfcf8adae8e1d3231abcf029e4786ce22a36909941f9b2b34daf79e193c4',
-    routerAddress: '0xf1F13Faa8c9EcD983f4776eEF5Cb63b966234926',
+      '0xdb2998980fcf4c581a94119bac0c79a0aa8d710fee87f2467931f0ff84bf1734',
+    routerAddress: '0x7Fc2C8BC41418960e1A70eFEADBe4Ae93af64820',
     masterChefAddress: '0x00A4A639EC536C3Bb9436e710b38120856Fa95ec',
     narfexToken: '0xe48d1C63199aca7B4b4B39068098A0ED27840a8d',
     tokenSale: '',
@@ -136,7 +136,7 @@ export const POOLS_LIST = {
     '0xe19E7E35c52169d27a515781e83FF90422e5b7b7',
   ],
   [SONGBIRD]: [
-  
+    '0x0d32824FeAf0D287be58d2FEb86c1073D5e58a2C',
   ]
 };
 

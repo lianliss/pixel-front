@@ -28,7 +28,7 @@ function DexSwapInput({
                       }) {
   // States
   const [textValue, setTextValue] = React.useState(value);
-  const adaptive = useSelector((store) => store.default.adaptive);
+  const adaptive = useSelector((store) => store.App.adaptive);
 
   // Refs
   const inputRef = React.useRef(null);

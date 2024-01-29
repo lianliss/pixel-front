@@ -54,8 +54,8 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   const [values, setValues] = React.useState(['0', '0']);
   // --Tokens
   const [selectedTokens, setSelectedTokens] = React.useState([
-    tokens.find(t => t.symbol === 'NRFX'),
-    tokens.find(t => t.symbol === 'USDC'),
+    tokens.find(t => t.symbol === 'SGB'),
+    tokens.find(t => t.symbol === 'exUSDT'),
   ]);
   const [selectToken, setSelectToken] = React.useState(0);
   const [reserves, setReserves] = React.useState([0,0]);
@@ -66,6 +66,7 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
 
   const amount0 = Number(values[0]) || 0;
   const amount1 = Number(values[1]) || 1;
+  console.log('selectedTokens', selectedTokens, tokens);
   const pairAddress = selectedTokens[0].symbol && selectedTokens[1].symbol
     ? getPairAddress(selectedTokens[0], selectedTokens[1])
     : '';
@@ -155,8 +156,8 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
         console.error("[LiquidityAdd] Can't set the current pool", currentPool, error);
       });
     } else {
-      const firstToken = tokens.find(t => t.symbol === 'NRFX');
-      const secondToken = tokens.find(t => t.symbol === 'USDC');
+      const firstToken = tokens.find(t => t.symbol === 'SGB');
+      const secondToken = tokens.find(t => t.symbol === 'exUSDT');
 
       setSelectedTokens([firstToken, secondToken]);
       // clearInterval(balanceInterval);
@@ -283,25 +284,25 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
               </div>
             </div>
             {!allowance[0] && <Button
-              type="lightBlue"
-              state={isApproving ? 'loading' : ''}
-              size="extra_large"
+              loading={isApproving}
+              primary
+              large
               onClick={approve}
             >
               {enableLang} {selectedTokens[0].symbol}
             </Button>}
             {(!!allowance[0] && !allowance[1]) && <Button
-              type="lightBlue"
-              state={isApproving ? 'loading' : ''}
-              size="extra_large"
+              loading={isApproving}
+              primary
+              large
               onClick={approve}
             >
               {enableLang} {selectedTokens[1].symbol}
             </Button>}
             <Button
-              type={!isAvailable ? 'secondary' : 'lightBlue'}
+              primary={isAvailable}
               disabled={!isAvailable}
-              size="extra_large"
+              large
               onClick={() => liquidityModal({
                 selectedTokens,
                 reserves,

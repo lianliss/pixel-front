@@ -14,7 +14,6 @@ import { getConnectorObject } from 'services/multiwallets/multiwalletsDifference
 import './ConnectToWalletModal.scss';
 
 function ConnectToWalletModal(props) {
-  console.log('props', props);
   const context = React.useContext(Web3Context);
   const { isConnected, connectWallet } = context;
   const adaptive = useSelector((state) => state.App.adaptive);

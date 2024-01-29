@@ -23,6 +23,10 @@
     justify-content: flex-start;
     width: 100%;
 
+    &.center {
+      justify-content: center;
+    }
+
     &:first-child {
       padding-right: 15px;
     }
@@ -81,14 +85,13 @@
     flex-direction: column;
     width: 100%;
     padding: 24px 16px;
-    background: var(--alice-blue);
+    background: var(--color-bg);
     border-radius: var(--radius-panel);
     box-sizing: border-box;
 
-    font-weight: 700;
+    font-weight: 600;
     font-size: 16px;
     line-height: 20px;
-    color: #292d32;
   }
 
   &__item {

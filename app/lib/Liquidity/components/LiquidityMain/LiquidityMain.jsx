@@ -37,12 +37,12 @@ function LiquidityMain({
               Description
             </p>
             <Button
-              type="lightBlue"
-              size="extra_large"
+              large
+              primary
+              rightIcon={'small-plus'}
               onClick={() => onAddClick()}
             >
-              Add Liquidity&nbsp;
-              <span>+</span>
+              Add Liquidity
             </Button>
           </div>
         </>
