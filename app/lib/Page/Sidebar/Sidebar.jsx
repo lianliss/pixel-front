@@ -44,7 +44,11 @@ const sections = [
   {
     isAvailable: account => true,
     menu: [
-      routes.about,
+      {
+        title: 'Docs',
+        link: 'https://docs.hellopixel.network/hello-pixel/pixel-introduce',
+        icon: 'git-repo',
+      },
       routes.history,
       routes.settings,
     ],
