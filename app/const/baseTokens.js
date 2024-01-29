@@ -168,6 +168,14 @@ const SONGBIRD_BASE_TOKENS = [
     6,
     'https://static.metaswap.codefi.network/api/v1/tokenIcons/137/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270.png',
   ),
+  new Token(
+    'Test 5',
+    'TTT5',
+    '0x7c1a525B2Ad20b423e06080DA1846298B2b3afE2',
+    19,
+    6,
+    'https://static.metaswap.codefi.network/api/v1/tokenIcons/137/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270.png',
+  ),
 ];
 
 const BASE_TOKENS = [
