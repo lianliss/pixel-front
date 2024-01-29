@@ -165,7 +165,7 @@ const SONGBIRD_BASE_TOKENS = [
     'TTT1',
     '0xBE57CAb0bA57ba8D0d277Cc77ec5735fCdBB6c6e',
     19,
-    18,
+    6,
     'https://static.metaswap.codefi.network/api/v1/tokenIcons/137/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270.png',
   ),
 ];

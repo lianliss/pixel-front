@@ -55,7 +55,7 @@ function Header() {
   };
   
   const connectText = accountAddress
-    ? accountAddress.slice(0, 6) + '...' + accountAddress.slice(accountAddress.length - 6)
+    ? accountAddress.slice(0, 6) + '...' + accountAddress.slice(accountAddress.length - 4)
     : 'Connect Wallet';
   
   const userMenu = <Menu>
