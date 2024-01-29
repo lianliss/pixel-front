@@ -1,5 +1,5 @@
 import {Request} from 'utils/async/request';
-import {API_URL} from 'const';
+import {API_URL, IS_DEVELOP} from 'const';
 import Store from 'app/store';
 import {appUpdateAccount} from 'slices/App';
 import {
@@ -20,7 +20,9 @@ class Api extends Request {
   processError = (method, url, error, isSilent = false) => {
     try {
       if (!error) {
-        //window.location.reload();
+        if (!IS_DEVELOP) {
+          window.location.reload();
+        }
         return;
       }
       const {status} = error;
