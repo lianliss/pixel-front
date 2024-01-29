@@ -160,6 +160,14 @@ const SONGBIRD_BASE_TOKENS = [
     6,
     'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
   ),
+  new Token(
+    'Test 1',
+    'TTT1',
+    '0xBE57CAb0bA57ba8D0d277Cc77ec5735fCdBB6c6e',
+    19,
+    18,
+    'https://static.metaswap.codefi.network/api/v1/tokenIcons/137/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270.png',
+  ),
 ];
 
 const BASE_TOKENS = [
