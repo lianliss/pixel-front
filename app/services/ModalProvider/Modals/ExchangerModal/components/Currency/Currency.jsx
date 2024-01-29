@@ -15,7 +15,7 @@ function Currency({ currency, amount, name, adaptive }) {
       <span className="Number">
         {getFinePrice(amount)}
       </span>
-      <div>
+      <div className={"ExchangerModal__Currency-right"}>
         <span className="ExchangerModal__Currency-name">{currency.name}</span>
         <span className="ExchangerModal__Currency-currency">{currency.symbol}</span>
       </div>

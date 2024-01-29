@@ -85,6 +85,7 @@ const useExchanger = () => {
   const getInitialCoin = () => allCoins.find((t) => t.symbol === initialCoin) || allCoins[0];
 
   const swapSelected = () => {
+    //console.log('swapSelected', fiatSelected, coinSelected);
     if (coinSelected) {
       setFiatSelected(coinSelected);
     } else {
@@ -188,7 +189,7 @@ const useExchanger = () => {
 
       // Get the currency coin to update it.
       // The using fiatSelected here is unwanted solution.
-      const currencySymbol = paramsTo;
+      const currencySymbol = paramsFrom;
       const currency = coins.find((t) => t.symbol === currencySymbol);
       if (!currency) return;
 
@@ -231,13 +232,14 @@ const useExchanger = () => {
   // Set initial coin
   React.useEffect(() => {
     const coin = getParamsCoin() || getInitialCoin();
-
+    //console.log('Set initial coin', coin, getParamsCoin(), getInitialCoin());
     setCoin(coin);
   }, [chainId]);
 
   // Set initial fiat
   React.useEffect(() => {
     const fiat = getParamsFiat() || getInitialFiat();
+    //console.log('Set initial fiat', fiat, getParamsFiat(), getInitialFiat());
     setFiat(fiat);
   }, [fiatsLoaded, chainId]);
 

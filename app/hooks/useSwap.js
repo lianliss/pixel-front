@@ -348,7 +348,7 @@ export const useSwapAction = ({
     tryExchangeError,
   } = context || React.useContext(Web3Context);
   
-  const {TransactionSubmitted} = React.useContext(ModalContext);
+  const {transactionSubmitted} = React.useContext(ModalContext);
 
   const [inAmount, setInAmount] = React.useState(fiatAmount);
   const [outAmount, setOutAmount] = React.useState(coinAmount);
@@ -495,7 +495,7 @@ export const useSwapAction = ({
         ],
         value
       );
-      TransactionSubmitted({
+      transactionSubmitted({
         txLink: getBSCScanLink(receipt),
         symbol: coin.symbol,
         addToken: () => addTokenToWallet(coin),

@@ -1,0 +1,52 @@
+.TestnetOverlay {
+  &__wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  &__background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background: var(--color-bg);
+    opacity: 0.85;
+    z-index: 1000;
+  }
+  &__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 1001;
+
+    margin-top: 128px;
+
+    h2,
+    p {
+      text-align: center;
+      padding: 0 10px 10px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    margin-top: 20px;
+
+    .Button {
+      &:not(:first-child) {
+        margin-left: 20px;
+      }
+    }
+  }
+}

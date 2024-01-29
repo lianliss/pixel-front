@@ -10,7 +10,7 @@ import {
   POLYGON_MAINNET,
   ARBITRUM_MAINNET,
   SONGBIRD,
-  FLARE,
+  //FLARE,
 } from '../multichain/chains';
 
 export const noderealRPC = {
@@ -24,7 +24,7 @@ export const noderealRPC = {
     'https://rpc.ankr.com/polygon/6c2f34a42715fa4c50762b0069a7a658618c752709b7db32f7bfe442741117eb',
   [ARBITRUM_MAINNET]:
     'https://rpc.ankr.com/arbitrum/6c2f34a42715fa4c50762b0069a7a658618c752709b7db32f7bfe442741117eb',
-  [FLARE]: 'https://flare-api.flare.network/ext/bc/C/rpc',
+  //[FLARE]: 'https://flare-api.flare.network/ext/bc/C/rpc',
   [SONGBIRD]: 'https://songbird-api.flare.network/ext/bc/C/rpc',
 };
 

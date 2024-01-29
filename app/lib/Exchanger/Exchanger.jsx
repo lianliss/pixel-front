@@ -70,6 +70,10 @@ function Exchanger() {
     }
     setTab(id);
   }
+  
+  if (isConnected && chainId !== 19) {
+    return <LoadModule lib={"TestnetOverlay/TestnetOverlay"} />;
+  }
 
   return (
     <div className="Exchanger__wrap">

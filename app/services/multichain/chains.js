@@ -6,7 +6,7 @@ export const POLYGON_MAINNET = 137;
 export const ARBITRUM_MAINNET = 42161;
 export const POLYGON_MUMBAI = 80001;
 export const SONGBIRD = 19;
-export const FLARE = 14;
+//export const FLARE = 14;
 
 // Chain is mainnet.
 export const isMainnet = {
@@ -17,7 +17,7 @@ export const isMainnet = {
   [ARBITRUM_MAINNET]: true,
   [POLYGON_MUMBAI]: true,
   [SONGBIRD]: true,
-  [FLARE]: true,
+  //[FLARE]: true,
 };
 
 // Chain IDs that are integrated.
@@ -28,7 +28,7 @@ export const FINE_CHAIN_IDS = [
   POLYGON_MAINNET,
   ARBITRUM_MAINNET,
   POLYGON_MUMBAI,
-  FLARE,
+  //FLARE,
   SONGBIRD,
 ];
 
@@ -91,12 +91,12 @@ export const NETWORKS_DATA = {
     defaultSymbol: 'SGB',
     hops: 0,
   },
-  [FLARE]: {
-    networkID: 'FLR',
-    title: 'Flare',
-    fiatDecimals: 18,
-    scan: 'https://flare-explorer.flare.network',
-    defaultSymbol: 'FLR',
-    hops: 0,
-  },
+  // [FLARE]: {
+  //   networkID: 'FLR',
+  //   title: 'Flare',
+  //   fiatDecimals: 18,
+  //   scan: 'https://flare-explorer.flare.network',
+  //   defaultSymbol: 'FLR',
+  //   hops: 0,
+  // },
 };

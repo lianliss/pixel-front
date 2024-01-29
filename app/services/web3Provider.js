@@ -6,8 +6,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import Network from './multichain/Network';
 import getAllPairsCombinations from 'utils/getPairCombinations';
-import {Percent, JSBI, TokenAmount, CurrencyAmount, Token as TokenSDK, Fraction} from '@narfex/sdk';
-import { Pair, Trade} from '@lianliss/v2-sdk';
+import {Pair, Trade, Percent, JSBI, TokenAmount, CurrencyAmount, Token as TokenSDK, Fraction} from '@narfex/sdk';
 import { getAddress, getCreate2Address } from '@ethersproject/address';
 import { keccak256, pack } from '@ethersproject/solidity';
 import significant from 'utils/significant';
@@ -384,6 +383,7 @@ class Web3Provider extends React.PureComponent {
    * @returns {void}
    */
   async setProvider(chainId) {
+    if (!CONTRACT_ADDRESSES[chainId]) return;
     const hostProvider = new Web3.providers.HttpProvider(
       CONTRACT_ADDRESSES[chainId].providerAddress
     );

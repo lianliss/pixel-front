@@ -113,8 +113,8 @@ export const CONTRACT_ADDRESSES = {
     tokenSale: '',
     saleFactory: '',
     fiatFactory: '0xC8f30866816fdab9Bb6BDbbb03d4a54103145c99',
-    exchangerRouter: '0xD6a42EDb99Bd9a3387CC37A86d3D27c34780b9B6',
-    narfexOracle: '0x049eEE4028Fb4fF8591Ea921F15843Cd2d9e9f94',
+    exchangerRouter: '0x48F01417d1ce1160202eBc35F5f00Ac8Ce7859Cb',
+    narfexOracle: '0xF0608d2332C29CF2bf46028A9337D3a6755344ce',
     providerAddress: noderealRPC[SONGBIRD],
   },
 };
@@ -147,5 +147,5 @@ export const TOKEN_ABI = {
   [POLYGON_MAINNET]: require('const/ABI/Erc20Token'),
   [ARBITRUM_MAINNET]: require('const/ABI/Erc20Token'),
   [SONGBIRD]: require('const/ABI/Erc20Token'),
-  [FLARE]: require('const/ABI/Erc20Token'),
+  //[FLARE]: require('const/ABI/Erc20Token'),
 };

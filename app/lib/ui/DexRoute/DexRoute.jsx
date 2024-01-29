@@ -12,9 +12,9 @@ import './DexRoute.scss';
 function DexRoute({ route = [], tokens = [] }) {
   return (
     <div className="DexRoute">
-      <h3>
+      <h2>
         <span>{"Route"}</span>
-      </h3>
+      </h2>
       <div className="DexRoute-container">
         {route &&
           route.map((symbol, index) => {

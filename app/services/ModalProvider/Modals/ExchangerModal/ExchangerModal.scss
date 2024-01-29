@@ -5,37 +5,44 @@
   }
 
   &__container {
-    background: #fff;
     box-sizing: border-box;
-    border-radius: var(--radius-panel);
-    padding: 40px 38px;
+    padding: 0 15px;
   }
 
   h3 {
     font-weight: 600;
     font-size: 24px;
     line-height: 29px;
+    margin: 0 0 20px;
+  }
+
+  &__actions {
+    margin: 24px 0;
+    display: flex;
+    justify-content: center;
   }
 
   &__Currency__container {
     margin-top: 20px;
 
     & > span {
-      margin-bottom: 15.5px;
+      margin-bottom: 15px;
       font-weight: 600;
       font-size: 16px;
       line-height: 20px;
-      color: var(--cool-gray);
+      display: block;
     }
   }
 
   &-List {
-    color: var(--black-gunmetal);
+    opacity: 0.75;
 
     &Item {
       font-size: 14px;
       line-height: 110%;
       letter-spacing: -0.01em;
+      display: flex;
+      justify-content: space-between;
 
       &__title {
         font-weight: 500;

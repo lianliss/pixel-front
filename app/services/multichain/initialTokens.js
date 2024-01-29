@@ -7,7 +7,7 @@ import {
   POLYGON_MUMBAI,
   ARBITRUM_MAINNET,
   NETWORKS_DATA,
-  FLARE,
+  //FLARE,
   SONGBIRD,
 } from './chains';
 import baseTokens from 'const/baseTokens';
@@ -35,7 +35,7 @@ export const ABI = {
   [POLYGON_MUMBAI]: require('const/ABI/Erc20Token'),
   [ARBITRUM_MAINNET]: require('const/ABI/Erc20Token'),
   [SONGBIRD]: require('const/ABI/Erc20Token'),
-  [FLARE]: require('const/ABI/Erc20Token'),
+  //[FLARE]: require('const/ABI/Erc20Token'),
 };
 
 export const TOKENS = {

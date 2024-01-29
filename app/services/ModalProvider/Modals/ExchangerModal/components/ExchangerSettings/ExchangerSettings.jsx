@@ -23,16 +23,15 @@ function ExchangerSettings(props) {
   return (
     <div className="ExchangerModal__Settings">
       <Button
-        type="secondary-alice"
-        size="extra_large"
-        className={cn({ 'settings-toggler': true, isActive })}
+        large
+        icon={"settings"}
+        rightIcon={isActive ? "chevron-up" : "chevron-down"}
         onClick={() => setIsActive((prevState) => !prevState)}
+        className={'settings-toggler'}
       >
-        <Icon icon={"settings"} className="settings-icon" />
         {isActive ? "Close" : "Open"}
         &nbsp;
         settings
-        <Icon icon={"chevron-down"} className="dropdown-icon" />
       </Button>
       <div
         className={cn({ ExchangerModal__Settings__container: true, isActive })}

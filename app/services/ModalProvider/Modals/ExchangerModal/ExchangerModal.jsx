@@ -3,6 +3,7 @@ import React from 'react';
 // Components
 import {Icon} from '@blueprintjs/core';
 import { Button } from 'ui';
+import { Button as BPButton } from '@blueprintjs/core';
 import Currency from './components/Currency/Currency';
 import ExchangeRoute from './components/ExchangeRoute/ExchangeRoute';
 import ExchangerSettings from './components/ExchangerSettings/ExchangerSettings';
@@ -40,9 +41,10 @@ function ExchangerModal({ ...props }) {
   );
 
   const SwapButton = () => (
-    <Button
+    <BPButton
       onClick={() => swapAction.setIsRateReverse(!swapAction.isRateReverse)}
       className="swap"
+      minimal
       icon={"swap-horizontal"}
     />
   );
@@ -101,24 +103,24 @@ function ExchangerModal({ ...props }) {
             }
           />
         </div>
-        <div>
+        <div className={"ExchangerModal__actions"}>
           {!swapAction.isAvailable && (
             <Button
-              type="lightBlue"
-              size="extra_large"
+              primary
+              large
               onClick={() => swapAction.approve()}
-              state={swapAction.isApproving ? 'loading' : ''}
+              loading={swapAction.isApproving}
               className="exchange"
             >
               Approve
             </Button>
           )}
           <Button
-            type="lightBlue"
-            size="extra_large"
+            primary
+            large
             onClick={() => swapAction.swap()}
             disabled={!swapAction.isAvailable}
-            state={swapAction.isProcess ? 'loading' : ''}
+            loading={swapAction.isProcess}
             className="exchange"
           >
             Swap
