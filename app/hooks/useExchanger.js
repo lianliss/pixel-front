@@ -32,6 +32,7 @@ const useExchanger = () => {
     updateFiats,
     isConnected,
     tokens,
+    customTokens,
     cmcTokens,
     getTokens,
     fiatsLoaded,
@@ -57,7 +58,7 @@ const useExchanger = () => {
     return token;
   });
   // Get raw coins list
-  const coins = _.uniqBy(tokens, 'address');
+  const coins = _.uniqBy([...customTokens, ...tokens], 'address');
 
   // Filters for select the fiat.
   const params = _.get(match, 'params', {});

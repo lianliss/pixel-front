@@ -29,7 +29,7 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   const context = React.useContext(Web3Context);
   const {
     getPairAddress, getReserves, getTokenBalance, getTokenContract,
-    network, tokens, fiats, chainId, accountAddress,
+    network, tokens, customTokens, fiats, chainId, accountAddress,
   } = context;
   const { routerAddress } = network.contractAddresses;
   const rates = useSelector(ratesSelector);
@@ -66,7 +66,6 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
 
   const amount0 = Number(values[0]) || 0;
   const amount1 = Number(values[1]) || 1;
-  console.log('selectedTokens', selectedTokens, tokens);
   const pairAddress = selectedTokens[0].symbol && selectedTokens[1].symbol
     ? getPairAddress(selectedTokens[0], selectedTokens[1])
     : '';
@@ -363,6 +362,7 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
           }}
           commonBases={network.commonBases}
           {...context}
+          tokens={[...customTokens, ...tokens]}
           fiats={fiatTokens}
         />
       )}

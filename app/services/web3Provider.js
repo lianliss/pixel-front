@@ -27,6 +27,7 @@ import { DEFAULT_CHAIN, NETWORKS_DATA } from "./multichain/chains";
 import { CONTRACT_ADDRESSES } from "./multichain/contracts";
 import { FiatToken, Token } from "./Token";
 import toaster from 'services/toaster';
+import ExchangerStorage from 'services/ExchangerStorage';
 
 export const Web3Context = React.createContext();
 
@@ -55,6 +56,7 @@ class Web3Provider extends React.PureComponent {
     },
     chainId: null,
     tokens: this.network.displayTokens,
+    customTokens: [],
     tokensLoaded: false,
     tokensChain: null,
     pools: null,
@@ -76,12 +78,14 @@ class Web3Provider extends React.PureComponent {
   web3Host = null;
   farm = null;
   pairs = {};
+  customTokens = [];
   connectionCheckTimeout;
   successConnectionCheck = false;
   requestMethods = {};
   fetchEthereumRequest = fetchEthereumRequest.bind(this);
   getFineChainId = getFineChainId.bind(this);
   connectWallet = this.connectWallet.bind(this);
+  storage = new ExchangerStorage();
   walletConnectorStorage = () => new WalletConnectorStorage(this);
 
   // Moralis
@@ -111,6 +115,89 @@ class Web3Provider extends React.PureComponent {
       this.network.contractAddresses.providerAddress
     );
     this.web3Host = new Web3(provider);
+    this.loadCustomTokens();
+  }
+  
+  addCustomToken = async _address => {
+    let address, token;
+    if (typeof _address === 'string') {
+      address = this.getWeb3().utils.toChecksumAddress(_address);
+    } else {
+      token = _address;
+      address = token.address;
+    }
+    if (this.customTokens.find(t => t.address === address)) return;
+    
+    if (typeof _address === 'string') {
+      token = await this.initCustomToken(_address);
+    }
+    if (!token) return;
+    
+    this.customTokens.push(token);
+    this.storage.set({customTokens: this.customTokens.map(token => {
+      return Object.assign({}, token);
+      })});
+    this.updateStateCustomTokens();
+  }
+  
+  initCustomToken = async (_address) => {
+    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    try {
+      const contract = this.getContract(this.network.tokenABI, address);
+      const data = await Promise.all([
+        contract.methods.name().call(),
+        contract.methods.symbol().call(),
+        contract.methods.decimals().call(),
+      ]);
+      return new Token(
+        data[0],
+        data[1],
+        address,
+        this.state.chainId,
+        Number(data[2]),
+        'https://dex.oracleswap.io/_next/static/media/SGB.88221107.png',
+        true,
+      )
+    } catch (error) {
+      console.error('[initCustomToken]', error);
+      return null;
+    }
+  }
+  
+  removeCustomToken = _address => {
+    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    if (this.customTokens.find(t => t.address === address)) return;
+    this.customTokens = this.customTokens.filter(t => t.address !== address);
+    this.storage.set({customTokens: this.customTokens.map(token => {
+        return Object.assign({}, token);
+      })});
+    this.updateStateCustomTokens();
+  }
+  
+  getCustomTokens = (chainId = this.state.chainId) => {
+    return this.customTokens.filter(t => t.chainId === chainId);
+  }
+  
+  loadCustomTokens = () => {
+    this.customTokens = _.get(this.storage.storage, 'customTokens', [])
+      .map(token => {
+        return new Token(
+          token.name,
+          token.symbol,
+          token.address,
+          token.chainId,
+          token.decimals,
+          undefined,
+          true,
+          );
+      });
+    this.updateStateCustomTokens();
+  }
+  
+  updateStateCustomTokens = chainId => {
+    this.setState({
+      customTokens: this.getCustomTokens(chainId),
+    })
   }
 
   async checkConnection() {
@@ -445,6 +532,7 @@ class Web3Provider extends React.PureComponent {
         poolsList: this.network.poolsList,
         chainId: id,
       });
+      this.updateStateCustomTokens(id);
       this.getBlocksPerSecond();
       if (
         this.network.mainnet &&
@@ -1750,6 +1838,9 @@ class Web3Provider extends React.PureComponent {
       mountDapp: this.mountDapp.bind(this),
       logout: this.logout.bind(this),
       network: this.network,
+      addCustomToken: this.addCustomToken.bind(this),
+      initCustomToken: this.initCustomToken.bind(this),
+      removeCustomToken: this.removeCustomToken.bind(this),
       getPairAddress: this.getPairAddress.bind(this),
       getReserves: this.getReserves.bind(this),
       pairs: this.pairs,

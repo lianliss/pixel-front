@@ -5,13 +5,14 @@ class Token {
   balance = '0';
   price = 0;
 
-  constructor(name, symbol, address, chainId, decimals, logoURI) {
+  constructor(name, symbol, address, chainId, decimals, logoURI = null, isCustom = false) {
     this.name = name;
     this.symbol = symbol;
     this.address = address;
     this.chainId = chainId;
     this.decimals = decimals || DEFAULT_DECIMALS;
     this.logoURI = logoURI;
+    this.isCustom = isCustom;
   }
 }
 

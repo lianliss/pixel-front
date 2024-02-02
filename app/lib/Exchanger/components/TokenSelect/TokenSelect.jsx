@@ -9,15 +9,21 @@ import Web3 from 'web3/dist/web3.min.js';
 import wei from 'utils/wei';
 import getFinePrice from 'utils/getFinePrice';
 import { classNames as cn } from 'utils';
-import { SwitchTabs, SectionBlock, WalletIcon } from 'ui';
-import {Icon, Card} from '@blueprintjs/core';
+import { SwitchTabs, SectionBlock, WalletIcon, Button, } from 'ui';
+import {Icon, Card, Spinner} from '@blueprintjs/core';
+import {Web3Context} from 'services/web3Provider';
 
 const web3 = new Web3();
 
 class TokenSelect extends React.PureComponent {
+  static contextType = Web3Context;
+  
   state = {
     search: '',
     switchTabsSelected: 'tokens',
+    isAddress: false,
+    isNewAddress: false,
+    newToken: null,
   };
 
   constructor(props) {
@@ -25,11 +31,46 @@ class TokenSelect extends React.PureComponent {
     this.state.switchTabsSelected = props.defaultList;
   }
 
-  onSearchInput = (event) => {
+  onSearchInput = (value) => {
+    const {tokens, fiats} = this.props;
+    const {customTokens, initCustomToken, isConnected} = this.context;
+    const isAddress = web3.utils.isAddress(value);
+    let isNewAddress;
+    if (isAddress && isConnected) {
+      const address = web3.utils.toChecksumAddress(value);
+      isNewAddress = !([...customTokens, ...tokens, ...fiats].find(t => t.address === address));
+      if (isNewAddress) {
+        initCustomToken(value).then(token => {
+          if (token) {
+            this.setState({
+              newToken: token,
+            })
+          }
+        });
+      }
+    }
+    
     this.setState({
-      search: event.target.value,
+      search: value,
+      isAddress,
+      isNewAddress,
+      newToken: null,
     });
   };
+  
+  onSubmit = (event, filtered = []) => {
+    event.preventDefault();
+    const {isAddress, isNewAddress, newToken} = this.state;
+    const {addCustomToken} = this.context;
+    if (isAddress && isNewAddress && newToken) {
+      addCustomToken(newToken);
+      this.props.onChange(newToken);
+    } else {
+      if (!isNewAddress && filtered.length) {
+        this.props.onChange(filtered[0].token);
+      }
+    }
+  }
 
   componentDidMount() {
     this._mounted = true;
@@ -73,15 +114,31 @@ class TokenSelect extends React.PureComponent {
       disableName,
       disableSymbol,
     } = this.props;
-    const { search, switchTabsSelected } = this.state;
+    const {
+      search,
+      switchTabsSelected,
+      isAddress,
+      isNewAddress,
+      newToken,
+    } = this.state;
+    const {
+      customTokens, isConnected,
+    } = this.context;
     const isTokens = switchTabsSelected === 'tokens';
     const isFiats = switchTabsSelected === 'fiats';
 
-    const filtered = (isTokens ? tokens : fiats)
+    const checkSumAddress = isAddress
+      ? web3.utils.toChecksumAddress(search)
+      : '';
+    const filtered = (isTokens
+      ? [...tokens]
+      : fiats)
       .filter(
         (token) =>
-          token.symbol.toUpperCase().indexOf(search.toUpperCase()) >= 0 ||
-          token.name.toUpperCase().indexOf(search.toUpperCase()) >= 0
+          isAddress
+            ? token.address === checkSumAddress
+            : token.symbol.toUpperCase().indexOf(search.toUpperCase()) >= 0
+              || token.name.toUpperCase().indexOf(search.toUpperCase()) >= 0
       )
       .sort(
         (a, b) =>
@@ -97,11 +154,14 @@ class TokenSelect extends React.PureComponent {
 
         return {
           id: key,
+          token,
           content: (
             <div
               className="TokenSelect__token"
               key={key}
-              onClick={() => onChange(token)}
+              onClick={e => isNewAddress && newToken
+                ? this.onSubmit(e)
+                : onChange(token)}
             >
               <div className="TokenSelect__token-left">
                 <div
@@ -141,62 +201,105 @@ class TokenSelect extends React.PureComponent {
                 <Icon icon="cross" />
               </span>
             </h2>
-            <div className="TokenSelect__search">
+            <form className="TokenSelect__search" onSubmit={e => this.onSubmit(e, filtered)}>
               <input
                 type="text"
                 value={search}
-                placeholder={"Search"}
-                onChange={this.onSearchInput.bind(this)}
+                placeholder={isConnected ? "Search or address" : "Search"}
+                onChange={event => this.onSearchInput.bind(this)(event.target.value)}
               />
               <Icon icon="search" />
-            </div>
-            {!disableSwitcher && <SwitchTabs
-              selected={switchTabsSelected}
-              onChange={(value) => this.setState({ switchTabsSelected: value })}
-              tabs={[
-                { value: 'fiats', label: "Fiats" },
-                { value: 'tokens', label: "Tokens" },
-              ]}
-              type="light-blue"
-              size="medium"
-            />}
-            {(!disableCommonBases && isTokens) && <SectionBlock className="TokenSelect__fiat" title="Common bases">
-              {tokens.filter((token) => {
-                  const symbol = token.symbol.toUpperCase();
-
-                  for (let i = 0; i < commonBases.length; i++) {
-                    if (symbol === commonBases[i].toUpperCase()) {
-                      return true;
+            </form>
+            {(isAddress && isNewAddress)
+             ? <SectionBlock>
+                {!!newToken ? <div className="TokenSelect__list">
+                  <h3>
+                    Add Custom Token
+                  </h3>
+                  <ReactScrollableList
+                    listItems={[{
+                      id: 'newToken',
+                      token: newToken,
+                      content: (
+                        <div
+                          className="TokenSelect__token"
+                          key={'newToken'}
+                          onClick={e => this.onSubmit(e)}
+                        >
+                          <div className="TokenSelect__token-left">
+                            <div
+                              className="TokenSelect__token-icon"
+                              style={{
+                                backgroundImage: `url('${newToken.logoURI}')`,
+                              }}
+                            />
+                            <div className="TokenSelect__token-name">
+                              {!disableSymbol && <span>{newToken.symbol}</span>}
+                              {!disableName && <span>{newToken.name}</span>}
+                            </div>
+                          </div>
+                          <div className="TokenSelect__token-right">
+                            <Button onClick={e => this.onSubmit(e)}>
+                              Add token
+                            </Button>
+                          </div>
+                        </div>
+                      ),
+                    }]}
+                    heightOfItem={54}
+                    maxItemsToRender={10}
+                  />
+                </div> : <Spinner />}
+            </SectionBlock>
+            : <>
+                {!disableSwitcher && <SwitchTabs
+                  selected={switchTabsSelected}
+                  onChange={(value) => this.setState({ switchTabsSelected: value })}
+                  tabs={[
+                    { value: 'fiats', label: "Fiats" },
+                    { value: 'tokens', label: "Tokens" },
+                  ]}
+                  type="light-blue"
+                  size="medium"
+                />}
+                {(!disableCommonBases && isTokens) && <SectionBlock className="TokenSelect__fiat" title="Common bases">
+                  {tokens.filter((token) => {
+                    const symbol = token.symbol.toUpperCase();
+                    
+                    for (let i = 0; i < commonBases.length; i++) {
+                      if (symbol === commonBases[i].toUpperCase()) {
+                        return true;
+                      }
                     }
-                  }
-                })
-                .map((token, key) => {
-                  const active = token.symbol === selected.symbol;
-
-                  return (
-                    <div
-                      key={key}
-                      onClick={() => onChange(token)}
-                      className={cn(`TokenSelect__fiat__item`, { active })}
-                    >
-                      <WalletIcon currency={token} size={16} />
-                      {token.symbol.toUpperCase()}
-                    </div>
-                  );
-                })}
-            </SectionBlock>}
-            <div className="TokenSelect__list">
-              <h3>
-                {isTokens && "Tokens list"}
-                {isFiats && 'List'}
-                </h3>
-              {!!filtered.length && <ReactScrollableList
-                listItems={filtered}
-                heightOfItem={54}
-                maxItemsToRender={10}
-              />}
-            </div>
-              {!filtered.length && 'Coming soon'}
+                  })
+                    .map((token, key) => {
+                      const active = token.symbol === selected.symbol;
+                      
+                      return (
+                        <div
+                          key={key}
+                          onClick={() => onChange(token)}
+                          className={cn(`TokenSelect__fiat__item`, { active })}
+                        >
+                          <WalletIcon currency={token} size={16} />
+                          {token.symbol.toUpperCase()}
+                        </div>
+                      );
+                    })}
+                </SectionBlock>}
+                <div className="TokenSelect__list">
+                  <h3>
+                    {isTokens && "Tokens list"}
+                    {isFiats && 'List'}
+                  </h3>
+                  {!!filtered.length && <ReactScrollableList
+                    listItems={filtered}
+                    heightOfItem={54}
+                    maxItemsToRender={10}
+                  />}
+                </div>
+                {!filtered.length && 'Coming soon'}
+            </>}
           </div>
         </div>
       </Card>

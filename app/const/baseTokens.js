@@ -166,7 +166,7 @@ const SONGBIRD_BASE_TOKENS = [
     '0x1137E464B8adD7B9b022CB1acFc592f53c6Db6B5',
     19,
     6,
-    'https://static.metaswap.codefi.network/api/v1/tokenIcons/137/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270.png',
+    'https://dex.oracleswap.io/_next/static/media/SGB.88221107.png',
   ),
   new Token(
     'Oracle',
