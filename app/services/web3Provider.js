@@ -1522,19 +1522,19 @@ class Web3Provider extends React.PureComponent {
       this.setState({pools: null})
     }
     try {
-      if (chainId === 97) {
+      if (chainId === 18) {
         await this.fetchEthereumRequest({
           method: this.requestMethods.wallet_addEthereumChain,
           params: [{
-            chainId: this.web3.utils.toHex(97),
-            chainName: 'BSC testnet',
+            chainId: this.web3.utils.toHex(18),
+            chainName: 'Songbird',
             nativeCurrency: {
-              name: 'BNB',
-              symbol: 'BNB',
+              name: 'Songbird',
+              symbol: 'SGB',
               decimals: 18
             },
-            rpcUrls: ['https://bsc-testnet.web3api.com/v1/KBR2FY9IJ2IXESQMQ45X76BNWDAW2TT3Z3'],
-            blockExplorerUrls: ['https://testnet.bscscan.com']
+            rpcUrls: ['https://songbird-api.flare.network/ext/bc/C/rpc'],
+            blockExplorerUrls: ['https://songbird-explorer.flare.network']
           }],
         });
       }
