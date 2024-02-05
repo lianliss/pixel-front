@@ -30,6 +30,7 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   const {
     getPairAddress, getReserves, getTokenBalance, getTokenContract,
     network, tokens, customTokens, fiats, chainId, accountAddress,
+    addCustomLP,
   } = context;
   const { routerAddress } = network.contractAddresses;
   const rates = useSelector(ratesSelector);
@@ -204,6 +205,16 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   
   const perLang = 'per';
   const enableLang = "Enable";
+  
+  const onAddPair = async () => {
+    try {
+      const pairAddress = getPairAddress(selectedTokens[0], selectedTokens[1]);
+      await addCustomLP(pairAddress);
+      onClose();
+    } catch (error) {
+      console.error('[onAddPair]', error);
+    }
+  };
 
   return (
     <>
@@ -319,19 +330,9 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
         )}
         {isImport && (
           <div className="LiquidityAdd__import__footer">
-            <p className="LiquidityAdd__import__default_text">
-              How to import
-            </p>
-            <span
-              className="LiquidityAdd__import__default_text link"
-              onClick={() => {
-                if (pairAddress.length) addPool(pairAddress);
-                setIsImport(false);
-                setValues(['0', '0']);
-              }}
-            >
-              Main add liquidity
-            </span>
+            <Button primary large onClick={onAddPair}>
+              Import Liquidity Pair
+            </Button>
           </div>
         )}
       </div>

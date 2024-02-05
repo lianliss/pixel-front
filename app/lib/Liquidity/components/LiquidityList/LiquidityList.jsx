@@ -24,10 +24,10 @@ const UPDATE_BALANCE_TIMEOUT = 5000;
 // Main
 function LiquidityList({ onAddClick, onRemoveClick, poolsList, emptyText }) {
   const context = React.useContext(Web3Context);
-  const { getReserves, getTokenContract, accountAddress, chainId } = context;
+  const { getReserves, getTokenContract, accountAddress, chainId, customLP } = context;
   const [pools, setPools] = React.useState([]);
   const [balances, setBalances] = React.useState({});
-
+  
   const updateBalance = () => {
     if (accountAddress) {
       Promise.allSettled(poolsList.map((address) => getReserves(address))).then(

@@ -54,6 +54,7 @@ function LiquidityConfirmModal(props) {
     getBSCScanLink,
     addTokenToWallet,
     getPairAddress,
+    addCustomLP,
   } = context;
   const { wrapToken, defaultSymbol } = network;
   const { routerAddress } = network.contractAddresses;
@@ -146,6 +147,7 @@ function LiquidityConfirmModal(props) {
         addToken,
         onClose: props.onClose,
       });
+      addCustomLP(pairAddress);
     } catch (error) {
       console.error('[LiquidityConfirmModal][supply]', error);
       setErrorText(processError(error));
@@ -190,6 +192,7 @@ function LiquidityConfirmModal(props) {
         addToken,
         onClose: props.onClose,
       });
+      addCustomLP(pairAddress);
     } catch (error) {
       console.error('[LiquidityConfirmModal][supplyBNB]', error);
       setErrorText(processError(error));

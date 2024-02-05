@@ -57,6 +57,7 @@ class Web3Provider extends React.PureComponent {
     chainId: null,
     tokens: this.network.displayTokens,
     customTokens: [],
+    customLP: [],
     tokensLoaded: false,
     tokensChain: null,
     pools: null,
@@ -79,6 +80,7 @@ class Web3Provider extends React.PureComponent {
   farm = null;
   pairs = {};
   customTokens = [];
+  customLP = [];
   connectionCheckTimeout;
   successConnectionCheck = false;
   requestMethods = {};
@@ -116,6 +118,7 @@ class Web3Provider extends React.PureComponent {
     );
     this.web3Host = new Web3(provider);
     this.loadCustomTokens();
+    this.loadCustomLP();
   }
   
   addCustomToken = async _address => {
@@ -136,6 +139,28 @@ class Web3Provider extends React.PureComponent {
     this.customTokens.push(token);
     this.storage.set({customTokens: this.customTokens.map(token => {
       return Object.assign({}, token);
+      })});
+    this.updateStateCustomTokens();
+  }
+  
+  addCustomLP = async _address => {
+    let address, token;
+    if (typeof _address === 'string') {
+      address = this.getWeb3().utils.toChecksumAddress(_address);
+    } else {
+      token = _address;
+      address = token.address;
+    }
+    if (this.customLP.find(t => t.address === address)) return;
+    
+    if (typeof _address === 'string') {
+      token = await this.initCustomLP(_address);
+    }
+    if (!token) return;
+    
+    this.customLP.push(token);
+    this.storage.set({customLP: this.customLP.map(token => {
+        return Object.assign({}, token);
       })});
     this.updateStateCustomTokens();
   }
@@ -164,6 +189,38 @@ class Web3Provider extends React.PureComponent {
     }
   }
   
+  initCustomLP = async (_address) => {
+    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    try {
+      const contract = this.getContract(require('const/ABI/PancakePair'), address);
+      const data = await Promise.all([
+        contract.methods.name().call(),
+        contract.methods.symbol().call(),
+        contract.methods.decimals().call(),
+        contract.methods.token0().call(),
+        contract.methods.token1().call(),
+      ]);
+      const token0 = data[3];
+      const token1 = data[4];
+      await Promise.all([
+        this.addCustomToken(data[3]),
+        this.addCustomToken(data[4]),
+      ]);
+      return new Token(
+        data[0],
+        data[1],
+        address,
+        this.state.chainId,
+        Number(data[2]),
+        'https://dynamic-assets.coinbase.com/a1f4b7b34069888e313f284b49012a01b3bbc37b5113319c7105170a8fe268de8f60be5a0af7a8dafa8aba31fcc21ef44bc30c1e8bbb8379064ac94965bccf26/asset_icons/aafc2f5fff21664213e2a5a2c6e31aa055f277d1069b16745d54f84c0e94f1f3.png',
+        true,
+      )
+    } catch (error) {
+      console.error('[initCustomLP]', error);
+      return null;
+    }
+  }
+  
   removeCustomToken = _address => {
     const address = this.getWeb3().utils.toChecksumAddress(_address);
     if (this.customTokens.find(t => t.address === address)) return;
@@ -176,6 +233,10 @@ class Web3Provider extends React.PureComponent {
   
   getCustomTokens = (chainId = this.state.chainId) => {
     return this.customTokens.filter(t => t.chainId === chainId);
+  }
+  
+  getCustomLP = (chainId = this.state.chainId) => {
+    return this.customLP.filter(t => t.chainId === chainId);
   }
   
   loadCustomTokens = () => {
@@ -194,9 +255,26 @@ class Web3Provider extends React.PureComponent {
     this.updateStateCustomTokens();
   }
   
+  loadCustomLP = () => {
+    this.customLP = _.get(this.storage.storage, 'customLP', [])
+      .map(token => {
+        return new Token(
+          token.name,
+          token.symbol,
+          token.address,
+          token.chainId,
+          token.decimals,
+          token.logoURI,
+          true,
+        );
+      });
+    this.updateStateCustomTokens();
+  }
+  
   updateStateCustomTokens = chainId => {
     this.setState({
       customTokens: this.getCustomTokens(chainId),
+      customLP: this.getCustomLP(chainId),
     })
   }
 
@@ -1841,6 +1919,8 @@ class Web3Provider extends React.PureComponent {
       addCustomToken: this.addCustomToken.bind(this),
       initCustomToken: this.initCustomToken.bind(this),
       removeCustomToken: this.removeCustomToken.bind(this),
+      addCustomLP: this.addCustomLP.bind(this),
+      initCustomLP: this.initCustomLP.bind(this),
       getPairAddress: this.getPairAddress.bind(this),
       getReserves: this.getReserves.bind(this),
       pairs: this.pairs,

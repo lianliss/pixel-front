@@ -80,7 +80,7 @@ function LiquidityMain({
       <div className="Liquidity__footer">
         <p className="default-text">
           Don't see you LP tokens?&nbsp;
-          <Button disabled onClick={() => onImportClick()}>
+          <Button onClick={() => onImportClick()}>
             Import
           </Button>
         </p>
