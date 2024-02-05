@@ -74,10 +74,10 @@ function Header({isMenuOpen, setIsMenuOpen}) {
     </div>
     <div className={"header-right"}>
       <BluePrintButton icon={<Icon icon="search" size={20} />} className={"header-round"} minimal />
-      <BluePrintButton icon={<Icon icon="layout-grid" size={20} />} className={"header-round"} minimal />
-      <Button icon={<img src={pixelLogo} />} minimal >
+      {!adaptive && <BluePrintButton icon={<Icon icon="layout-grid" size={20} />} className={"header-round"} minimal />}
+      {!adaptive && <Button icon={<img src={pixelLogo} />} minimal >
         $0.04
-      </Button>
+      </Button>}
       <Button icon={"box"} minimal >
         Airdrop
       </Button>

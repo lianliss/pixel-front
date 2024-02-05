@@ -17,6 +17,24 @@ function ConnectToWalletModal(props) {
   const context = React.useContext(Web3Context);
   const { isConnected, connectWallet } = context;
   const adaptive = useSelector((state) => state.App.adaptive);
+  
+  const handleMetamaskWallet = () => {
+    if (!adaptive) {
+      connectWallet(CONNECTORS.METAMASK);
+      return;
+    }
+    
+    const isMetamask = getConnectorObject(CONNECTORS.METAMASK);
+    if (isMetamask) {
+      connectWallet(CONNECTORS.METAMASK);
+      return;
+    }
+    
+    window.open(
+      `https://metamask.app.link/dapp/hellopixel.network${window.location.pathname}`,
+      '_blank'
+    );
+  };
 
   const handleTrustWallet = () => {
     if (!adaptive) {
@@ -55,7 +73,7 @@ function ConnectToWalletModal(props) {
             title="Metamask"
             icon={require('app/assets/social/metaMask.svg')}
             style={{ background: '#fff' }}
-            onClick={() => connectWallet(CONNECTORS.METAMASK)}
+            onClick={handleMetamaskWallet}
           />
           <Wallet
             title="Trust Wallet"
