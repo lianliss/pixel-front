@@ -1522,11 +1522,11 @@ class Web3Provider extends React.PureComponent {
       this.setState({pools: null})
     }
     try {
-      if (chainId === 18) {
+      if (chainId === 19) {
         await this.fetchEthereumRequest({
           method: this.requestMethods.wallet_addEthereumChain,
           params: [{
-            chainId: this.web3.utils.toHex(18),
+            chainId: this.web3.utils.toHex(19),
             chainName: 'Songbird',
             nativeCurrency: {
               name: 'Songbird',
