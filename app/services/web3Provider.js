@@ -187,7 +187,7 @@ class Web3Provider extends React.PureComponent {
           token.address,
           token.chainId,
           token.decimals,
-          undefined,
+          token.logoURI,
           true,
           );
       });

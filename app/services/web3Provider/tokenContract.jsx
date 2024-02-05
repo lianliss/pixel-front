@@ -104,7 +104,7 @@ class TokenContract {
         NarfexOracleABI,
         this.network.contractAddresses.narfexOracle,
       );
-      const tokensData = (await oracleContract.methods.getTokensData(tokens.map(t => t.address), false).call())
+      const tokensData = (await oracleContract.methods.getTokensData(tokens.map(t => t.address), true).call())
         .map((tokenData, index) => {
         const token = tokens[index];
         this.provider.oracleTokens[token.address] = Object.assign(
