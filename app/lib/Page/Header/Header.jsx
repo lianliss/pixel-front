@@ -23,12 +23,15 @@ import getFinePrice from 'utils/getFinePrice';
 import {BUILT_AT} from 'const';
 import {Web3Context} from 'services/web3Provider';
 import {ModalContext} from "services/ModalProvider";
+import {adaptiveSelector} from 'app/store/selectors';
+import {classNames as cn} from 'utils';
 
-function Header() {
+function Header({isMenuOpen, setIsMenuOpen}) {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const context = React.useContext(Web3Context);
+  const adaptive = useSelector(adaptiveSelector);
   const {
     connectToWalletModal,
   } = React.useContext(ModalContext);
@@ -63,7 +66,12 @@ function Header() {
   </Menu>;
   
   return <div className="header">
-    <BluePrintButton icon={<Icon icon="menu" size={20} />} className={"header-round header-menu-icon"} minimal />
+    <div className={"header-left"}>
+      {adaptive && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
+                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                    className={"header-round header-menu-icon"}
+                                    minimal />}
+    </div>
     <div className={"header-right"}>
       <BluePrintButton icon={<Icon icon="search" size={20} />} className={"header-round"} minimal />
       <BluePrintButton icon={<Icon icon="layout-grid" size={20} />} className={"header-round"} minimal />

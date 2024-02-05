@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 import UserCard from './UserCard/UserCard';
 import {useNavigate} from 'react-router-dom';
+import {adaptiveSelector} from 'app/store/selectors';
+import {classNames as cn} from 'utils';
 
 const sections = [
   {
@@ -59,11 +61,12 @@ function DisabledLink(props) {
   return <div className="sidebar-item disabled" {...props} />
 }
 
-function Sidebar({match}) {
+function Sidebar({match, isMenuOpen}) {
   const account = {};
   const navigate = useNavigate();
+  const adaptive = useSelector(adaptiveSelector);
   
-  return <div className="sidebar">
+  return <div className={cn('sidebar', adaptive && 'adaptive', isMenuOpen && 'is-open')}>
     <img className="sidebar-logo" onClick={() => {
       navigate(routes.dashboard.path);
     }} src={logo} />

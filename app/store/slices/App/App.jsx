@@ -17,6 +17,9 @@ export const AppSlice = createSlice({
     appUpdateAuth: (state, {payload}) => {
       state.isAuthorized = payload;
     },
+    appSetAdaptive: (state, {payload}) => {
+      state.adaptive = payload;
+    }
   },
 });
 
@@ -24,6 +27,7 @@ export const {
   appStateInitialize,
   appUpdateAccount,
   appUpdateAuth,
+  appSetAdaptive,
 } = AppSlice.actions;
 
 export default AppSlice.reducer;

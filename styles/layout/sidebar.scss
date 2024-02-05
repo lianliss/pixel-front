@@ -13,6 +13,20 @@
     position: relative;
     border-right: 1px solid $color-border;
 
+    &.adaptive {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        transform: translateX(-100%);
+        transition: all 0.2s ease;
+
+        &.is-open {
+            transform: translateX(0);
+        }
+    }
+
     &-logo {
         cursor: pointer;
     }

@@ -7,7 +7,7 @@ import LoadModule from 'utils/async/load-module';
 import {} from 'slices/App';
 import _ from 'lodash';
 import getCookie from 'utils/get-cookie';
-import {appUpdateAccount} from 'slices/App';
+import {appUpdateAccount, appSetAdaptive} from 'slices/App';
 import Router from './router';
 import 'process';
 
@@ -21,7 +21,23 @@ class AppContainer extends React.PureComponent {
   };
   
   componentDidMount() {
+    window.addEventListener("resize", this.onResize.bind(this));
+    this.onResize();
     this.getAccountData();
+  }
+  
+  onResize() {
+    const {appSetAdaptive, adaptive} = this.props;
+    if (adaptive && window.innerWidth >= 800) {
+      appSetAdaptive(false);
+    }
+    if (!adaptive && window.innerWidth < 800) {
+      appSetAdaptive(true);
+    }
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize.bind(this));
   }
   
   async getAccountData() {
@@ -53,6 +69,8 @@ class AppContainer extends React.PureComponent {
 
 export default connect(state => ({
   account: _.get(state, 'App.account'),
+  adaptive: _.get(state, 'App.adaptive'),
 }), dispatch => bindActionCreators({
   appUpdateAccount,
+  appSetAdaptive,
 }, dispatch), null, {pure: true})(AppContainer);
