@@ -795,6 +795,7 @@ class Web3Provider extends React.PureComponent {
   }
 
   async logout() {
+    console.log('logout');
     this.setBalances([], 'clear');
     this.setState({
       tokens: this.network.displayTokens,

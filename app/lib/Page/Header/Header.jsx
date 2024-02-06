@@ -25,6 +25,8 @@ import {Web3Context} from 'services/web3Provider';
 import {ModalContext} from "services/ModalProvider";
 import {adaptiveSelector} from 'app/store/selectors';
 import {classNames as cn} from 'utils';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import toaster from 'services/toaster';
 
 function Header({isMenuOpen, setIsMenuOpen}) {
   
@@ -40,6 +42,7 @@ function Header({isMenuOpen, setIsMenuOpen}) {
   const {
     accountAddress,
     connectWallet,
+    isConnected,
   } = context;
   
   const onLogoClick = () => {
@@ -78,12 +81,28 @@ function Header({isMenuOpen, setIsMenuOpen}) {
       {!adaptive && <Button icon={<img src={pixelLogo} />} minimal >
         $0.04
       </Button>}
-      <Button icon={"box"} minimal >
+      <Button icon={"box"}
+              minimal
+              onClick={() => navigate(routes.airdrop.path)} >
         Airdrop
       </Button>
-      <Button icon={"antenna"} onClick={onWalletConnect} primary={!accountAddress} minimal >
-        {connectText}
-      </Button>
+      {isConnected ? <CopyToClipboard text={accountAddress}
+                                      className="copy-text"
+                                      onCopy={() => toaster.show({
+                                        intent: 'warning',
+                                        message: <>
+                                          Address <b>{accountAddress}</b><br/>
+                                            copied to clipboard
+                                        </>,
+                                        icon: 'clipboard',
+                                      })}>
+          <Button icon={"antenna"} minimal >
+            {connectText}
+          </Button>
+        </CopyToClipboard>
+      :<Button icon={"antenna"} onClick={onWalletConnect} primary minimal >
+          Connect Wallet
+      </Button>}
     </div>
   </div>
 }

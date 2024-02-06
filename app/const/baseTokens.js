@@ -166,7 +166,7 @@ const SONGBIRD_BASE_TOKENS = [
     '0x1137E464B8adD7B9b022CB1acFc592f53c6Db6B5',
     19,
     6,
-    'https://dex.oracleswap.io/_next/static/media/SGB.88221107.png',
+    require('assets/img/lion.jpg'),
   ),
   new Token(
     'Oracle',

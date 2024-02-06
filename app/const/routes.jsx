@@ -15,6 +15,12 @@ const routes = {
     lib: 'Dashboard',
     disabled: true,
   },
+  airdrop: {
+    path: '/airdrop/',
+    title: 'Airdrop',
+    icon: 'box',
+    lib: 'Airdrop',
+  },
   bridge: {
     path: '/bridge/',
     title: 'Bridge',
