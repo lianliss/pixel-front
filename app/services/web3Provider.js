@@ -13,7 +13,7 @@ import significant from 'utils/significant';
 import TokenContract from './web3Provider/tokenContract';
 import KNOWN_FIATS from 'const/knownFiats';
 import {
-  getRequestMetods,
+  getRequestMethods,
   getConnectorObject,
   fetchEthereumRequest,
   getFineChainId,
@@ -728,7 +728,7 @@ class Web3Provider extends React.PureComponent {
       }
 
       this.ethereum = ethereumObject.ethereum;
-      this.requestMethods = getRequestMetods(connector);
+      this.requestMethods = getRequestMethods(connector);
       const provider = ethereumObject.provider;
 
       this.successConnectionCheck = true;

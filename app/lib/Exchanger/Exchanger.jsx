@@ -77,6 +77,8 @@ function Exchanger() {
 
   return (
     <div className="Exchanger__wrap">
+      <div>{window.navigator.userAgent}</div>
+      <div>{_.get(window, 'Telegram.WebApp') ? 'Telegram' : 'Other userAgent'}</div>
       <Tabs id="Exchanger"
             renderActiveTabPanelOnly
             onChange={onTabChange}

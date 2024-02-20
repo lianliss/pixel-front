@@ -33,7 +33,7 @@ export const noderealRPC = {
  * @param connector {string} - Wallet connector name from constant.
  * @returns {object}
  */
-export const getRequestMetods = (connector) => {
+export const getRequestMethods = (connector) => {
   return requests[connector];
 };
 
