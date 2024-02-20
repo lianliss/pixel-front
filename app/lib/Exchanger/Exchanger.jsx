@@ -75,7 +75,7 @@ function Exchanger() {
     return <LoadModule lib={"TestnetOverlay/TestnetOverlay"} />;
   }
   
-  const [isDebug, setIsDebug] = React.useState(true);
+  const [isDebug, setIsDebug] = React.useState(false);
   React.useEffect(() => {
     const app = _.get(window, 'Telegram.WebApp');
     if (!app) return;
@@ -99,13 +99,31 @@ function Exchanger() {
             {
               id: 2,
               type: 'destructive',
-              text: 'Нагнать жути',
+              text: 'Сканировать QR',
             },
           ],
+        }, id => {
+          if (id === 2) {
+            app.showScanQrPopup({
+              text: 'Пока не знаю зачем это',
+            }, code => {
+              app.showConfirm(code);
+              return true;
+            });
+          }
         });
       });
+      app.setHeaderColor('#001529');
     }
     if (app.MainButton) {
+      app.MainButton.setText(isDebug ? 'Hide debug data' : 'Debug Me!');
+      app.MainButton.onClick(() => {
+        setIsDebug(!isDebug);
+      });
+      app.MainButton.setParams({
+        color: '#A62CFF',
+        text_color: '#FFFFFF',
+      });
       app.MainButton.show();
       app.MainButton.enable();
     }
