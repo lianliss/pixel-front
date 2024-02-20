@@ -74,11 +74,39 @@ function Exchanger() {
   if (isConnected && chainId !== 19) {
     return <LoadModule lib={"TestnetOverlay/TestnetOverlay"} />;
   }
+  
+  const [isDebug, setIsDebug] = React.useState(false);
+  React.useEffect(() => {
+    const app = _.get(window, 'Telegram.WebApp');
+    if (!app) return;
+    app.ready();
+    app.expand();
+    if (app.SettingsButton) {
+      app.SettingsButton.show();
+    }
+  }, []);
+  
+  React.useEffect(() => {
+    if (app.MainButton) {
+      app.MainButton.setText(isDebug ? 'Hide debug data' : 'Debug Me!');
+      app.MainButton.onClick(() => {
+        setIsDebug(!isDebug);
+      });
+      app.MainButton.show();
+    }
+  }, [isDebug])
 
   return (
     <div className="Exchanger__wrap">
-      <div>{window.navigator.userAgent}</div>
-      <div>{_.get(window, 'Telegram.WebApp') ? 'Telegram' : 'Other userAgent'}</div>
+      {isDebug && <>
+        <div>{window.navigator.userAgent}</div>
+        <div>initData: {_.get(window, 'Telegram.WebApp.initData')}</div>
+        <div>version: {_.get(window, 'Telegram.WebApp.version')}</div>
+        <div>platform: {_.get(window, 'Telegram.WebApp.platform')}</div>
+        <div>username: {_.get(window, 'Telegram.WebApp.WebAppInitData.user.username')}</div>
+        <div>user.id: {_.get(window, 'Telegram.WebApp.WebAppInitData.user.id')}</div>
+        <div>chat.id: {_.get(window, 'Telegram.WebApp.WebAppInitData.chat.id')}</div>
+      </>}
       <Tabs id="Exchanger"
             renderActiveTabPanelOnly
             onChange={onTabChange}
