@@ -75,7 +75,7 @@ function Exchanger() {
     return <LoadModule lib={"TestnetOverlay/TestnetOverlay"} />;
   }
   
-  const [isDebug, setIsDebug] = React.useState(false);
+  const [isDebug, setIsDebug] = React.useState(true);
   React.useEffect(() => {
     const app = _.get(window, 'Telegram.WebApp');
     if (!app) return;
@@ -83,7 +83,33 @@ function Exchanger() {
     app.expand();
     if (app.SettingsButton) {
       app.SettingsButton.show();
+      app.SettingsButton.onClick(() => {
+        app.showPopup({
+          title: 'Popup test',
+          message: 'Тест кнопки',
+          buttons: [
+            {
+              id: 0,
+              type: 'ok',
+            },
+            {
+              id: 1,
+              type: 'cancel',
+            },
+            {
+              id: 2,
+              type: 'destructive',
+              text: 'Нагнать жути',
+            },
+          ],
+        });
+      });
     }
+    if (app.MainButton) {
+      app.MainButton.show();
+      app.MainButton.enable();
+    }
+    app.enableClosingConfirmation();
   }, []);
   
   React.useEffect(() => {
