@@ -103,14 +103,12 @@ function Exchanger() {
             },
           ],
         }, id => {
-          if (id === 2) {
-            app.showScanQrPopup({
-              text: 'Пока не знаю зачем это',
-            }, code => {
-              app.showConfirm(code);
-              return true;
-            });
-          }
+          app.showScanQrPopup({
+            text: `${id}`,
+          }, code => {
+            app.showConfirm(code);
+            return true;
+          });
         });
       });
       app.setHeaderColor('#001529');

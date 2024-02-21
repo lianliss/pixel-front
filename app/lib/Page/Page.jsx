@@ -14,7 +14,9 @@ function Page({children, match, title}) {
   const adaptive = useSelector(adaptiveSelector);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return <div className={cn('page-container', adaptive && 'adaptive')}>
-    <Sidebar match={match} isMenuOpen={isMenuOpen} />
+    <Sidebar match={match}
+             setIsMenuOpen={setIsMenuOpen}
+             isMenuOpen={isMenuOpen} />
     <div className="page">
       {!IS_TELEGRAM && <Header setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
       {IS_TELEGRAM && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}

@@ -87,7 +87,7 @@ function DisabledLink(props) {
   return <div className="sidebar-item disabled" {...props} />
 }
 
-function Sidebar({match, isMenuOpen}) {
+function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
   const context = React.useContext(Web3Context);
   const modal = React.useContext(ModalContext);
   const {accountAddress, isConnected, logout} = context;
@@ -122,11 +122,13 @@ function Sidebar({match, isMenuOpen}) {
               : !!item.disabled;
             const onClick = typeof item.onClick === 'function'
               ? e => {
-                console.log('LOGOUT');
                 e.preventDefault();
+                setIsMenuOpen(false);
                 return item.onClick(account);
               }
-              : () => {};
+              : () => {
+                setIsMenuOpen(false);
+              };
             const LinkComponent = isDisabled ? DisabledLink : Link;
             const link = _.get(item, 'link');
             
