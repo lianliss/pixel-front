@@ -9,6 +9,9 @@
     border-radius: var(--radius-wrapper);
     padding: 24px;
 
+    .telegram & {
+      margin: 20px auto 0;
+    }
     .bp5-tabs {
       .bp5-tab {
         &[aria-selected=true] {

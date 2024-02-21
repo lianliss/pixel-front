@@ -28,6 +28,34 @@
         overflow: auto;
         padding-bottom: 40px;
     }
+    .telegram &-content {
+        margin-top: 0;
+    }
+    &-overlay {
+        background: rgba(0,0,0,0.25);
+        position: fixed;
+        z-index: 9;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    .bp5-dark &-menu-button.bp5-button.bp5-minimal {
+        position: fixed;
+        z-index: 10;
+        right: 15px;
+        bottom: 15px;
+        background: var(--color-panel);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--color-main);
+        box-shadow: 0 4px 10px 0 rgba(146, 44, 255, 0.4);
+
+        &:hover {
+            background-color: var(--color-main);
+        }
+    }
 }
 
 .dashboard {

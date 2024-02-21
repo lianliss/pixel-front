@@ -1,6 +1,7 @@
 'use strict';
 
 import 'process';
+import _ from 'lodash';
 
 export const APP_DOM_ID = 'app';
 export const APP_DOM_CLASS = 'app';
@@ -17,3 +18,6 @@ export const STORAGE_URL = process.env.STORAGE_URL;
 export const BUILT_AT = process.env.BUILT_AT;
 
 export const TIMEZONE_OFFSET = 0; //(new Date()).getTimezoneOffset() * 60;
+
+export const IS_TELEGRAM = IS_DEVELOP
+  || !!_.get(window, 'Telegram.WebApp.initData', '').length;

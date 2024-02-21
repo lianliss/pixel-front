@@ -10,6 +10,8 @@ import getCookie from 'utils/get-cookie';
 import {appUpdateAccount, appSetAdaptive} from 'slices/App';
 import Router from './router';
 import 'process';
+import {classNames} from 'utils';
+import {IS_TELEGRAM} from "const";
 
 class AppContainer extends React.PureComponent {
   static displayName = 'AppContainer';
@@ -52,15 +54,24 @@ class AppContainer extends React.PureComponent {
   
   render() {
     const {account} = this.props;
+    const className = [
+      'container',
+      'bp5-dark',
+    ];
+    if (IS_TELEGRAM) {
+      className.push('telegram');
+      window.Telegram.WebApp.expand();
+      window.Telegram.WebApp.ready();
+    }
     
     if (!this.state.isAccountGet) {
-      return <div className="container bp5-dark">
+      return <div className={className.join(' ')}>
         {LoadModule.renderLoading()}
       </div>;
     }
     
     return (
-      <div className="container bp5-dark">
+      <div className={className.join(' ')}>
         <Router />
       </div>
     );

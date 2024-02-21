@@ -8,6 +8,12 @@ const routes = {
     icon: 'exchange',
     lib: 'Exchanger',
   },
+  wallet: {
+    path: '/wallet/',
+    title: 'Wallet',
+    icon: 'person',
+    lib: 'Wallet',
+  },
   dashboard: {
     path: '/dashboard/',
     title: 'Dashboard',

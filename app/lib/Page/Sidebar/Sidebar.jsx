@@ -16,11 +16,16 @@ import {adaptiveSelector} from 'app/store/selectors';
 import {classNames as cn} from 'utils';
 import {Web3Context} from "services/web3Provider";
 import {ModalContext} from "services/ModalProvider";
+import {IS_TELEGRAM} from "const";
 
 const sections = [
   {
     isAvailable: account => true,
     menu: [
+      {
+        ...routes.wallet,
+        isAvailable: () => IS_TELEGRAM,
+      },
       routes.dashboard,
       routes.exchange,
       routes.bridge,
@@ -68,7 +73,7 @@ const sections = [
       {
         title: 'Connect Wallet',
         icon: 'antenna',
-        isAvailable: account => !account.isConnected,
+        isAvailable: account => !IS_TELEGRAM && !account.isConnected,
         onClick: account => {
           account.connectToWalletModal();
           return false;
