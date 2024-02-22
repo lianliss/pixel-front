@@ -76,67 +76,6 @@ function Exchanger() {
   }
   
   const [isDebug, setIsDebug] = React.useState(false);
-  React.useEffect(() => {
-    const app = _.get(window, 'Telegram.WebApp');
-    if (!app) return;
-    app.ready();
-    app.expand();
-    if (app.SettingsButton) {
-      app.SettingsButton.show();
-      app.SettingsButton.onClick(() => {
-        app.showPopup({
-          title: 'Popup test',
-          message: 'Тест кнопки',
-          buttons: [
-            {
-              id: 0,
-              type: 'ok',
-            },
-            {
-              id: 1,
-              type: 'cancel',
-            },
-            {
-              id: 2,
-              type: 'destructive',
-              text: 'Сканировать QR',
-            },
-          ],
-        }, id => {
-          app.showScanQrPopup({
-            text: `${id}`,
-          }, code => {
-            app.showConfirm(code);
-            return true;
-          });
-        });
-      });
-      app.setHeaderColor('#001529');
-    }
-    if (app.MainButton) {
-      app.MainButton.setText(isDebug ? 'Hide debug data' : 'Debug Me!');
-      app.MainButton.onClick(() => {
-        setIsDebug(!isDebug);
-      });
-      app.MainButton.setParams({
-        color: '#A62CFF',
-        text_color: '#FFFFFF',
-      });
-      app.MainButton.show();
-      app.MainButton.enable();
-    }
-    app.enableClosingConfirmation();
-  }, []);
-  
-  React.useEffect(() => {
-    if (app.MainButton) {
-      app.MainButton.setText(isDebug ? 'Hide debug data' : 'Debug Me!');
-      app.MainButton.onClick(() => {
-        setIsDebug(!isDebug);
-      });
-      app.MainButton.show();
-    }
-  }, [isDebug])
 
   return (
     <div className="Exchanger__wrap">

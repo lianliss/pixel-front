@@ -30,6 +30,8 @@
     }
     .telegram &-content {
         margin-top: 0;
+        padding-bottom: 15px;
+        height: calc(100vh);
     }
     &-overlay {
         background: rgba(0,0,0,0.25);

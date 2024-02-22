@@ -11,7 +11,79 @@
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
     </head>
     <body>
-        <div id="app"></div>
+        <div id="app">
+            <div style="position: fixed; left: 0; right: 0; top: 0; bottom: 0; display: flex; justify-content: center; align-items: center;">
+                <svg width="37" height="28" viewBox="0 0 37 28" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <style>
+                        @-webkit-keyframes vibrate-1 {
+                            0% {
+                                -webkit-transform: translate(0);
+                                transform: translate(0);
+                            }
+                            20% {
+                                -webkit-transform: translate(-2px, 2px);
+                                transform: translate(-2px, 2px);
+                            }
+                            40% {
+                                -webkit-transform: translate(-2px, -2px);
+                                transform: translate(-2px, -2px);
+                            }
+                            60% {
+                                -webkit-transform: translate(2px, 2px);
+                                transform: translate(2px, 2px);
+                            }
+                            80% {
+                                -webkit-transform: translate(2px, -2px);
+                                transform: translate(2px, -2px);
+                            }
+                            100% {
+                                -webkit-transform: translate(0);
+                                transform: translate(0);
+                            }
+                        }
+                        @keyframes vibrate-1 {
+                            0% {
+                                -webkit-transform: translate(0);
+                                transform: translate(0);
+                            }
+                            20% {
+                                -webkit-transform: translate(-2px, 2px);
+                                transform: translate(-2px, 2px);
+                            }
+                            40% {
+                                -webkit-transform: translate(-2px, -2px);
+                                transform: translate(-2px, -2px);
+                            }
+                            60% {
+                                -webkit-transform: translate(2px, 2px);
+                                transform: translate(2px, 2px);
+                            }
+                            80% {
+                                -webkit-transform: translate(2px, -2px);
+                                transform: translate(2px, -2px);
+                            }
+                            100% {
+                                -webkit-transform: translate(0);
+                                transform: translate(0);
+                            }
+                        }
+                        .loading-animation {
+                            -webkit-animation: vibrate-1 0.3s linear infinite both;
+                            animation: vibrate-1 0.3s linear infinite both;
+                        }
+                    </style>
+                    <rect width="36.6662" height="28" fill="url(#pattern0)"/>
+                    <defs>
+                        <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                            <use xlink:href="#image0_686_1005" transform="matrix(0.0116279 0 0 0.0152268 0 -0.00248518)"/>
+                        </pattern>
+                        <image class="loading-animation" id="image0_686_1005" width="86" height="66"
+                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFYAAABCCAYAAADNESF6AAADBklEQVR4nO2bP04bQRTGbYkrIEXxMVzgPi2GS0S0HIACu8gB0qJcIiYtfVJwhXQgJA7Bn1k+yfvsybyZnW9mvHm/ZjGwa++nn99+HttHk/Z4EbenVR7FQI5qP4Cx0lKwztS/m07Y5/vulyfr6UEa3FKwo6KFYJ2R378+uBsw9XjebQ/V4BaCHSXNBLuYfe7dluZKg283j257+WPWpMHNBDs2agbrTPtzLYXrI80Fy7PO8MWHsL8f2jLYjCVRI9heC9AizcWMBZjReAbUNtiMJVEtWNkCUveHmdjKv8Pgt/476P5iMWNJlAxW1QJC7LQEz6iWBmOmb81cqsJmLIkSwSa1gBAwF31WtoTamLEkigU7tAVojy9nq6TUrDVjSTCDzdICQmhbQmnMWBKMYCktIERsS2DPWjOWBC1YdgvQ3n+oJbAwY0nkDLZICwgR2xJYs9aMJZEj2CotIETttQQzlkS2YEMtINcK/tnptdtezVdR+4VaQu5Za8aSGBKsqgV8u191//yiawvTaV8U337ny+64IXNrrSWYsSRSglW1AMxUramx/LxduS0M136iJtQScs1aM5ZEcrC51gLkTC0FuyWYsSRigm3yFVYspVqCGUtCE2zPVO1sxVUafRNX8Z2DJ7YGHDd1NU3bEvBKb/NrHTVrzVgS6mBTWwBeGeW++ude9/W1hC+fLtx2M1lHHc+MJfGvYLO2gNrvLPjQtoTYWWvGktgXbFILaAXMyNjHHWoJsbPWjCXhDfbQTAV3Tzduu5itovaD6cs5vj+2vyVoZ60ZS2I72L0tIHVm1QK9GevB2jaC88NsxayVLUE7a81YEjvBytlyKKYCaSrec4Np2vOBub5ZG1qvNWNJvAfbm621Pp3nY+s7sar/l9eIoZ8/kM9cbUswY0kEe2ztWSu/E8tCnqc8f6wlLCYyh/0twYwlMbpWkMrQ85az1owlsRNsqBX8LybLHLD6hV4cwowl8R6s6114BeFbKwBjNdX3TMX5hkx9m6340Xosk+1ge+Ya0dhaQQleAY6/d0Jgn+7mAAAAAElFTkSuQmCC"/>
+                    </defs>
+                </svg>
+            </div>
+        </div>
     </body>
     
 </html>
