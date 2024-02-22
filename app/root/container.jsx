@@ -30,6 +30,10 @@ class AppContainer extends React.PureComponent {
   
   onResize() {
     const {appSetAdaptive, adaptive} = this.props;
+    if (IS_TELEGRAM) {
+      appSetAdaptive(true);
+      return;
+    }
     if (adaptive && window.innerWidth >= 800) {
       appSetAdaptive(false);
     }
