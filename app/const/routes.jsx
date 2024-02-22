@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
+import {IS_TELEGRAM} from "app/const/index";
 
 const routes = {
   home: {
     path: '/',
     title: 'Exchange',
     icon: 'exchange',
-    lib: 'Exchanger',
+    lib: IS_TELEGRAM ? 'Wallet' :'Exchanger',
   },
   wallet: {
     path: '/wallet/',
