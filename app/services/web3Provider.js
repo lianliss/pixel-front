@@ -28,6 +28,9 @@ import { CONTRACT_ADDRESSES } from "./multichain/contracts";
 import { FiatToken, Token } from "./Token";
 import toaster from 'services/toaster';
 import ExchangerStorage from 'services/ExchangerStorage';
+import {IS_TELEGRAM} from "const";
+import PixelWallet from "services/multiwallets/pixelWallet";
+import telegram from 'services/telegram';
 
 export const Web3Context = React.createContext();
 
@@ -119,6 +122,22 @@ class Web3Provider extends React.PureComponent {
     this.web3Host = new Web3(provider);
     this.loadCustomTokens();
     this.loadCustomLP();
+    
+    if (IS_TELEGRAM) {
+      window.pixelWallet = new PixelWallet(this);
+      this.connectPixelWallet();
+    }
+  }
+  
+  connectPixelWallet = async _privateKey => {
+    try {
+      const privateKey = _privateKey || await telegram.getPrivateKey();
+      if (!privateKey) throw new Error('No privateKey founded');
+      window.pixelWallet.connect(privateKey);
+      this.connectWallet(CONNECTORS.PIXEL);
+    } catch (error) {
+      console.log('[connectPixelWallet]', error);
+    }
   }
   
   addCustomToken = async _address => {
@@ -1914,6 +1933,7 @@ class Web3Provider extends React.PureComponent {
       getWeb3: this.getWeb3.bind(this),
       ethereum: this.ethereum,
       connectWallet: this.connectWallet.bind(this),
+      connectPixelWallet: this.connectPixelWallet.bind(this),
       mountDapp: this.mountDapp.bind(this),
       logout: this.logout.bind(this),
       network: this.network,

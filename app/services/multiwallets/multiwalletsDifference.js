@@ -55,6 +55,11 @@ export const walletIsValid = (wallet, validationArray) =>
  */
 export const getEthereum = (connector, chainID = DEFAULT_CHAIN) => {
   switch (connector) {
+    case CONNECTORS.PIXEL:
+      if (!window['pixelWallet']) {
+        return null;
+      }
+      return window['pixelWallet'];
     case CONNECTORS.BSC: {
       if (!window['BinanceChain']) {
         return null;
@@ -134,6 +139,7 @@ const getProviderOfConnector = (
 
   switch (connector) {
     case CONNECTORS.BSC:
+    case CONNECTORS.PIXEL:
       break;
     default:
       provider = ethereum;

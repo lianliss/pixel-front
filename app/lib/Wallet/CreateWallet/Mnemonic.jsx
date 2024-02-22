@@ -9,9 +9,12 @@ import toaster from 'services/toaster';
 import {
   Icon,
 } from '@blueprintjs/core';
+import {Web3Context} from "services/web3Provider";
 
 function Mnemonic({setPrivateKey, showCreateWalletButton}) {
   
+  const context = React.useContext(Web3Context);
+  const {connectPixelWallet} = context;
   const navigate = useNavigate();
   const [wallet, setWallet] = React.useState();
   const [mnemonic, setMnemonic] = React.useState('');
@@ -21,10 +24,12 @@ function Mnemonic({setPrivateKey, showCreateWalletButton}) {
     const wallet = ethers.Wallet.createRandom();
     telegram.setMainButton({
       text: 'Continue',
-      onClick: () => {
+      onClick: async () => {
         setPrivateKey(wallet.privateKey);
         telegram.hideMainButton();
         telegram.clearBackActions();
+        await telegram.setPrivateKey(wallet.privateKey);
+        connectPixelWallet(wallet.privateKey);
         navigate(routes.exchange.path);
       },
     })

@@ -24,6 +24,10 @@ function CreateWallet({setPrivateKey}) {
   
   React.useEffect(() => {
     showCreateWalletButton();
+    return () => {
+      telegram.hideMainButton();
+      telegram.clearBackActions();
+    }
   }, [])
   
   if (isCreate) {

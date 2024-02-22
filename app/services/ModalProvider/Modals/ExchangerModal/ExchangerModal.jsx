@@ -48,6 +48,8 @@ function ExchangerModal({ ...props }) {
       icon={"swap-horizontal"}
     />
   );
+  
+  console.log('swapAction', swapAction);
 
   return (
     <div className="ExchangerModal">

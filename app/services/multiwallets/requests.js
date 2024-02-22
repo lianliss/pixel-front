@@ -41,4 +41,12 @@ export default {
     wallet_switchEthereumChain: 'wallet_switchEthereumChain',
     personal_sign: 'personal_sign',
   },
+  [CONNECTORS.PIXEL]: {
+    request_accounts: 'eth_requestAccounts',
+    eth_sendTransaction: 'eth_sendTransaction',
+    wallet_watchAsset: 'wallet_watchAsset',
+    wallet_addEthereumChain: 'wallet_addEthereumChain',
+    wallet_switchEthereumChain: 'wallet_switchEthereumChain',
+    personal_sign: 'personal_sign',
+  },
 };

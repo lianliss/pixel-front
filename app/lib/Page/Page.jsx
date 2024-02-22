@@ -9,8 +9,10 @@ import {
   Button as BluePrintButton, Icon,
 } from '@blueprintjs/core';
 import {IS_TELEGRAM} from "const";
+import {Web3Context} from "services/web3Provider";
 
 function Page({children, match, title}) {
+  const {isConnected} = React.useContext(Web3Context);
   const adaptive = useSelector(adaptiveSelector);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return <div className={cn('page-container', adaptive && 'adaptive')}>
@@ -19,7 +21,7 @@ function Page({children, match, title}) {
              isMenuOpen={isMenuOpen} />
     <div className="page">
       {!IS_TELEGRAM && <Header setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
-      {IS_TELEGRAM && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
+      {(IS_TELEGRAM && isConnected) && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                                     className={"page-menu-button"}
                                     minimal />}

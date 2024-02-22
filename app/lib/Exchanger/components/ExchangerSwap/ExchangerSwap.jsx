@@ -12,6 +12,8 @@ import DappInput from 'lib/Exchanger/components/DappInput/DappInput';
 
 // Styles
 import './ExchangerSwap.scss';
+import {IS_TELEGRAM} from "const";
+import telegram from 'services/telegram';
 
 function ExchangerSwap({
   fiats,
@@ -59,6 +61,29 @@ function ExchangerSwap({
   });
   const fiatSymbol = _.get(fiat, 'symbol', '');
   const coinSymbol = _.get(coin, 'symbol', '');
+  
+  React.useEffect(() => {
+    if (!IS_TELEGRAM) return;
+    telegram.setMainButton({
+      text: isNoLiquidity
+        ? 'No liquidity found'
+        : 'Swap',
+      isDisabled: !fiatAmount || !coinAmount,
+      isLoading: isProcessing,
+      onClick: () =>
+        exchangerModal({
+          isExactOut,
+          fiat,
+          coin,
+          fiatAmount,
+          coinAmount,
+        }),
+    });
+    
+    return () => {
+      telegram.hideMainButton();
+    }
+  }, [fiatAmount, coinAmount, isProcessing, isNoLiquidity]);
 
   return (
     <div className={`ExchangerSwap ${isAdaptive && 'adaptive'}`}>
@@ -156,7 +181,7 @@ function ExchangerSwap({
       </div>
       {context.isConnected ? (
         <div className="ExchangerSwap__actions-buy">
-          <Button
+          {!IS_TELEGRAM && <Button
             large
             primary
             icon={isNoLiquidity
@@ -178,7 +203,7 @@ function ExchangerSwap({
             {isNoLiquidity
               ? 'No liquidity found'
               : 'Swap'}
-          </Button>
+          </Button>}
         </div>
       ) : (
         <div className="ExchangerSwap__actions-buy">
