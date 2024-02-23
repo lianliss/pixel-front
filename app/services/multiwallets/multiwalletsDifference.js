@@ -13,7 +13,7 @@ import {
   SONGBIRD,
   //FLARE,
 } from '../multichain/chains';
-import {hexToNumber} from 'web3-utils';
+//import {hexToNumber} from 'web3-utils';
 
 export const noderealRPC = {
   [ETHEREUM_MAINNET]:
@@ -201,9 +201,9 @@ export const getFineChainId = function (id) {
 
   // If id is hex, use hexToNumber
   // Else just set id in Number type.
-  if (String(id).search('x') >= 0 && !isNumber(id)) {
-    return hexToNumber(id);
-  }
+  // if (String(id).search('x') >= 0 && !isNumber(id)) {
+  //   return hexToNumber(id);
+  // }
 
   return Number(id);
 };

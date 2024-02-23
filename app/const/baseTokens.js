@@ -1,4 +1,4 @@
-import { Token } from 'services/Token';
+import { Token } from 'services/web3Provider/Token';
 
 const TESTNET_BASE_TOKENS = [
   new Token(

@@ -1,4 +1,4 @@
-import { FiatToken } from 'services/Token';
+import { FiatToken } from 'services/web3Provider/Token';
 
 const ETHER_FIATS = [
   new FiatToken(

@@ -68,9 +68,16 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
 
   const amount0 = Number(values[0]) || 0;
   const amount1 = Number(values[1]) || 1;
-  const pairAddress = selectedTokens[0].symbol && selectedTokens[1].symbol
-    ? getPairAddress(selectedTokens[0], selectedTokens[1])
-    : '';
+  
+  const [pairAddress, setPairAddress] = React.useState('');
+  React.useEffect(() => {
+    if (selectedTokens[0].symbol && selectedTokens[1].symbol) {
+      getPairAddress(selectedTokens[0], selectedTokens[1]).then(setPairAddress)
+    }
+  }, [
+    selectedTokens[0].symbol,
+    selectedTokens[1].symbol,
+  ]);
 
   const updateBalances = () => {
     if (!selectedTokens[0]
@@ -209,7 +216,7 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   
   const onAddPair = async () => {
     try {
-      const pairAddress = getPairAddress(selectedTokens[0], selectedTokens[1]);
+      const pairAddress = await getPairAddress(selectedTokens[0], selectedTokens[1]);
       await addCustomLP(pairAddress);
       onClose();
     } catch (error) {

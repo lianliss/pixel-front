@@ -1,4 +1,4 @@
-import { Token, BaseChainToken } from '../Token';
+import { Token, BaseChainToken } from '../web3Provider/Token';
 import {
   ETHEREUM_MAINNET,
   BSC_MAINNET,

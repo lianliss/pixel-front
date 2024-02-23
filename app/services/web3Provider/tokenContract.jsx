@@ -162,7 +162,7 @@ class TokenContract {
   
   _getDEXResult = async (token0, token1, amount, isExactIn = true, maxHops = 3) => {
     const pairs = await this.provider.getPairs(token0, token1, maxHops);
-    const trade = this.provider.getTrade(pairs, token0, token1, amount, isExactIn);
+    const trade = await this.provider.getTrade(pairs, token0, token1, amount, isExactIn);
     const transferFee = (token0.transferFee + 1) * (token1.transferFee + 1) - 1;
     const priceImpact = significant(trade.priceImpact.asFraction);
     return {

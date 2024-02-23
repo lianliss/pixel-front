@@ -1,6 +1,5 @@
 import {DEFAULT_CHAIN, SONGBIRD} from "services/multichain/chains";
 import {privateKeyToAccount} from 'web3-eth-accounts';
-import {noderealRPC} from "services/multiwallets/multiwalletsDifference";
 
 class PixelWallet {
   selectedAddress = null;

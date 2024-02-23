@@ -53,7 +53,6 @@ function LiquidityConfirmModal(props) {
     accountAddress,
     getBSCScanLink,
     addTokenToWallet,
-    getPairAddress,
     addCustomLP,
   } = context;
   const { wrapToken, defaultSymbol } = network;
@@ -160,8 +159,6 @@ function LiquidityConfirmModal(props) {
     setIsTransaction(true);
     setErrorText('');
     try {
-      const pr = getPairAddress('0x1a7b46656B2b8b29B1694229e122d066020503D0', '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED');
-      console.log('PR', pr);
       const routerContract = new (eth.Contract)(
         require('const/ABI/PancakeRouter'),
         routerAddress,

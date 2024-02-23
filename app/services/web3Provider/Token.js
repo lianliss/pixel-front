@@ -1,4 +1,4 @@
-import { DEFAULT_DECIMALS } from './multichain/initialTokens';
+import { DEFAULT_DECIMALS } from 'services/multichain/initialTokens';
 
 class Token {
   isFiat = false;

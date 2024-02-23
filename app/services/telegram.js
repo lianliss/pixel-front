@@ -160,6 +160,7 @@ class Telegram {
             this.app.showConfirm('The private key will be deleted. It will be possible to restore the wallet only using a secret phrase. Are you sure you want to delete your wallet?', (isOk) => {
               if (isOk) {
                 this.clearPrivateKey();
+                window.location.reload();
               }
             });
             break;
