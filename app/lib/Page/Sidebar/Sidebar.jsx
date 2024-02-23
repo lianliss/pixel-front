@@ -5,7 +5,7 @@ import logo from 'styles/svg/logo_small.svg';
 import {
   Icon,
 } from '@blueprintjs/core';
-import _ from 'lodash';
+import {get} from 'lodash';
 import routes from 'const/routes';
 import {
   Link,
@@ -115,7 +115,7 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
         <div className="sidebar-section-menu">
           {section.menu.map((item, itemIndex) => {
             if (typeof item.isAvailable === 'function' && !item.isAvailable(account)) return;
-            const path = _.get(item, 'path');
+            const path = get(item, 'path');
             const isActive = _.includes(match.pathname, path);
             const isDisabled = typeof item.disabled === 'function'
               ? item.disabled(account)
@@ -130,7 +130,7 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
                 setIsMenuOpen(false);
               };
             const LinkComponent = isDisabled ? DisabledLink : Link;
-            const link = _.get(item, 'link');
+            const link = get(item, 'link');
             
             if (link) {
               return <a href={link}

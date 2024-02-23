@@ -9,7 +9,6 @@ import ExchangeRoute from './components/ExchangeRoute/ExchangeRoute';
 import ExchangerSettings from './components/ExchangerSettings/ExchangerSettings';
 
 // Utils
-import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { adaptiveSelector} from "app/store/selectors";
 import getFinePrice from 'utils/getFinePrice';

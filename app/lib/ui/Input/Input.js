@@ -4,7 +4,7 @@ import "./Input.scss";
 import React from "react";
 import PropTypes from "prop-types";
 import {Icon} from '@blueprintjs/core';
-import _ from 'lodash';
+import {get} from 'lodash';
 // internal
 import { classNames } from "utils";
 
@@ -74,7 +74,7 @@ class Input extends React.Component {
     placeholder =
       typeof placeholder === "string"
         ? placeholder
-        : _.get(placeholder, 'props.langContent', undefined);
+        : get(placeholder, 'props.langContent', undefined);
 
     let type = this.props.type;
     let error = false;

@@ -7,7 +7,7 @@ import {
   DropdownElement, Button,
 } from 'ui';
 import {Icon} from '@blueprintjs/core';
-import _ from 'lodash';
+import {get} from 'lodash';
 import { Web3Context } from 'services/web3Provider';
 
 // Utils
@@ -32,7 +32,7 @@ function LiquidityList({ onAddClick, onRemoveClick, poolsList, emptyText }) {
     if (accountAddress) {
       Promise.allSettled(poolsList.map((address) => getReserves(address))).then(
         (data) => {
-          setPools(data.map((d) => _.get(d, 'value[2]')).filter((d) => d));
+          setPools(data.map((d) => get(d, 'value[2]')).filter((d) => d));
         }
       );
       Promise.allSettled(
@@ -67,13 +67,13 @@ function LiquidityList({ onAddClick, onRemoveClick, poolsList, emptyText }) {
   }, [poolsList, accountAddress, chainId]);
 
   const ItemContent = ({ item }) => {
-    const symbol0 = _.get(item, 'token0.symbol', '');
-    const symbol1 = _.get(item, 'token1.symbol', '');
-    const decimals0 = _.get(item, 'token0.decimals', 18);
-    const decimals1 = _.get(item, 'token1.decimals', 18);
+    const symbol0 = get(item, 'token0.symbol', '');
+    const symbol1 = get(item, 'token1.symbol', '');
+    const decimals0 = get(item, 'token0.decimals', 18);
+    const decimals1 = get(item, 'token1.decimals', 18);
     const reserve0 = wei.from(item[symbol0] || '0', decimals0);
     const reserve1 = wei.from(item[symbol1] || '0', decimals1);
-    const totalSupply = wei.from(_.get(item, 'totalSupply', '0'));
+    const totalSupply = wei.from(get(item, 'totalSupply', '0'));
     const balance = balances[item.address];
     const share = totalSupply ? balance / totalSupply : 0;
     const userAmount0 = reserve0 * share;

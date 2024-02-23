@@ -2,7 +2,7 @@ import React from 'react';
 import getFinePrice from 'utils/getFinePrice';
 import useSwap from 'app/hooks/useSwap';
 import {ModalContext} from "services/ModalProvider/ModalProvider";
-import _ from 'lodash';
+import {get} from 'lodash';
 
 // Components
 import {Icon, Overlay} from '@blueprintjs/core';
@@ -59,8 +59,8 @@ function ExchangerSwap({
     setCoin,
     fiatsLoaded,
   });
-  const fiatSymbol = _.get(fiat, 'symbol', '');
-  const coinSymbol = _.get(coin, 'symbol', '');
+  const fiatSymbol = get(fiat, 'symbol', '');
+  const coinSymbol = get(coin, 'symbol', '');
   
   React.useEffect(() => {
     if (!IS_TELEGRAM) return;
@@ -94,13 +94,13 @@ function ExchangerSwap({
               <div
                 className="ExchangerSwap__icon"
                 style={{
-                  backgroundImage: `url('${_.get(fiat, 'logoURI', '')}')`,
+                  backgroundImage: `url('${get(fiat, 'logoURI', '')}')`,
                 }}
               />
               <div className="ExchangerSwap__select">
-                {/*<span>{_.get(fiat, 'name', 'Unknown')}</span>*/}
+                {/*<span>{get(fiat, 'name', 'Unknown')}</span>*/}
                 <div className="ExchangerSwap__currency">
-                  <span>{_.get(fiat, 'symbol', 'Unknown')}</span>
+                  <span>{get(fiat, 'symbol', 'Unknown')}</span>
                   <Icon icon={"chevron-down"} />
                 </div>
               </div>
@@ -146,12 +146,12 @@ function ExchangerSwap({
               <div
                 className="ExchangerSwap__icon"
                 style={{
-                  backgroundImage: `url('${_.get(coin, 'logoURI', '')}')`,
+                  backgroundImage: `url('${get(coin, 'logoURI', '')}')`,
                 }}
               />
               <div className="ExchangerSwap__select">
                 <div className="ExchangerSwap__currency">
-                  <span>{_.get(coin, 'symbol', 'Unknown')}</span>
+                  <span>{get(coin, 'symbol', 'Unknown')}</span>
                   <Icon icon={"chevron-down"} />
                 </div>
               </div>

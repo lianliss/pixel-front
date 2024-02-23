@@ -4,7 +4,7 @@ import React from 'react';
 import {Icon} from '@blueprintjs/core';
 
 // Utils
-import _ from 'lodash';
+import {get} from 'lodash';
 
 // Styles
 import './DexRoute.scss';
@@ -19,7 +19,7 @@ function DexRoute({ route = [], tokens = [] }) {
         {route &&
           route.map((symbol, index) => {
             const token = tokens.find((t) => t.symbol === symbol);
-            const logo = _.get(token, 'logoURI', '');
+            const logo = get(token, 'logoURI', '');
             return (
               <div className="DexRoute-symbol" key={`${symbol}-${index}`}>
                 {!!index && (

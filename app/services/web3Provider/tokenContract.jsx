@@ -1,5 +1,4 @@
 import wei from 'utils/wei';
-import _ from 'lodash';
 import NarfexOracleABI from 'const/ABI/NarfexOracle';
 import significant from 'utils/significant';
 
@@ -12,13 +11,13 @@ class TokenContract {
   constructor(token, provider, isPairContract = false) {
     Object.assign(this, token);
     this.provider = provider;
-    this.web3 = provider.getWeb3();
+    this.eth = provider.getEth();
     this.ethereum = provider.ethereum;
     this.network = provider.network;
     this.chainId = provider.network.chainId;
     this.allowance = null;
 
-    this.contract = new (this.web3.eth.Contract)(
+    this.contract = new (this.eth.Contract)(
       isPairContract
         ? require('const/ABI/PancakePair')
         : require('const/ABI/Bep20Token'),
@@ -100,7 +99,7 @@ class TokenContract {
   
   _updateTokensData = async (tokens) => {
     try {
-      const oracleContract = new (this.web3.eth.Contract)(
+      const oracleContract = new (this.eth.Contract)(
         NarfexOracleABI,
         this.network.contractAddresses.narfexOracle,
       );

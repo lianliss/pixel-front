@@ -164,7 +164,7 @@
     "url": "^0.11.0",
     "url-loader": "4.1.1",
     "util": "^0.12.4",
-    "web3": "^1.7.3",
+    "web3": "^4.5.0",
     "web3-react": "^5.0.5",
     "webpack-livereload-plugin": "^3.0.2",
     "webpack-manifest-plugin": "4.0.2",
@@ -203,6 +203,7 @@
     "style-loader": "^3.3.3",
     "ts-loader": "6.2.1",
     "webpack": "^5.88.2",
+    "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "write-file-webpack-plugin": "^4.5.1"

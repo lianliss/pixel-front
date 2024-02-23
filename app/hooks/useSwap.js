@@ -13,19 +13,19 @@ import { getFixedNumber } from 'utils';
 import routerABI from 'const/ABI/NarfexExchangerRouter';
 import { ModalContext } from 'services/ModalProvider/ModalProvider';
 import toaster from 'services/toaster';
-import _ from 'lodash';
+import {get} from 'lodash';
 import TransactionSubmitted from "services/ModalProvider/Modals/TransactionSubmitted";
 import {useMatch, useNavigate} from "react-router-dom";
 import routes from "const/routes";
 
 function getTokenPrice(token) {
   const rates = useSelector(ratesSelector);
-  const isFiat = _.get(token, 'isFiat', false);
-  const symbol = _.get(token, 'symbol');
+  const isFiat = get(token, 'isFiat', false);
+  const symbol = get(token, 'symbol');
   let price;
   switch (symbol) {
     case 'NRFX':
-      price = _.get(rates, 'nrfx', 0);
+      price = get(rates, 'nrfx', 0);
       break;
     case 'USDC':
     case 'USD':
@@ -33,8 +33,8 @@ function getTokenPrice(token) {
       break;
     default:
       price = isFiat
-        ? _.get(rates, symbol.toLowerCase(), 0)
-        : _.get(rates, `${symbol}USDT`, 0);
+        ? get(rates, symbol.toLowerCase(), 0)
+        : get(rates, `${symbol}USDT`, 0);
   }
   return price;
 }
@@ -43,10 +43,10 @@ function getDefaultCommission(token, _commissions) {
   if (!token) return 0;
   const commissions =
     _commissions ||
-    useSelector((state) => _.get(state, 'web3.commissions', {}));
+    useSelector((state) => get(state, 'web3.commissions', {}));
   return token.isFiat
-    ? _.get(commissions, 'FiatDefault', 0)
-    : _.get(commissions, 'BinanceDefault', 0);
+    ? get(commissions, 'FiatDefault', 0)
+    : get(commissions, 'BinanceDefault', 0);
 }
 
 // For asynchronous amounts check
@@ -64,7 +64,7 @@ const useSwap = ({
   const dispatch = useDispatch();
   const isAdaptive = useSelector(adaptiveSelector);
   const commissions = useSelector((state) =>
-    _.get(state, 'web3.commissions', {})
+    get(state, 'web3.commissions', {})
   );
   const navigate = useNavigate();
   const routePath = routes.exchangeCurrency.path;
@@ -82,13 +82,13 @@ const useSwap = ({
   });
 
   // Symbols
-  const fiatSymbol = _.get(fiat, 'symbol', '');
-  const coinSymbol = _.get(coin, 'symbol', '');
+  const fiatSymbol = get(fiat, 'symbol', '');
+  const coinSymbol = get(coin, 'symbol', '');
 
   // Fiat price
   const fiatBalance = wei.from(
-    _.get(fiat, 'balance', '0'),
-    _.get(fiat, 'decimals', 18)
+    get(fiat, 'balance', '0'),
+    get(fiat, 'decimals', 18)
   );
   const fiatPrice = getTokenPrice(fiat);
 
@@ -103,7 +103,7 @@ const useSwap = ({
   // Calculate amount
   const fiatCommission =
     Number(
-      _.get(
+      get(
         commissions,
         `${fiatSymbol.toLowerCase()}`,
         getDefaultCommission(fiat, commissions)
@@ -111,7 +111,7 @@ const useSwap = ({
     ) / 100;
   const coinCommission =
     (Number(
-      _.get(
+      get(
         commissions,
         `${coinSymbol.toLowerCase()}`,
         getDefaultCommission(coin, commissions)
@@ -129,7 +129,7 @@ const useSwap = ({
     try {
       if (isConnected) {
         const data = await getTokenContract(fiat).getOutAmount(coin, inAmount);
-        return _.get(data, 'outAmount', 0);
+        return get(data, 'outAmount', 0);
       } else {
         return inAmount * rate * (1 - coinCommission);
       }
@@ -144,7 +144,7 @@ const useSwap = ({
     try {
       if (isConnected) {
         const data = await getTokenContract(fiat).getInAmount(coin, outAmount);
-        return _.get(data, 'inAmount', 0);
+        return get(data, 'inAmount', 0);
       } else {
         return outAmount / (rate * (1 - coinCommission));
       }
@@ -215,7 +215,7 @@ const useSwap = ({
   const setParamsCoin = (tokens) => {
     if (paramsTokenLoaded.token) return;
     
-    const paramCoinSymbol = _.get(match, 'params.to', '').toLowerCase();
+    const paramCoinSymbol = get(match, 'params.to', '').toLowerCase();
     if (!paramCoinSymbol) return;
     const paramCoin = tokens.find(
       (coin) => coin.symbol.toLowerCase() === paramCoinSymbol
@@ -226,7 +226,7 @@ const useSwap = ({
   };
 
   const setParamsFiat = async (tokens) => {
-    const paramFiatSymbol = _.get(match, 'params.from', '').toLowerCase();
+    const paramFiatSymbol = get(match, 'params.from', '').toLowerCase();
 
     if (!paramFiatSymbol) {
       handleFiatChange(fiats[0]);
@@ -340,7 +340,7 @@ export const useSwapAction = ({
     addTokenToWallet,
     getTokenContract,
     chainId,
-    getWeb3,
+    getEth,
     transaction,
     getBSCScanLink,
     network,
@@ -385,7 +385,7 @@ export const useSwapAction = ({
         setOutAmount(Number(amounts.coin.toFixed(9)));
         setRate(amounts.coin / data.inAmount);
         setPath(data.path);
-        setPriceImpact(_.get(data, 'priceImpact', 0));
+        setPriceImpact(get(data, 'priceImpact', 0));
       } else {
         const data = await getTokenContract(fiat).getOutAmount(
           coin,
@@ -396,7 +396,7 @@ export const useSwapAction = ({
         setOutAmount(data.outAmount);
         setRate(data.outAmount / amounts.fiat);
         setPath(data.path);
-        setPriceImpact(_.get(data, 'priceImpact', 0));
+        setPriceImpact(get(data, 'priceImpact', 0));
       }
     } catch (err) {
       console.log('getAmounts', err);
@@ -457,7 +457,7 @@ export const useSwapAction = ({
   const swap = async () => {
     try {
       setIsProcess(true);
-      const router = new (getWeb3().eth.Contract)(
+      const router = new (getEth().Contract)(
         routerABI,
         network.contractAddresses.exchangerRouter
       );
@@ -476,11 +476,11 @@ export const useSwapAction = ({
       }
 
       const amountDecimals = isExactOut
-        ? _.get(path[path.length - 1], 'decimals', 18)
-        : _.get(path[0], 'decimals', 18);
+        ? get(path[path.length - 1], 'decimals', 18)
+        : get(path[0], 'decimals', 18);
       const limitDecimals = !isExactOut
-        ? _.get(path[path.length - 1], 'decimals', 18)
-        : _.get(path[0], 'decimals', 18);
+        ? get(path[path.length - 1], 'decimals', 18)
+        : get(path[0], 'decimals', 18);
 
       const receipt = await transaction(
         router,

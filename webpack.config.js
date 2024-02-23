@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 //const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
@@ -189,6 +190,7 @@ module.exports = () => {
     config.mode = "production";
   } else {
     config.mode = "development";
+    config.plugins.push(new BundleAnalyzerPlugin());
   }
   return config;
 };

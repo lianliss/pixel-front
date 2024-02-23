@@ -3,17 +3,14 @@ import './TokenSelect.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import ReactScrollableList from 'react-scrollable-list';
-import Web3 from 'web3/dist/web3.min.js';
+import {isAddress as web3IsAddress, toChecksumAddress} from 'web3-utils';
 import wei from 'utils/wei';
 import getFinePrice from 'utils/getFinePrice';
 import { classNames as cn } from 'utils';
 import { SwitchTabs, SectionBlock, WalletIcon, Button, } from 'ui';
 import {Icon, Card, Spinner} from '@blueprintjs/core';
 import {Web3Context} from 'services/web3Provider';
-
-const web3 = new Web3();
 
 class TokenSelect extends React.PureComponent {
   static contextType = Web3Context;
@@ -34,10 +31,10 @@ class TokenSelect extends React.PureComponent {
   onSearchInput = (value) => {
     const {tokens, fiats} = this.props;
     const {customTokens, initCustomToken, isConnected} = this.context;
-    const isAddress = web3.utils.isAddress(value);
+    const isAddress = web3IsAddress(value);
     let isNewAddress;
     if (isAddress && isConnected) {
-      const address = web3.utils.toChecksumAddress(value);
+      const address = toChecksumAddress(value);
       isNewAddress = !([...customTokens, ...tokens, ...fiats].find(t => t.address === address));
       if (isNewAddress) {
         initCustomToken(value).then(token => {
@@ -128,7 +125,7 @@ class TokenSelect extends React.PureComponent {
     const isFiats = switchTabsSelected === 'fiats';
 
     const checkSumAddress = isAddress
-      ? web3.utils.toChecksumAddress(search)
+      ? toChecksumAddress(search)
       : '';
     const filtered = (isTokens
       ? [...tokens]

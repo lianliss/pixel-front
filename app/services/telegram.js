@@ -1,10 +1,10 @@
-import _ from 'lodash';
+import {get} from 'lodash';
 
-const IS_TRUE_TELEGRAM = !!_.get(window, 'Telegram.WebApp.initData', '').length;
+const IS_TRUE_TELEGRAM = !!get(window, 'Telegram.WebApp.initData', '').length;
 
 class Telegram {
-  app = _.get(window, 'Telegram.WebApp');
-  storage = _.get(window, 'Telegram.WebApp.CloudStorage');
+  app = get(window, 'Telegram.WebApp');
+  storage = get(window, 'Telegram.WebApp.CloudStorage');
   mainColor = '#A62CFF';
   primaryColor = '#20C997';
   textColor = '#FFFFFF';

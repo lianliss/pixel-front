@@ -1,6 +1,6 @@
 import axios from 'axios';
 import https from 'https';
-import _ from 'lodash-es';
+import {get} from 'lodash-es';
 import getCookie from 'utils/get-cookie';
 
 const TIMEOUT_CODE = 'ETIMEDOUT';
@@ -40,10 +40,10 @@ export class Request {
             {
                 let response;
                 if (!options.method) options.method = 'get';
-                const instance = _.get(options, 'tempInstance', this.instance);
-                const customUrlMod = _.get(options, 'customUrlMod');
+                const instance = get(options, 'tempInstance', this.instance);
+                const customUrlMod = get(options, 'customUrlMod');
                 const url = customUrlMod ? customUrlMod(rawUrl) : this.urlMod(rawUrl);
-                const params = this.paramsMod(_.get(options, 'params', {}));
+                const params = this.paramsMod(get(options, 'params', {}));
 
                 try {
                     response = await instance({

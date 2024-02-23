@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 import { Web3Context } from 'services/web3Provider';
 import { Button } from 'ui';

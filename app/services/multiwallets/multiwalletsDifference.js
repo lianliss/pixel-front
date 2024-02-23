@@ -1,7 +1,7 @@
 //import WalletConnectProvider from '@walletconnect/web3-provider';
 import * as CONNECTORS from './connectors';
 import requests from './requests';
-import _ from 'lodash';
+import {get, isNumber} from 'lodash';
 import {
   DEFAULT_CHAIN,
   ETHEREUM_MAINNET,
@@ -12,6 +12,7 @@ import {
   SONGBIRD,
   //FLARE,
 } from '../multichain/chains';
+import {hexToNumber} from 'web3-utils';
 
 export const noderealRPC = {
   [ETHEREUM_MAINNET]:
@@ -45,7 +46,7 @@ export const getRequestMethods = (connector) => {
  */
 export const walletIsValid = (wallet, validationArray) =>
   validationArray.some((validation) =>
-    _.get(window, `${wallet}.${validation}`)
+    get(window, `${wallet}.${validation}`)
   );
 
 /**
@@ -199,8 +200,8 @@ export const getFineChainId = function (id) {
 
   // If id is hex, use hexToNumber
   // Else just set id in Number type.
-  if (String(id).search('x') >= 0 && !_.isNumber(id)) {
-    return this.getWeb3().utils.hexToNumber(id);
+  if (String(id).search('x') >= 0 && !isNumber(id)) {
+    return hexToNumber(id);
   }
 
   return Number(id);
@@ -211,15 +212,15 @@ export const getFineChainId = function (id) {
  * @returns {string}
  */
 export const getCurrentConnector = () => {
-  if (_.get(window, 'ethereum.isMetaMask')) {
+  if (get(window, 'ethereum.isMetaMask')) {
     return CONNECTORS.METAMASK;
   }
 
   if (
-    _.get(window, 'trustwallet.isTrustWallet') ||
-    _.get(window, 'ethereum.isTrustWallet') ||
-    _.get(window, 'trustwallet.isTrust') ||
-    _.get(window, 'ethereum.isTrust')
+    get(window, 'trustwallet.isTrustWallet') ||
+    get(window, 'ethereum.isTrustWallet') ||
+    get(window, 'trustwallet.isTrust') ||
+    get(window, 'ethereum.isTrust')
   ) {
     return CONNECTORS.TRUST_WALLET;
   }

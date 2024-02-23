@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Web3Context } from 'services/web3Provider';
-import _ from 'lodash';
+import {get} from 'lodash';
 
 // Styles
 import './DoubleWallets.scss';
@@ -12,8 +12,8 @@ function DoubleWallets({ first, second, pair, disableSymbols, size }) {
   const { wrapToken, defaultSymbol } = network;
   // const [symbol0, setSymbol0] = React.useState(first.symbol);
   // const [symbol1, setSymbol1] = React.useState(second.symbol);
-  const [token0, setToken0] = React.useState(_.get(pair, 'token0', first));
-  const [token1, setToken1] = React.useState(_.get(pair, 'token1', second));
+  const [token0, setToken0] = React.useState(get(pair, 'token0', first));
+  const [token1, setToken1] = React.useState(get(pair, 'token1', second));
   const containerSize = size && size * 2 - size * 2 * 0.1956;
   const sizeStyles = {
     width: size,

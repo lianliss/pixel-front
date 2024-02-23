@@ -4,7 +4,7 @@ import React from 'react';
 import LiquidityAdd from './components/LiquidityAdd/LiquidityAdd';
 import LiquidityRemove from './components/LiquidityRemove/LiquidityRemove';
 import LiquidityMain from './components/LiquidityMain/LiquidityMain';
-import _ from 'lodash';
+import {uniq, get} from 'lodash';
 import { Web3Context } from 'services/web3Provider';
 
 // Styles
@@ -32,9 +32,9 @@ function Liquidity() {
     storagePools = [];
   }
   const [userPools, setUserPools] = React.useState(storagePools);
-  const poolsList = _.uniq([
-    ..._.get(context, 'poolsList', []),
-    ..._.get(context, 'customLP', []).map(lp => lp.address),
+  const poolsList = uniq([
+    ...get(context, 'poolsList', []),
+    ...get(context, 'customLP', []).map(lp => lp.address),
     //...userPools,
   ]);
 
@@ -42,7 +42,7 @@ function Liquidity() {
     context.addCustomLP(_poolAddress);
     const poolAddress = _poolAddress.toLowerCase();
     if (
-      _.get(context, 'poolsList', []).indexOf(poolAddress) >= 0 ||
+      get(context, 'poolsList', []).indexOf(poolAddress) >= 0 ||
       userPools.indexOf(poolAddress) >= 0
     )
       return;
@@ -54,7 +54,7 @@ function Liquidity() {
   const removePool = (_poolAddress) => {
     const poolAddress = _poolAddress.toLowerCase();
     if (
-      _.get(context, 'poolsList', []).indexOf(poolAddress) >= 0 ||
+      get(context, 'poolsList', []).indexOf(poolAddress) >= 0 ||
       userPools.indexOf(poolAddress) < 0
     )
       return;

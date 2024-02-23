@@ -16,15 +16,10 @@ import {
 } from '@blueprintjs/core';
 import {Button} from 'ui';
 import pixelLogo from 'styles/svg/logo_icon.svg';
-import _ from 'lodash';
-import {appUpdateAccount} from 'slices/App';
 import routes from 'const/routes';
-import getFinePrice from 'utils/getFinePrice';
-import {BUILT_AT} from 'const';
 import {Web3Context} from 'services/web3Provider';
 import {ModalContext} from "services/ModalProvider";
 import {adaptiveSelector} from 'app/store/selectors';
-import {classNames as cn} from 'utils';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import toaster from 'services/toaster';
 

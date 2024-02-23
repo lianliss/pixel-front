@@ -1,5 +1,5 @@
 import baseTokens from 'const/baseTokens';
-import _ from 'lodash';
+import {uniqBy} from 'lodash';
 
 /**
  * Returns all possible pairs combinations with entered tokens and base tokens
@@ -9,7 +9,7 @@ import _ from 'lodash';
  */
 const getAllPairsCombinations = (token0, token1, chainId = 56) => {
 
-  let tokens = _.uniqBy([
+  let tokens = uniqBy([
     token0,
     token1,
     ...baseTokens.filter(t => t.chainId === chainId)

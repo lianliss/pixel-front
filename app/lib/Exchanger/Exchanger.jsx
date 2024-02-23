@@ -12,7 +12,7 @@ import LoadModule from 'utils/async/load-module';
 
 
 // Utils
-import _ from 'lodash';
+import {get} from 'lodash';
 import useExchanger from 'app/hooks/useExchanger';
 import { Web3Context } from 'services/web3Provider';
 
@@ -81,12 +81,12 @@ function Exchanger() {
     <div className="Exchanger__wrap">
       {isDebug && <>
         <div>{window.navigator.userAgent}</div>
-        <div>initData: {_.get(window, 'Telegram.WebApp.initData')}</div>
-        <div>version: {_.get(window, 'Telegram.WebApp.version')}</div>
-        <div>platform: {_.get(window, 'Telegram.WebApp.platform')}</div>
-        <div>username: {_.get(window, 'Telegram.WebApp.WebAppInitData.user.username')}</div>
-        <div>user.id: {_.get(window, 'Telegram.WebApp.WebAppInitData.user.id')}</div>
-        <div>chat.id: {_.get(window, 'Telegram.WebApp.WebAppInitData.chat.id')}</div>
+        <div>initData: {get(window, 'Telegram.WebApp.initData')}</div>
+        <div>version: {get(window, 'Telegram.WebApp.version')}</div>
+        <div>platform: {get(window, 'Telegram.WebApp.platform')}</div>
+        <div>username: {get(window, 'Telegram.WebApp.WebAppInitData.user.username')}</div>
+        <div>user.id: {get(window, 'Telegram.WebApp.WebAppInitData.user.id')}</div>
+        <div>chat.id: {get(window, 'Telegram.WebApp.WebAppInitData.chat.id')}</div>
       </>}
       <Tabs id="Exchanger"
             renderActiveTabPanelOnly

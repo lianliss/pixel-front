@@ -1,6 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
 import INITIAL_DAPP_STATE from "const/schemas/dapp";
-import _ from 'lodash-es';
 
 export const DappSlice = createSlice({
   name: 'Dapp',

@@ -1,6 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
 import INITIAL_APP_STATE from "const/schemas/app";
-import _ from 'lodash-es';
 
 export const AppSlice = createSlice({
   name: 'App',

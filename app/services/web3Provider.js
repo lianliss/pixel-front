@@ -1,13 +1,15 @@
 import React from "react";
-import Web3 from 'web3/dist/web3.min.js';
+import {HttpProvider} from "web3-providers-http";
+import {toHex, toWei} from 'web3-utils';
+import Eth from 'web3-eth';
 import wei from 'utils/wei';
 import wait from 'utils/wait';
-import _ from 'lodash';
+import {get, uniqBy, chunk, cloneDeep} from 'lodash';
 import axios from 'axios';
 import Network from './multichain/Network';
 import getAllPairsCombinations from 'utils/getPairCombinations';
 import {Pair, Trade, Percent, JSBI, TokenAmount, CurrencyAmount, Token as TokenSDK, Fraction} from '@narfex/sdk';
-import { getAddress, getCreate2Address } from '@ethersproject/address';
+import { getCreate2Address } from '@ethersproject/address';
 import { keccak256, pack } from '@ethersproject/solidity';
 import significant from 'utils/significant';
 import TokenContract from './web3Provider/tokenContract';
@@ -43,6 +45,8 @@ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const DH_PRIME_KEY = '2611891123';
 const DH_GENERATOR = '1723';
 
+console.log('HttpProvider', HttpProvider);
+
 class Web3Provider extends React.PureComponent {
   network = new Network(DEFAULT_CHAIN, this);
 
@@ -76,11 +80,8 @@ class Web3Provider extends React.PureComponent {
   };
 
   ethereum = null;
-  //providerAddress = 'https://bsc-dataseed1.defibit.io:443';
-  //providerAddress = 'https://bsc-testnet.web3api.com/v1/KBR2FY9IJ2IXESQMQ45X76BNWDAW2TT3Z3';
-  web3 = null;
-  web3Host = null;
-  farm = null;
+  ethHost = null;
+  eth = null;
   pairs = {};
   customTokens = [];
   customLP = [];
@@ -105,21 +106,21 @@ class Web3Provider extends React.PureComponent {
     }
   };
 
-  getWeb3() {
+  getEth() {
     if (this.state.isConnected) {
-      return this.web3;
+      return this.eth;
     } else {
-      return this.web3Host;
+      return this.ethHost;
     }
   }
 
   componentDidMount() {
     this._mounted = true;
 
-    const provider = new Web3.providers.HttpProvider(
+    const provider = new HttpProvider(
       this.network.contractAddresses.providerAddress
     );
-    this.web3Host = new Web3(provider);
+    this.ethHost = new Eth(provider);
     this.loadCustomTokens();
     this.loadCustomLP();
     
@@ -133,8 +134,8 @@ class Web3Provider extends React.PureComponent {
     try {
       const privateKey = _privateKey || await telegram.getPrivateKey();
       if (!privateKey) throw new Error('No privateKey founded');
-      window.pixelWallet.connect(privateKey);
-      this.connectWallet(CONNECTORS.PIXEL);
+      const account = window.pixelWallet.connect(privateKey);
+      this.connectWallet(CONNECTORS.PIXEL, false, account);
     } catch (error) {
       console.log('[connectPixelWallet]', error);
     }
@@ -143,7 +144,7 @@ class Web3Provider extends React.PureComponent {
   addCustomToken = async _address => {
     let address, token;
     if (typeof _address === 'string') {
-      address = this.getWeb3().utils.toChecksumAddress(_address);
+      address = this.getEth().utils.toChecksumAddress(_address);
     } else {
       token = _address;
       address = token.address;
@@ -165,7 +166,7 @@ class Web3Provider extends React.PureComponent {
   addCustomLP = async _address => {
     let address, token;
     if (typeof _address === 'string') {
-      address = this.getWeb3().utils.toChecksumAddress(_address);
+      address = this.getEth().utils.toChecksumAddress(_address);
     } else {
       token = _address;
       address = token.address;
@@ -185,7 +186,7 @@ class Web3Provider extends React.PureComponent {
   }
   
   initCustomToken = async (_address) => {
-    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    const address = this.getEth().utils.toChecksumAddress(_address);
     try {
       const contract = this.getContract(this.network.tokenABI, address);
       const data = await Promise.all([
@@ -209,7 +210,7 @@ class Web3Provider extends React.PureComponent {
   }
   
   initCustomLP = async (_address) => {
-    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    const address = this.getEth().utils.toChecksumAddress(_address);
     try {
       const contract = this.getContract(require('const/ABI/PancakePair'), address);
       const data = await Promise.all([
@@ -241,7 +242,7 @@ class Web3Provider extends React.PureComponent {
   }
   
   removeCustomToken = _address => {
-    const address = this.getWeb3().utils.toChecksumAddress(_address);
+    const address = this.getEth().utils.toChecksumAddress(_address);
     if (this.customTokens.find(t => t.address === address)) return;
     this.customTokens = this.customTokens.filter(t => t.address !== address);
     this.storage.set({customTokens: this.customTokens.map(token => {
@@ -259,7 +260,7 @@ class Web3Provider extends React.PureComponent {
   }
   
   loadCustomTokens = () => {
-    this.customTokens = _.get(this.storage.storage, 'customTokens', [])
+    this.customTokens = get(this.storage.storage, 'customTokens', [])
       .map(token => {
         return new Token(
           token.name,
@@ -275,7 +276,7 @@ class Web3Provider extends React.PureComponent {
   }
   
   loadCustomLP = () => {
-    this.customLP = _.get(this.storage.storage, 'customLP', [])
+    this.customLP = get(this.storage.storage, 'customLP', [])
       .map(token => {
         return new Token(
           token.name,
@@ -301,7 +302,7 @@ class Web3Provider extends React.PureComponent {
     if (this.successConnectionCheck) return;
 
     try {
-      if (_.get(this, 'state.isConnected')) return;
+      if (get(this, 'state.isConnected')) return;
 
       const storageConnector = this.walletConnectorStorage().get();
       if (storageConnector) {
@@ -407,7 +408,7 @@ class Web3Provider extends React.PureComponent {
 
     // Get a liquidity for each pair
     const results = await Promise.allSettled(addresses.map(pairAddress => {
-      const pairContract = new (this.getWeb3().eth.Contract)(
+      const pairContract = new (this.getEth().eth.Contract)(
         require('const/ABI/PancakePair'),
         pairAddress,
       );
@@ -422,8 +423,8 @@ class Web3Provider extends React.PureComponent {
       const token0 = this.getToken(pair[0]);
       const token1 = this.getToken(pair[1]);
       const isForward = token0.address.toLowerCase() < token1.address.toLowerCase(); // True if token0 is the first token of LP
-      const reserve0 = _.get(result, 'value._reserve0', 0);
-      const reserve1 = _.get(result, 'value._reserve1', 0);
+      const reserve0 = get(result, 'value._reserve0', 0);
+      const reserve1 = get(result, 'value._reserve1', 0);
       const tokenAmount0 = new TokenAmount(token0, isForward ? reserve0 : reserve1);
       const tokenAmount1 = new TokenAmount(token1, isForward ? reserve1 : reserve0);
       
@@ -445,7 +446,7 @@ class Web3Provider extends React.PureComponent {
     let bestTrade;
     for (let hops = 1; hops <= maxHops; hops++) {
       const tradeMethod = isExactIn ? Trade.bestTradeExactIn : Trade.bestTradeExactOut;
-      const trade = _.get(tradeMethod(
+      const trade = get(tradeMethod(
         pairs,
         isExactIn
           ? this.getTokenAmount(token0, amount)
@@ -562,18 +563,18 @@ class Web3Provider extends React.PureComponent {
   }
 
    /**
-   * Sets a provider of chainId and connector to the web3.
+   * Sets a provider of chainId and connector to the web3
    * @param {number} chainId 
    * @returns {void}
    */
   async setProvider(chainId) {
     if (!CONTRACT_ADDRESSES[chainId]) return;
-    const hostProvider = new Web3.providers.HttpProvider(
+    const hostProvider = new HttpProvider(
       CONTRACT_ADDRESSES[chainId].providerAddress
     );
-    this.web3Host.setProvider(hostProvider);
+    this.ethHost.setProvider(hostProvider);
 
-    if (!this.web3) return;
+    if (!this.eth) return;
 
     const { connector } = this.state;
     const ethereumObject = getConnectorObject(connector, chainId);
@@ -589,7 +590,7 @@ class Web3Provider extends React.PureComponent {
       await provider.enable();
     }
 
-    this.web3.setProvider(ethereumObject.provider);
+    this.eth.setProvider(ethereumObject.provider);
   }
 
   /**
@@ -733,7 +734,7 @@ class Web3Provider extends React.PureComponent {
    * Connect to web3 wallet plugin
    * @returns {Promise.<void>}
    */
-  async connectWallet (connector = this.state.connector, showErrorMessage = true) {
+  async connectWallet (connector = this.state.connector, showErrorMessage = true, account) {
     try {
       // Get connector.
       let ethereumObject = getConnectorObject(connector);
@@ -745,10 +746,13 @@ class Web3Provider extends React.PureComponent {
 
         return;
       }
+      console.log('connectWallet', 'ethereumObject', ethereumObject);
 
       this.ethereum = ethereumObject.ethereum;
       this.requestMethods = getRequestMethods(connector);
       const provider = ethereumObject.provider;
+      
+      console.log('connectWallet', 'provider', provider);
 
       this.successConnectionCheck = true;
       if (connector === CONNECTORS.WALLET_CONNECT) {
@@ -761,13 +765,17 @@ class Web3Provider extends React.PureComponent {
         });
       }
 
-      this.web3 = new Web3(provider);
+      this.eth = new Eth(provider);
+      
+      console.log('connectWallet', 'eth', this.eth);
 
       // Set account address
       const accountAddress = (
         await this.fetchEthereumRequest({
           method: this.requestMethods.request_accounts
       }))[0];
+      
+      console.log('connectWallet', 'accountAddress', accountAddress);
 
       if (!accountAddress) {
         throw new Error('No accounts connected');
@@ -779,15 +787,17 @@ class Web3Provider extends React.PureComponent {
 
       // Set the chain id after an account address setted
       // because the address maybe empty.
-      let chainId = await this.web3.eth.getChainId();
+      let chainId = Number(await this.eth.getChainId());
       if (chainId) {
         this.setChain(chainId, false);
       }
+      
+      console.log('connectWallet', 'chainId', chainId, typeof chainId);
 
       this.walletConnectorStorage().set(connector);
 
       if (!chainId) {
-        chainId = await this.web3.eth.getChainId();
+        chainId = Number(await this.eth.getChainId());
         this.setChain(chainId, false);
       }
 
@@ -802,7 +812,7 @@ class Web3Provider extends React.PureComponent {
       this.ethereumUnsubscribe();
       this.ethereumSubsribe();
 
-      this.checkRefer();
+      //this.checkRefer();
 
       // On account address change
     } catch (error) {
@@ -838,7 +848,7 @@ class Web3Provider extends React.PureComponent {
         break;
     }
 
-    this.web3 = null;
+    this.eth = null;
   }
 
   /**
@@ -870,7 +880,7 @@ class Web3Provider extends React.PureComponent {
       const tokenListURI = this.network.tokenListURI;
       if (!tokens && tokenListURI) {
         const request = tokenListURI && await axios.get(tokenListURI);
-        tokens = _.get(request, 'data.tokens').map((t) => {
+        tokens = get(request, 'data.tokens').map((t) => {
           return new Token(
             t.name,
             t.symbol,
@@ -891,7 +901,7 @@ class Web3Provider extends React.PureComponent {
       }
       if (!this.network.mainnet) return [];
       if (!this._mounted) return;
-      const result = _.uniqBy(
+      const result = uniqBy(
         [...this.state.tokens, ...tokens],
         'address'
       ).filter(fineToken);
@@ -948,7 +958,7 @@ class Web3Provider extends React.PureComponent {
           ]
         }
       }
-      const contract = new (this.getWeb3().eth.Contract)(
+      const contract = new (this.getEth().eth.Contract)(
         require('const/ABI/PancakePair'),
         pairAddress,
       );
@@ -999,7 +1009,7 @@ class Web3Provider extends React.PureComponent {
   }
 
   // Shortcur to toBN method
-  toBN = data => this.getWeb3().utils.toBN(data);
+  toBN = data => this.getEth().utils.toBN(data);
 
   /**
    * Returns relation between tokens reserves, which means that for 1 token0 you will get n number of token1
@@ -1014,12 +1024,12 @@ class Web3Provider extends React.PureComponent {
 
     try {
       const {toBN} = this;
-      const decimals = Number(_.get(token0, 'decimals', 18));
+      const decimals = Number(get(token0, 'decimals', 18));
       const amountWei = wei.to(amount, decimals);
-      const amountHex = this.getWeb3().utils.toHex(amountWei);
+      const amountHex = this.getEth().utils.toHex(amountWei);
 
       // Get token0 address and decimals value from the pair
-      const routerContract = new (this.getWeb3().eth.Contract)(
+      const routerContract = new (this.getEth().eth.Contract)(
         require('const/ABI/PancakeRouter'),
         this.network.contractAddresses.routerAddress,
       );
@@ -1031,7 +1041,7 @@ class Web3Provider extends React.PureComponent {
         amountHex,
         [token0.address, token1.address],
       ).call();
-      return wei.from(data[1], Number(_.get(token1, 'decimals', 18)));
+      return wei.from(data[1], Number(get(token1, 'decimals', 18)));
     } catch (error) {
       console.error('[getTokensRelativePrice]', error);
     }
@@ -1054,7 +1064,7 @@ class Web3Provider extends React.PureComponent {
         this.network.hops
       );
 
-      return _.get(data, 'outAmount', 0);
+      return get(data, 'outAmount', 0);
     } catch (error) {
       console.warn('[getTokenUSDPrice]', error);
       return 0;
@@ -1074,14 +1084,14 @@ class Web3Provider extends React.PureComponent {
 
       if (tokenContractAddress) {
         // Return token balance
-        const contract = new (this.getWeb3().eth.Contract)(
+        const contract = new (this.getEth().eth.Contract)(
           require('const/ABI/Bep20Token'),
           tokenContractAddress,
         );
         return await contract.methods.balanceOf(accountAddress).call();
       } else {
         // Return default balance
-        return await (this.getWeb3().eth.getBalance(accountAddress));
+        return await (this.getEth().eth.getBalance(accountAddress));
       }
     } catch (error) {
       console.error('[getTokenBalance]', this.getBSCScanLink(tokenContractAddress), error);
@@ -1100,7 +1110,7 @@ class Web3Provider extends React.PureComponent {
    */
   async getTokensBalances(contractAddresses) {
     try {
-      const contract = await new this.web3.eth.Contract(
+      const contract = await new this.eth.Contract(
         require('const/ABI/NarfexOracle'),
         this.network.contractAddresses.narfexOracle,
       );
@@ -1137,7 +1147,7 @@ class Web3Provider extends React.PureComponent {
     try {
       const reserves = await this.getReserves(pairAddress);
       // const {tokens} = this.state;
-      // const contract = new (this.getWeb3().eth.Contract)(
+      // const contract = new (this.getEth().Contract)(
       //   require('const/ABI/PancakePair'),
       //   pairAddress,
       // );
@@ -1192,7 +1202,7 @@ class Web3Provider extends React.PureComponent {
       // Only MetaMask have a good provider
       // for send more requests on one time.
       const isMetamask = this.state.connector === CONNECTORS.METAMASK &&
-        _.get(window, 'ethereum.isMetaMask');
+        get(window, 'ethereum.isMetaMask');
       // Set positive balance tokens
       this.setBalances(this.state.tokens.filter((t) => t.balance > 0));
 
@@ -1223,7 +1233,7 @@ class Web3Provider extends React.PureComponent {
       await this.setChainTokenBalance();
 
       const oneChunkNumber = 256;
-      const chunks = _.chunk(tokens, oneChunkNumber);
+      const chunks = chunk(tokens, oneChunkNumber);
 
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
@@ -1276,14 +1286,14 @@ class Web3Provider extends React.PureComponent {
     }
   }
 
-  fractionToHex = (fraction, decimals) => this.getWeb3().utils.toHex(wei.to(significant(fraction), decimals));
+  fractionToHex = (fraction, decimals) => this.getEth().utils.toHex(wei.to(significant(fraction), decimals));
   
   // Set chain token balance to balances and tokens.
   async setChainTokenBalance() {
     try {
       // Get Chain token balance
       let chainToken = CHAIN_TOKENS[this.network.chainId];
-      const chainTokenBalance = await new this.web3.eth.getBalance(
+      const chainTokenBalance = await new this.eth.getBalance(
         this.state.accountAddress
       );
 
@@ -1350,13 +1360,12 @@ class Web3Provider extends React.PureComponent {
    */
   async swap(pair, trade, slippageTolerance = 2, isExactIn = true, deadline = 20) {
     const {accountAddress} = this.state;
-    const {web3} = this;
-    const routerContract = new (this.getWeb3().eth.Contract)(
+    const routerContract = new (this.getEth().eth.Contract)(
       require('const/ABI/PancakeRouter'),
       this.network.contractAddresses.routerAddress,
     );
-    const isFromBNB = !_.get(pair, '[0].address');
-    const isToBNB = !_.get(pair, '[1].address');
+    const isFromBNB = !get(pair, '[0].address');
+    const isToBNB = !get(pair, '[1].address');
 
     // Calculate slippage tolerance tokens amount
     const slippageFraction = this.numberToFraction(slippageTolerance).divide(100);
@@ -1407,7 +1416,7 @@ class Web3Provider extends React.PureComponent {
     options.push(path);
 
     options.push(accountAddress); // "to" field
-    options.push(this.getWeb3().utils.toHex(Math.round(Date.now()/1000) + 60 * deadline)); // Deadline
+    options.push(this.getEth().utils.toHex(Math.round(Date.now()/1000) + 60 * deadline)); // Deadline
 
     try {
       try {
@@ -1433,7 +1442,7 @@ class Web3Provider extends React.PureComponent {
    */
   getTokenContract = (token, isPair = false) => new TokenContract(token, this, isPair);
 
-  getContract = (abi, address) => new (this.web3.eth.Contract)(
+  getContract = (abi, address) => new (this.eth.Contract)(
     abi,
     address,
   );
@@ -1447,7 +1456,7 @@ class Web3Provider extends React.PureComponent {
    */
   estimateTransaction = async (contract, method, params) => {
     try {
-      const accountAddress = _.get(this, 'state.accountAddress');
+      const accountAddress = get(this, 'state.accountAddress');
       const data = contract.methods[method](...params);
       return await data.estimateGas({from: accountAddress, gas: 50000000000});
     } catch (error) {
@@ -1465,10 +1474,10 @@ class Web3Provider extends React.PureComponent {
    */
   transaction = async (contract, method, params, value = 0) => {
     try {
-      const accountAddress = _.get(this, 'state.accountAddress');
-      const count = await this.web3.eth.getTransactionCount(accountAddress);
+      const accountAddress = get(this, 'state.accountAddress');
+      const count = await this.eth.getTransactionCount(accountAddress);
       const data = contract.methods[method](...params);
-      const gasPrice = await this.web3.eth.getGasPrice();
+      const gasPrice = await this.eth.getGasPrice();
       const gasEstimationParams = {from: accountAddress, gas: 50000000000};
       if (value) {
         gasEstimationParams.value = value;
@@ -1476,15 +1485,15 @@ class Web3Provider extends React.PureComponent {
       const gasLimit = await data.estimateGas(gasEstimationParams);
       const rawTransaction = {
         from: accountAddress,
-        gasPrice: this.web3.utils.toHex(gasPrice),
-        gasLimit: this.web3.utils.toHex(gasLimit),
+        gasPrice: toHex(gasPrice),
+        gasLimit: toHex(gasLimit),
         gas: null,
         to: contract._address,
         data: data.encodeABI(),
-        nonce: this.web3.utils.toHex(count),
+        nonce: toHex(count),
       };
       if (value) {
-        rawTransaction.value = this.web3.utils.toHex(value);
+        rawTransaction.value = toHex(value);
       }
       return await this.fetchEthereumRequest({
         method: this.requestMethods.eth_sendTransaction,
@@ -1527,7 +1536,7 @@ class Web3Provider extends React.PureComponent {
    */
   async getTransactionReceipt(txHash) {
     try {
-      const receipt = await this.web3.eth.getTransactionReceipt(txHash);
+      const receipt = await this.eth.getTransactionReceipt(txHash);
       if (receipt) return receipt;
       await wait(1000);
       return await this.getTransactionReceipt(txHash);
@@ -1624,7 +1633,7 @@ class Web3Provider extends React.PureComponent {
         await this.fetchEthereumRequest({
           method: this.requestMethods.wallet_addEthereumChain,
           params: [{
-            chainId: this.web3.utils.toHex(19),
+            chainId: toHex(19),
             chainName: 'Songbird',
             nativeCurrency: {
               name: 'Songbird',
@@ -1638,13 +1647,13 @@ class Web3Provider extends React.PureComponent {
       }
       await this.fetchEthereumRequest({
         method: this.requestMethods.wallet_switchEthereumChain,
-        params: [{ chainId: this.web3.utils.toHex(chainId) }]
+        params: [{ chainId: toHex(chainId) }]
       });
       return true;
     } catch (error) {
       console.log('[switchToChain]', error);
       
-      toaster.warning(`Switch to chain ${_.get(NETWORKS_DATA[chainId], 'title', '')}`);
+      toaster.warning(`Switch to chain ${get(NETWORKS_DATA[chainId], 'title', '')}`);
       if (this.requiredChain === chainId) {
         // return await this.switchToChain(chainId, false);
       }
@@ -1668,12 +1677,12 @@ class Web3Provider extends React.PureComponent {
    * @returns {Promise.<void>}
    */
   async getBlocksPerSecond() {
-    if (!this.web3) return;
+    if (!this.eth) return;
     try {
-      const currentBlockNumber = await this.web3.eth.getBlockNumber();
+      const currentBlockNumber = await this.eth.getBlockNumber();
       const data = await Promise.all([
-        this.web3.eth.getBlock(currentBlockNumber),
-        this.web3.eth.getBlock(currentBlockNumber - 10000),
+        this.eth.getBlock(currentBlockNumber),
+        this.eth.getBlock(currentBlockNumber - 10000),
       ]);
       const blocksPerSecond = (data[0].number - data[1].number) / (data[0].timestamp - data[1].timestamp);
       this.setState({
@@ -1703,11 +1712,11 @@ class Web3Provider extends React.PureComponent {
         });
         return KNOWN_FIATS;
       }
-      const fiats = _.cloneDeep(this.state.fiats);
-      let list = _.get(fiats, 'list', []);
+      const fiats = cloneDeep(this.state.fiats);
+      let list = get(fiats, 'list', []);
 
       if (!list.length) {
-        const factoryContract = new (this.getWeb3().eth.Contract)(
+        const factoryContract = new (this.getEth().eth.Contract)(
           require('const/ABI/fiatFactory'),
           this.network.contractAddresses.fiatFactory,
         );
@@ -1716,7 +1725,7 @@ class Web3Provider extends React.PureComponent {
       }
 
       const userFiats = (await Promise.all(list.map(fiatAddress => {
-        const fiatContract = new (this.getWeb3().eth.Contract)(
+        const fiatContract = new (this.getEth().eth.Contract)(
           require('const/ABI/fiat'),
           fiatAddress,
         );
@@ -1777,12 +1786,12 @@ class Web3Provider extends React.PureComponent {
   getFiatsArray(rates = {}) {
     const chainId = this.state.chainId || 56;
     const userId = `${chainId}${this.state.accountAddress}`;
-    return _.get(
+    return get(
       this.state.fiats,
       userId,
       KNOWN_FIATS.filter(f => f.chainId === chainId)
     ).map(token => {
-      const price = _.get(rates, token.symbol.toLowerCase());
+      const price = get(rates, token.symbol.toLowerCase());
 
       if (price) {
         token.price = price;
@@ -1855,7 +1864,7 @@ class Web3Provider extends React.PureComponent {
  */
   async sendTokens(token, address, value) {
     const contract = this.getTokenContract(token).contract;
-    const amount = this.web3.utils.toWei(String(value));
+    const amount = toWei(String(value));
     // const accountBalance = await contract.methods
     // .balanceOf(this.state.accountAddress)
     // .call();
@@ -1863,12 +1872,9 @@ class Web3Provider extends React.PureComponent {
     //   ? accountBalance
     //   : wei.to(value);
     if(token.symbol === this.network.wrapToken.symbol) {
-      const gasPrice = await this.web3.eth.getGasPrice();
-      const latestBlock = await this.web3.eth.getBlock('latest');
+      const gasPrice = await this.eth.getGasPrice();
+      const latestBlock = await this.eth.getBlock('latest');
       const gasLimit = latestBlock.gasLimit;
-
-      // Web3 to hex for reuse
-      const { toHex } = this.web3.utils;
 
       const rawTransaction = {
         gasPrice: toHex(gasPrice),
@@ -1929,8 +1935,8 @@ class Web3Provider extends React.PureComponent {
 
     return <Web3Context.Provider value={{
       ...this.state,
-      web3: this.web3,
-      getWeb3: this.getWeb3.bind(this),
+      eth: this.eth,
+      getEth: this.getEth.bind(this),
       ethereum: this.ethereum,
       connectWallet: this.connectWallet.bind(this),
       connectPixelWallet: this.connectPixelWallet.bind(this),

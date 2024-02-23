@@ -49,7 +49,7 @@ function LiquidityConfirmModal(props) {
   const {
     getReserves,
     transaction, getTransactionReceipt,
-    network, web3,
+    network, eth,
     accountAddress,
     getBSCScanLink,
     addTokenToWallet,
@@ -118,7 +118,7 @@ function LiquidityConfirmModal(props) {
     setIsTransaction(true);
     setErrorText('');
     try {
-      const routerContract = new (web3.eth.Contract)(
+      const routerContract = new (eth.Contract)(
         require('const/ABI/PancakeRouter'),
         routerAddress,
       );
@@ -162,7 +162,7 @@ function LiquidityConfirmModal(props) {
     try {
       const pr = getPairAddress('0x1a7b46656B2b8b29B1694229e122d066020503D0', '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED');
       console.log('PR', pr);
-      const routerContract = new (web3.eth.Contract)(
+      const routerContract = new (eth.Contract)(
         require('const/ABI/PancakeRouter'),
         routerAddress,
       );

@@ -38,7 +38,7 @@ function LiquidityRemove({ onClose, currentPool }) {
     getReserves,
     transaction, getTransactionReceipt,
     getTokenContract, chainId,
-    network, web3,
+    network, eth,
     accountAddress, bnb,
     getBSCScanLink,
     addTokenToWallet,
@@ -122,7 +122,7 @@ function LiquidityRemove({ onClose, currentPool }) {
     const tokenAmount = isToken0Wrap ? userAmount1 : userAmount0;
     const bnbAmount = isToken0Wrap ? userAmount0 : userAmount1;
     const deadline = Number(Date.now() / 1000 + 60 * 15).toFixed(0);
-    const routerContract = new (web3.eth.Contract)(
+    const routerContract = new (eth.Contract)(
       require('const/ABI/PancakeRouter'),
       routerAddress,
     );

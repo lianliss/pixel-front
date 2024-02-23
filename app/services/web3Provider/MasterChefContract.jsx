@@ -1,5 +1,5 @@
 import wei from 'utils/wei';
-import _ from 'lodash';
+import {get} from 'lodash';
 import { DEFAULT_CHAIN } from 'services/multichain/chains';
 import Network from 'services/multichain/Network';
 
@@ -9,14 +9,14 @@ class MasterChefContract {
 
   constructor(provider) {
     //if (!provider.state.isConnected) return;
-    if (!provider.web3) return;
+    if (!provider.eth) return;
     this.provider = provider;
-    this.web3 = provider.web3;
+    this.eth = provider.eth;
     this.ethereum = provider.ethereum;
     this.chainId = provider.state.chainId || DEFAULT_CHAIN;
     this.network = new Network(this.chainId || DEFAULT_CHAIN);
 
-    this.contract = new (this.web3.eth.Contract)(
+    this.contract = new (this.eth.Contract)(
       require('src/index/constants/ABI/MasterChef'),
       this.provider.network.contractAddresses.masterChefAddress,
     );
@@ -24,7 +24,7 @@ class MasterChefContract {
 
   async getPoolsList() {
     try {
-      const accountAddress = _.get(this, 'provider.state.accountAddress');
+      const accountAddress = get(this, 'provider.state.accountAddress');
       const pools = {};
       console.log('getPoolsList', this);
       const count = await this.contract.methods.getPoolsCount().call();
@@ -54,7 +54,7 @@ class MasterChefContract {
   async getPoolData(pool) {
     try {
       const {address} = pool;
-      const accountAddress = _.get(this, 'provider.state.accountAddress');
+      const accountAddress = get(this, 'provider.state.accountAddress');
       const promises = [
         this.contract.methods.getPoolData(address).call()
       ];
@@ -64,17 +64,17 @@ class MasterChefContract {
       const data = await Promise.all(promises);
       return {
         ...pool,
-        token0: _.get(data[0], 'token0'),
-        token1: _.get(data[0], 'token1'),
-        token0Symbol: _.get(data[0], 'token0Symbol'),
-        token1Symbol: _.get(data[0], 'token1Symbol'),
-        size: _.get(data[0], 'totalDeposited', '0'),
-        share: wei.from(_.get(data[0], 'poolShare', '0'), 4),
-        rewardPerBlock: _.get(data[0], 'rewardPerBlock', '0'),
-        balance: _.get(data[1], 'balance', '0'),
-        userPool: _.get(data[1], 'userPool', '0'),
-        reward: _.get(data[1], 'reward', '0'),
-        isCanHarvest: _.get(data[1], 'isCanHarvest', false),
+        token0: get(data[0], 'token0'),
+        token1: get(data[0], 'token1'),
+        token0Symbol: get(data[0], 'token0Symbol'),
+        token1Symbol: get(data[0], 'token1Symbol'),
+        size: get(data[0], 'totalDeposited', '0'),
+        share: wei.from(get(data[0], 'poolShare', '0'), 4),
+        rewardPerBlock: get(data[0], 'rewardPerBlock', '0'),
+        balance: get(data[1], 'balance', '0'),
+        userPool: get(data[1], 'userPool', '0'),
+        reward: get(data[1], 'reward', '0'),
+        isCanHarvest: get(data[1], 'isCanHarvest', false),
         isDataLoaded: true,
       }
     } catch (error) {

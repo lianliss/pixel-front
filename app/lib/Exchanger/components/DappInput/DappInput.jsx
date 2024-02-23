@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { adaptiveSelector } from 'app/store/selectors';
 import { classNames } from 'utils';
 import { getFixedNumber } from 'utils';
-import _ from 'lodash';
+import {isNaN, trimStart} from 'lodash';
 
 // Styles
 import './DappInput.scss';
@@ -46,7 +46,7 @@ function DappInput({
 
     if (type === 'number') {
       if (Number(value) !== Number(inputState)) {
-        if (!_.isNaN(value)) {
+        if (!isNaN(value)) {
           setInputState(value);
         }
       }
@@ -81,7 +81,7 @@ function DappInput({
       value = value.replace(',', '.');
 
       if (value.length >= 2 && value[0] === '0' && value[1] !== '.') {
-        value = _.trimStart(value, '0');
+        value = trimStart(value, '0');
       }
 
       if (value === '.') {
@@ -91,7 +91,7 @@ function DappInput({
         return;
       }
 
-      if (!_.isNaN(Number(value))) {
+      if (!isNaN(Number(value))) {
         onChange(getFixedNumber(Number(value), decimals));
         setInputState(getFixedNumber(value, decimals));
         return;

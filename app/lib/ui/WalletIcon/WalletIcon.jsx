@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import {get, isObject} from 'lodash';
 
 // Components
 import {Icon} from '@blueprintjs/core';
@@ -16,12 +16,12 @@ function WalletIcon({ currency, size, marginLeft, marginRight, className }) {
   const [icon, setIcon] = React.useState(null);
   const context = React.useContext(Web3Context);
   const { tokens } = context;
-  const defaultSymbol = _.isObject(currency) ? '' : currency;
-  const symbol = _.get(currency, 'symbol', defaultSymbol);
+  const defaultSymbol = isObject(currency) ? '' : currency;
+  const symbol = get(currency, 'symbol', defaultSymbol);
 
   React.useEffect(() => {
     try {
-      let logo = _.isObject(currency) && currency.logoURI;
+      let logo = isObject(currency) && currency.logoURI;
       const findToken = (t) => t.symbol === symbol;
       const token =
         (!logo && tokens.find(findToken)) || KNOWN_FIATS.find(findToken);

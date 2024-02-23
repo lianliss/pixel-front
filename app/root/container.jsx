@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import LoadModule from 'utils/async/load-module';
 import {} from 'slices/App';
-import _ from 'lodash';
+import {get} from 'lodash';
 import getCookie from 'utils/get-cookie';
 import {appUpdateAccount, appSetAdaptive} from 'slices/App';
 import Router from './router';
@@ -83,8 +83,8 @@ class AppContainer extends React.PureComponent {
 }
 
 export default connect(state => ({
-  account: _.get(state, 'App.account'),
-  adaptive: _.get(state, 'App.adaptive'),
+  account: get(state, 'App.account'),
+  adaptive: get(state, 'App.adaptive'),
 }), dispatch => bindActionCreators({
   appUpdateAccount,
   appSetAdaptive,

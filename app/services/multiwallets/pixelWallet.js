@@ -1,4 +1,6 @@
-import {DEFAULT_CHAIN} from "services/multichain/chains";
+import {DEFAULT_CHAIN, SONGBIRD} from "services/multichain/chains";
+import {privateKeyToAccount} from 'web3-eth-accounts';
+import {noderealRPC} from "services/multiwallets/multiwalletsDifference";
 
 class PixelWallet {
   selectedAddress = null;
@@ -6,15 +8,16 @@ class PixelWallet {
   chainId = '0x' + DEFAULT_CHAIN.toString(16);
   
   constructor(web3Provider) {
-    this.web3 = web3Provider.web3Host;
+    this.eth = web3Provider.ethHost;
   }
   
   connect(privateKey) {
-    const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+    const account = privateKeyToAccount(privateKey);
     this.selectedAddress = account.address;
     this.sign = account.sign;
     this.signTransaction = account.signTransaction;
     this.encrypt = account.encrypt;
+    return account;
   }
   
   sign = (data) => {
