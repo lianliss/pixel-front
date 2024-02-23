@@ -11,6 +11,7 @@ import { classNames as cn } from 'utils';
 import { SwitchTabs, SectionBlock, WalletIcon, Button, } from 'ui';
 import {Icon, Card, Spinner} from '@blueprintjs/core';
 import {Web3Context} from 'services/web3Provider';
+import get from 'lodash/get';
 
 class TokenSelect extends React.PureComponent {
   static contextType = Web3Context;
@@ -144,7 +145,7 @@ class TokenSelect extends React.PureComponent {
       .map((token) => {
         const { symbol, name, logoURI, price, balance } = token;
         const key = getTokenBalanceKey(token, accountAddress);
-        //const balance = _.get(this.props, key);
+        //const balance = get(this.props, key);
         const balanceNumber = balance
           ? Number(wei.from(balance, token.decimals))
           : null;

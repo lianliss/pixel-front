@@ -6,6 +6,7 @@ import {
   Icon,
 } from '@blueprintjs/core';
 import get from 'lodash/get';
+import includes from 'lodash/includes';
 import routes from 'const/routes';
 import {
   Link,
@@ -116,7 +117,7 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
           {section.menu.map((item, itemIndex) => {
             if (typeof item.isAvailable === 'function' && !item.isAvailable(account)) return;
             const path = get(item, 'path');
-            const isActive = _.includes(match.pathname, path);
+            const isActive = includes(match.pathname, path);
             const isDisabled = typeof item.disabled === 'function'
               ? item.disabled(account)
               : !!item.disabled;

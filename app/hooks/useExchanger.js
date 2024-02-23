@@ -8,7 +8,8 @@ import {
 import routes from 'const/routes';
 import { ratesSelector, adaptiveSelector } from 'app/store/selectors';
 import ExchangerStorage from 'services/ExchangerStorage';
-import { FiatToken } from 'services/Token';
+import get from 'lodash/get';
+import uniqBy from 'lodash/uniqBy';
 
 const UPDATE_DELAY = 5000;
 let fiatsUpdateTimeout;
@@ -44,12 +45,12 @@ const useExchanger = () => {
   const [fiatSelected, setFiatSelected] = React.useState(null);
   const [coinSelected, setCoinSelected] = React.useState(null);
   const [initTokensMounted, setInitTokensMounted] = React.useState(false);
-  const fiatSymbol = _.get(fiatSelected, 'symbol');
-  const coinSymbol = _.get(coinSelected, 'symbol');
+  const fiatSymbol = get(fiatSelected, 'symbol');
+  const coinSymbol = get(coinSelected, 'symbol');
 
   const userId = `${chainId}${accountAddress}`;
-  const fiatTokens = _.get(fiats, userId, []).map((token) => {
-    const price = _.get(rates, token.symbol.toLowerCase());
+  const fiatTokens = get(fiats, userId, []).map((token) => {
+    const price = get(rates, token.symbol.toLowerCase());
 
     if (price) {
       token.price = price;
@@ -58,10 +59,10 @@ const useExchanger = () => {
     return token;
   });
   // Get raw coins list
-  const coins = _.uniqBy([...customTokens, ...tokens], 'address');
+  const coins = uniqBy([...customTokens, ...tokens], 'address');
 
   // Filters for select the fiat.
-  const params = _.get(match, 'params', {});
+  const params = get(match, 'params', {});
   const paramsFrom = params.from !== 'undefined' ? params.from : null;
   const paramsTo = params.to !== 'undefined' ? params.to : null;
   const allCoins = [...fiatTokens, ...coins];
@@ -78,8 +79,8 @@ const useExchanger = () => {
 
   // Exchanger storage.
   const exchangerStorage = new ExchangerStorage();
-  const initialFiat = _.get(exchangerStorage.storage, 'fiat');
-  const initialCoin = _.get(exchangerStorage.storage, 'coin');
+  const initialFiat = get(exchangerStorage.storage, 'fiat');
+  const initialCoin = get(exchangerStorage.storage, 'coin');
 
   // Get token by storage.
   const getInitialFiat = () => allCoins.find((t) => t.symbol === initialFiat) || allCoins[1];
@@ -157,8 +158,8 @@ const useExchanger = () => {
   fiatsUpdate = async () => {
     try {
       await updateFiats().then((fiats) => {
-        const currencySymbol = _.get(match, 'params.from');
-        const userIdFiats = _.get(fiats, userId, []);
+        const currencySymbol = get(match, 'params.from');
+        const userIdFiats = get(fiats, userId, []);
         if (!fiatSelected) {
           const initialCurrency =
             userIdFiats.find((fiat) => fiat.symbol === currencySymbol) ||
@@ -186,7 +187,7 @@ const useExchanger = () => {
   const updateTokenBalance = async () => {
     try {
       if (!isConnected) return;
-      if (_.get(fiatSelected, 'isFiat', false)) return;
+      if (get(fiatSelected, 'isFiat', false)) return;
 
       // Get the currency coin to update it.
       // The using fiatSelected here is unwanted solution.
@@ -199,7 +200,7 @@ const useExchanger = () => {
 
       // While the balance is loading currency can be changed.
       // const match = useMatch(routePath);
-      // const symbolAfterLoading = _.get(match, 'params.to');
+      // const symbolAfterLoading = get(match, 'params.to');
       // if (currencySymbol !== symbolAfterLoading) return;
 
       // Set the token balance to context.

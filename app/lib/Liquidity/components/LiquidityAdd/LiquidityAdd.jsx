@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import wei from 'utils/wei';
 import getFinePrice from 'utils/getFinePrice';
 import { ratesSelector, adaptiveSelector } from 'app/store/selectors';
+import get from 'lodash/get';
 
 // Components
 import DexSwapInput from 'lib/Exchanger/components/DexSwapInput/DexSwapInput';
@@ -36,10 +37,10 @@ function LiquidityAdd({ onClose, type, addPool, currentPool, routerTokens }) {
   const rates = useSelector(ratesSelector);
   
   const userId = `${chainId}${accountAddress}`;
-  const chainFiats = _.get(fiats, 'known', []).filter(f => f.chainId === chainId);
+  const chainFiats = get(fiats, 'known', []).filter(f => f.chainId === chainId);
   const defaultFiats = chainFiats.length ? chainFiats : [];
-  const fiatTokens = _.get(fiats, userId, defaultFiats).map(token => {
-    const price = _.get(rates, token.symbol.toLowerCase());
+  const fiatTokens = get(fiats, userId, defaultFiats).map(token => {
+    const price = get(rates, token.symbol.toLowerCase());
 
     if (price) {
       token.price = price;

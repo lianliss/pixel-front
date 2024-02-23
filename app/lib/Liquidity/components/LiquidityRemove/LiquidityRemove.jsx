@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import wei from 'utils/wei';
 import getFinePrice from 'utils/getFinePrice';
 import toaster from "services/toaster";
+import get from 'lodash/get';
 
 // Components
 import { Button, WalletIcon, DoubleWallets } from 'ui';
@@ -76,13 +77,13 @@ function LiquidityRemove({ onClose, currentPool }) {
     <Spinner />
   </>);
 
-  const symbol0 = _.get(pair, 'token0.symbol', '');
-  const symbol1 = _.get(pair, 'token1.symbol', '');
-  const decimals0 = _.get(pair, 'token0.decimals', 18);
-  const decimals1 = _.get(pair, 'token1.decimals', 18);
+  const symbol0 = get(pair, 'token0.symbol', '');
+  const symbol1 = get(pair, 'token1.symbol', '');
+  const decimals0 = get(pair, 'token0.decimals', 18);
+  const decimals1 = get(pair, 'token1.decimals', 18);
   const reserve0 = wei.from(pair[symbol0] || '0', decimals0);
   const reserve1 = wei.from(pair[symbol1] || '0', decimals1);
-  const totalSupply = wei.from(_.get(pair, 'totalSupply', '0'));
+  const totalSupply = wei.from(get(pair, 'totalSupply', '0'));
   const share = totalSupply ? balance / totalSupply : 0;
   const userAmount0 = reserve0 * share;
   const userAmount1 = reserve1 * share;
