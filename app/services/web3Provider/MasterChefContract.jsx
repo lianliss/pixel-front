@@ -1,5 +1,5 @@
 import wei from 'utils/wei';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import { DEFAULT_CHAIN } from 'services/multichain/chains';
 import Network from 'services/multichain/Network';
 

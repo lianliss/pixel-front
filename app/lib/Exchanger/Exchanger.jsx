@@ -12,7 +12,7 @@ import LoadModule from 'utils/async/load-module';
 
 
 // Utils
-import {get} from 'lodash';
+import get from 'lodash/get';
 import useExchanger from 'app/hooks/useExchanger';
 import { Web3Context } from 'services/web3Provider';
 

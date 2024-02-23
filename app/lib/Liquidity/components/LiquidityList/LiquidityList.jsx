@@ -7,7 +7,7 @@ import {
   DropdownElement, Button,
 } from 'ui';
 import {Icon} from '@blueprintjs/core';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import { Web3Context } from 'services/web3Provider';
 
 // Utils

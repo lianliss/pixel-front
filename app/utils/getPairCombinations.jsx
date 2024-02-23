@@ -1,5 +1,5 @@
 import baseTokens from 'const/baseTokens';
-import {uniqBy} from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 
 /**
  * Returns all possible pairs combinations with entered tokens and base tokens

@@ -2,15 +2,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
 import LoadModule from 'utils/async/load-module';
-import {} from 'slices/App';
-import {get} from 'lodash';
-import getCookie from 'utils/get-cookie';
+import get from 'lodash/get';
 import {appUpdateAccount, appSetAdaptive} from 'slices/App';
 import Router from './router';
 import 'process';
-import {classNames} from 'utils';
 import {IS_TELEGRAM} from "const";
 
 class AppContainer extends React.PureComponent {

@@ -1,7 +1,8 @@
 //import WalletConnectProvider from '@walletconnect/web3-provider';
 import * as CONNECTORS from './connectors';
 import requests from './requests';
-import {get, isNumber} from 'lodash';
+import get from 'lodash/get';
+import isNumber from 'lodash/isNumber';
 import {
   DEFAULT_CHAIN,
   ETHEREUM_MAINNET,

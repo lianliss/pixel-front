@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 const IS_TRUE_TELEGRAM = !!get(window, 'Telegram.WebApp.initData', '').length;
 

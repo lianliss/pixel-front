@@ -13,7 +13,7 @@ import { getFixedNumber } from 'utils';
 import routerABI from 'const/ABI/NarfexExchangerRouter';
 import { ModalContext } from 'services/ModalProvider/ModalProvider';
 import toaster from 'services/toaster';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import TransactionSubmitted from "services/ModalProvider/Modals/TransactionSubmitted";
 import {useMatch, useNavigate} from "react-router-dom";
 import routes from "const/routes";

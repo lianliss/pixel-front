@@ -1,6 +1,6 @@
 import axios from 'axios';
 import https from 'https';
-import {get} from 'lodash-es';
+import get from 'lodash/get';
 import getCookie from 'utils/get-cookie';
 
 const TIMEOUT_CODE = 'ETIMEDOUT';

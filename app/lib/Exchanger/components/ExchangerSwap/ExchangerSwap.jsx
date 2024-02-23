@@ -2,7 +2,7 @@ import React from 'react';
 import getFinePrice from 'utils/getFinePrice';
 import useSwap from 'app/hooks/useSwap';
 import {ModalContext} from "services/ModalProvider/ModalProvider";
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 // Components
 import {Icon, Overlay} from '@blueprintjs/core';

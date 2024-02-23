@@ -1,4 +1,4 @@
-import {isFunction} from 'lodash';
+import isFunction from 'lodash/isFunction';
 
 export const getTokenFromSymbol = function (symbol) {
   const fiats = this.getFiatsArray();

@@ -4,7 +4,7 @@ import React from 'react';
 import {Icon} from '@blueprintjs/core';
 
 // Utils
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 // Styles
 import './DexRoute.scss';

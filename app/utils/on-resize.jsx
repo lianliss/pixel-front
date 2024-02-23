@@ -1,5 +1,5 @@
 'use strict';
-import {debounce} from "lodash-es";
+import debounce from 'lodash/debounce';
 
 const INTERVAL_UNTIL_RECEIVE_FIRST_SIZE = 500;
 const onResizeListeners = [];

@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {isNull, isNaN, trimStart, get} from 'lodash';
+import get from 'lodash/get';
+import isNull from 'lodash/isNull';
+import isNaN from 'lodash/isNaN';
+import trimStart from 'lodash/trimStart';
 import wei from 'utils/wei';
 import getFinePrice from 'utils/getFinePrice';
 import { useSelector } from 'react-redux';

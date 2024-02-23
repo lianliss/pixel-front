@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Web3Context } from 'services/web3Provider';
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 // Styles
 import './DoubleWallets.scss';

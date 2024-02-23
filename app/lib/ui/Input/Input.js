@@ -4,7 +4,7 @@ import "./Input.scss";
 import React from "react";
 import PropTypes from "prop-types";
 import {Icon} from '@blueprintjs/core';
-import {get} from 'lodash';
+import get from 'lodash/get';
 // internal
 import { classNames } from "utils";
 

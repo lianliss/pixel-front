@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {get, isObject} from 'lodash';
+import get from 'lodash/get';
+import isObject from 'lodash/isObject';
 
 // Components
 import {Icon} from '@blueprintjs/core';

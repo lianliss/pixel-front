@@ -1,7 +1,7 @@
 'use strict';
 
 import 'process';
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 export const APP_DOM_ID = 'app';
 export const APP_DOM_CLASS = 'app';

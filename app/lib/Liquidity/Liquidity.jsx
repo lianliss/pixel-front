@@ -4,7 +4,8 @@ import React from 'react';
 import LiquidityAdd from './components/LiquidityAdd/LiquidityAdd';
 import LiquidityRemove from './components/LiquidityRemove/LiquidityRemove';
 import LiquidityMain from './components/LiquidityMain/LiquidityMain';
-import {uniq, get} from 'lodash';
+import get from 'lodash/get';
+import uniq from 'lodash/uniq';
 import { Web3Context } from 'services/web3Provider';
 
 // Styles

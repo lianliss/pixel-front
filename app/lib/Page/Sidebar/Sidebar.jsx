@@ -5,7 +5,7 @@ import logo from 'styles/svg/logo_small.svg';
 import {
   Icon,
 } from '@blueprintjs/core';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import routes from 'const/routes';
 import {
   Link,

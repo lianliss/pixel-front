@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 import { adaptiveSelector } from 'app/store/selectors';
 import { classNames } from 'utils';
 import { getFixedNumber } from 'utils';
-import {isNaN, trimStart} from 'lodash';
+import isNaN from 'lodash/isNaN';
+import trimStart from 'lodash/trimStart';
 
 // Styles
 import './DappInput.scss';
