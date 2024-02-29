@@ -30,6 +30,9 @@ function Wallet() {
         telegram.hideMainButton();
         //navigate(routes.exchange.path);
       }
+      if (!privateKey) {
+        setIsLoading(false);
+      }
     }).catch(error => {
       setIsLoading(false);
       console.log('[Wallet]', error);
