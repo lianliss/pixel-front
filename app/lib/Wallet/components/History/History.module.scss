@@ -1,0 +1,19 @@
+.history {
+  margin-top: 20px;
+
+  &-title {
+    padding-left: 24px;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  &-block {
+    margin: 0 -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    color: var(--color-text-light);
+    font-size: 14px;
+  }
+}

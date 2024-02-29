@@ -52,12 +52,7 @@ function Icons() {
                     if (!disabled) {
                       navigate(path);
                       setBackAction(() => {
-                        try {
-                          console.log('navigate');
-                          navigate(routes.wallet.path);
-                        } catch (error) {
-                          console.error('BACK ACTION', error);
-                        }
+                        navigate(routes.wallet.path);
                       })
                     }
                   }}

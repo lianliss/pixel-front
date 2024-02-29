@@ -15,6 +15,19 @@ const routes = {
     icon: 'person',
     lib: 'Wallet',
   },
+  walletToken: {
+    path: '/wallet/token/:symbol',
+    title: 'Wallet Token',
+    icon: 'person',
+    lib: 'Wallet/Token',
+  },
+  walletTokenTransfer: {
+    path: '/wallet/token/:symbol/transfer',
+    title: 'Wallet Transfer',
+    icon: 'person',
+    lib: 'Wallet/Token',
+    disabled: true,
+  },
   dashboard: {
     path: '/dashboard/',
     title: 'Dashboard',

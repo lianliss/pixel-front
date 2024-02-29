@@ -1,0 +1,124 @@
+@import 'styles/utils/mixins';
+
+.token {
+  --size-header: 40px;
+
+  &-header {
+    height: var(--size-header);
+    background: var(--color-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px 0 21px;
+
+    &-title {
+      display: flex;
+      align-items: center;
+
+      &-icon {
+        height: 30px;
+        width: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(13, 47, 78, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        img {
+          width: 32px;
+        }
+      }
+      &-symbol {
+        font-size: 14px;
+        margin-left: 8px;
+        font-weight: 700;
+      }
+    }
+    &-price {
+      color: var(--color-text-light);
+      font-size: 14px;
+    }
+  }
+
+  &-container {
+    @include scrollbar();
+
+    min-height: calc(100vh - var(--size-header));
+    padding: 0 16px 16px;
+
+    background-image: url("styles/img/wallet-bg2.jpg");
+    background-position: top;
+    background-size: 100%;
+    background-repeat: repeat;
+    background-attachment: fixed;
+
+    overflow-y: scroll;
+  }
+
+  &-balance {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px auto;
+
+    &-amount {
+      font-size: 40px;
+      font-weight: 100;
+    }
+
+    &-value {
+      opacity: 0.5;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+  }
+
+  &-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px 16px 16px;
+    margin: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease 0s;
+
+    &:hover {
+      background: rgba(13, 47, 78, 1);
+    }
+    &:global(.disabled) {
+      cursor: default;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    &-image-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &-image {
+      background: url('styles/img/icon-bg.jpg');
+      background-size: 200%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      width: 20px;
+      height: 20px;
+      transform: scale(1.6);
+    }
+    &-title {
+      font-size: 11px;
+      margin-top: -4px;
+    }
+  }
+}
