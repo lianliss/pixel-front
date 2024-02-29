@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './CreateWallet.module.scss';
-import telegram from 'services/telegram';
 import {ethers} from 'ethers';
 import {useNavigate} from 'react-router-dom';
 import routes from 'const/routes';
@@ -10,15 +9,18 @@ import {
   Icon,
 } from '@blueprintjs/core';
 import {Web3Context} from "services/web3Provider";
+import {TelegramContext} from "services/telegramProvider";
 
-function Mnemonic({setPrivateKey, showCreateWalletButton}) {
+function Mnemonic() {
   
   const context = React.useContext(Web3Context);
   const {connectPixelWallet} = context;
+  const telegram = React.useContext(TelegramContext);
+  const {
+    setPrivateKey,
+  } = telegram;
   const navigate = useNavigate();
-  const [wallet, setWallet] = React.useState();
   const [mnemonic, setMnemonic] = React.useState('');
-  const [key, setKey] = React.useState();
   
   React.useEffect(() => {
     const wallet = ethers.Wallet.createRandom();

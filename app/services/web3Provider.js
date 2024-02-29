@@ -10,6 +10,7 @@ import { Token } from "./web3Provider/Token";
 import toaster from 'services/toaster';
 import ExchangerStorage from 'services/ExchangerStorage';
 import {getTokenFromSymbol} from './web3Provider/utils';
+import {TelegramContext} from "services/telegramProvider";
 
 export const Web3Context = React.createContext();
 

@@ -1,0 +1,76 @@
+.tokens {
+
+}
+
+.token {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease 0s;
+
+  &:hover {
+    background: rgba(13, 47, 78, 1);
+  }
+  &-info {
+    display: flex;
+    align-items: center;
+
+    &-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(0, 21, 41, 1);
+      border: 1px solid rgba(13, 47, 78, 1);
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 40px;
+      }
+    }
+    &-title {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-left: 8px;
+      font-size: 12px;
+
+      &-symbol {
+
+      }
+      &-name {
+        color: var(--color-text-light);
+
+      }
+    }
+  }
+  &-balance {
+    display: flex;
+    align-items: center;
+
+    &-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+
+      &-amount {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      &-value {
+        color: var(--color-text-light);
+      }
+    }
+    &-action {
+      padding: 16px 16px;
+      margin-right: -16px;
+    }
+  }
+}

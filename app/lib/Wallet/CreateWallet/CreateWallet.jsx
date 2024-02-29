@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './CreateWallet.module.scss';
-import telegram from 'services/telegram';
 import logo from 'styles/svg/logo_icon.svg';
 import Mnemonic from "./Mnemonic";
+import {TelegramContext} from "services/telegramProvider";
 
-function CreateWallet({setPrivateKey}) {
+function CreateWallet() {
   
   const [isCreate, setIsCreate] = React.useState(false);
+  const telegram = React.useContext(TelegramContext);
   
   const showCreateWalletButton = () => {
     telegram.setMainButton({
@@ -31,7 +32,7 @@ function CreateWallet({setPrivateKey}) {
   }, [])
   
   if (isCreate) {
-    return <Mnemonic setPrivateKey={setPrivateKey} />;
+    return <Mnemonic />;
   }
   
   return <div className={styles.createWallet}>

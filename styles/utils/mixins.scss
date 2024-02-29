@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-@mixin scrollbar($size: $size-scrollbar) {
+@mixin scrollbar($size: var(--size-scrollbar)) {
     &::-webkit-scrollbar {
         width: $size;
         height: $size;
@@ -23,18 +23,18 @@
         height: 0;
     }
     &::-webkit-scrollbar-thumb {
-        background: $color-scrollbar;
+        background: var(--color-scrollbar);
         border: 0 none #ffffff;
         border-radius: 2px;
     }
     &::-webkit-scrollbar-thumb:hover {
-        background: lighten($color-scrollbar, 10%);
+        background: var(--color-scrollbar-hover);
     }
     &::-webkit-scrollbar-thumb:active {
         //background: #000000;
     }
     &::-webkit-scrollbar-track {
-        background: $color-scrollbar-bg;
+        background: var(--color-scrollbar-bg);
         border: 0 none #ffffff;
         border-radius: 50px;
     }
@@ -47,7 +47,7 @@
     }
 }
 
-@mixin text-glow($color: $color-text-on-primary) {
+@mixin text-glow($color: black) {
     text-shadow:
             0 -1px 0 $color,
             1px -1px 0 $color,

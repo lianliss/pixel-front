@@ -13,7 +13,7 @@ import DappInput from 'lib/Exchanger/components/DappInput/DappInput';
 // Styles
 import './ExchangerSwap.scss';
 import {IS_TELEGRAM} from "const";
-import telegram from 'services/telegram';
+import {TelegramContext} from "services/telegramProvider";
 
 function ExchangerSwap({
   fiats,
@@ -28,6 +28,7 @@ function ExchangerSwap({
     connectToWalletModal,
     exchangerModal,
   } = React.useContext(ModalContext);
+  const telegram = React.useContext(TelegramContext);
   const {
     isAdaptive,
     fiatSelector,

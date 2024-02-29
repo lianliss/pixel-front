@@ -45,19 +45,19 @@ const routes = {
   exchange: {
     path: '/exchange/',
     title: 'Exchange',
-    icon: 'exchange',
+    icon: 'swap-horizontal',
     lib: 'Exchanger',
   },
   exchangeCurrency: {
     path: '/exchange/:from/:to',
     title: 'Exchange',
-    icon: 'exchange',
+    icon: 'swap-horizontal',
     lib: 'Exchanger',
   },
   liquidity: {
     path: '/exchange/liquidity/',
     title: 'Liquidity',
-    icon: 'exchange',
+    icon: 'swap-horizontal',
     lib: 'Exchanger',
   },
   farming: {

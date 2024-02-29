@@ -1,0 +1,30 @@
+.balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  &-title {
+    color: var(--color-text-light);
+    font-size: 14px;
+  }
+  &-value {
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 34px;
+    margin-top: 8px;
+  }
+  &-left {
+
+  }
+  &-right {
+    :global(.bp5-icon) {
+      color: var(--color-main);
+      //transform: translateY(-2px);
+      margin-left: 2px;
+    }
+  }
+  &-gas {
+    color: var(--color-text-light);
+    font-size: 12px;
+  }
+}

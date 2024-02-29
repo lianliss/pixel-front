@@ -1,81 +1,71 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {bindActionCreators} from 'redux';
-import LoadModule from 'utils/async/load-module';
+import LoadModule, {Loading} from 'utils/async/load-module';
 import get from 'lodash/get';
 import {appUpdateAccount, appSetAdaptive} from 'slices/App';
 import Router from './router';
 import 'process';
 import {IS_TELEGRAM} from "const";
+import {adaptiveSelector} from "app/store/selectors";
+import {TelegramContext} from "services/telegramProvider";
+import {Web3Context} from "services/web3Provider";
 
-class AppContainer extends React.PureComponent {
-  static displayName = 'AppContainer';
+function AppContainer() {
   
-  initialAccountData = null;
+  const dispatch = useDispatch();
+  const isAdaptive = useSelector(adaptiveSelector);
+  const telegram = React.useContext(TelegramContext);
+  const web3Context = React.useContext(Web3Context);
+  const [isLoading, setIsLoading] = React.useState(true);
   
-  state = {
-    isAccountGet: true,
-  };
-  
-  componentDidMount() {
-    window.addEventListener("resize", this.onResize.bind(this));
-    this.onResize();
-    this.getAccountData();
-  }
-  
-  onResize() {
-    const {appSetAdaptive, adaptive} = this.props;
+  function onResize() {
     if (IS_TELEGRAM) {
-      appSetAdaptive(true);
+      dispatch(appSetAdaptive(true));
       return;
     }
-    if (adaptive && window.innerWidth >= 800) {
-      appSetAdaptive(false);
+    if (isAdaptive && window.innerWidth >= 800) {
+      dispatch(appSetAdaptive(false));
     }
-    if (!adaptive && window.innerWidth < 800) {
-      appSetAdaptive(true);
+    if (!isAdaptive && window.innerWidth < 800) {
+      dispatch(appSetAdaptive(true));
     }
   }
   
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.onResize.bind(this));
+  React.useEffect(() => {
+    window.addEventListener("resize", onResize.bind(this));
+    onResize();
+    telegram.getPrivateKey().then(privateKey => {
+      web3Context.connectPixelWallet(privateKey);
+      setIsLoading(false);
+    }).catch(error => {
+      console.error('[container][getPrivateKey]', error);
+      setIsLoading(false);
+    });
+    return () => {
+      window.removeEventListener("resize", onResize.bind(this));
+    }
+  }, []);
+  
+  const className = [
+    'container',
+    'bp5-dark',
+  ];
+  if (IS_TELEGRAM) {
+    className.push('telegram');
   }
   
-  async getAccountData() {
-    const {appUpdateAccount} = this.props;
-    try {
-    
-    } catch (error) {
-      console.error('[getAccountData]', error);
-    }
-    this.setState({isAccountGet: true});
+  if (isLoading) {
+    return <Loading />;
   }
   
-  render() {
-    const {account} = this.props;
-    const className = [
-      'container',
-      'bp5-dark',
-    ];
-    if (IS_TELEGRAM) {
-      className.push('telegram');
-      window.Telegram.WebApp.expand();
-      window.Telegram.WebApp.ready();
-    }
-    
-    if (!this.state.isAccountGet) {
-      return <div className={className.join(' ')}>
-        {LoadModule.renderLoading()}
-      </div>;
-    }
-    
-    return (
-      <div className={className.join(' ')}>
-        <Router />
-      </div>
-    );
-  }
+  return (
+    <div className={className.join(' ')}>
+      <Router />
+    </div>
+  );
 }
 
 export default connect(state => ({

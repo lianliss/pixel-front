@@ -6,6 +6,16 @@ import {
 
 const toaster = OverlayToaster.create({position: "top", usePortal: true});
 
+export function Loading (props = {}) {
+  const {text} = props;
+  return <div className="module-loading">
+    <img className="loading" src={loading}/>
+    <div className="module-loading-text">
+      {text || 'Loading'}
+    </div>
+  </div>
+}
+
 class LoadModule extends React.PureComponent {
   /**
    * Lazy loader for any lib module which path starts from 'lib/...'
@@ -14,15 +24,6 @@ class LoadModule extends React.PureComponent {
    * @param modal {String} - module path after 'services/ModalProvider/Modals/'
    * @returns {XML}
    */
-  
-  static renderLoading = () => {
-    return <div className="module-loading">
-      <img className="loading" src={loading}/>
-      <div className="module-loading-text">
-        Loading
-      </div>
-    </div>
-  };
   
   static processError(error) {
     console.error('[LoadModule]', error);
@@ -65,7 +66,7 @@ class LoadModule extends React.PureComponent {
         LazyComponent = lazy(() => import(`lib/${lib}`).catch(LoadModule.processError));
     }
     
-    return <Suspense fallback={LoadModule.renderLoading()}>
+    return <Suspense fallback={Loading()}>
       <LazyComponent {...this.props} />
     </Suspense>
   }

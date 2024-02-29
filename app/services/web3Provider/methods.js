@@ -1,5 +1,4 @@
 import Eth from 'web3-eth';
-import telegram from "services/telegram";
 import * as CONNECTORS from "services/multiwallets/connectors";
 import {FiatToken, Token} from "services/web3Provider/Token";
 import {toHex, toWei, toChecksumAddress, toBigInt} from 'web3-utils';
@@ -59,13 +58,11 @@ export async function initProvider() {
   
   if (IS_TELEGRAM) {
     window.pixelWallet = new PixelWallet(this);
-    this.connectPixelWallet();
   }
 }
 
-export async function connectPixelWallet(_privateKey) {
+export async function connectPixelWallet(privateKey) {
   try {
-    const privateKey = _privateKey || await telegram.getPrivateKey();
     if (!privateKey) throw new Error('No privateKey founded');
     const account = window.pixelWallet.connect(privateKey);
     this.connectWallet(CONNECTORS.PIXEL, false, account);

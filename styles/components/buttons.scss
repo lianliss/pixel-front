@@ -18,7 +18,7 @@
       &.bp5-disabled {
         cursor: default;
         box-shadow: none;
-        color: var(--color-text-disabled);
+        //color: var(--color-text-disabled);
         background-color: var(--color-main-disabled);
       }
       &.bp5-minimal {
@@ -38,7 +38,7 @@
           box-shadow: 0 4px 14px 0 rgba(255, 255, 255, 0.4);
         }
         &.bp5-disabled {
-          color: var(--color-text-disabled);
+          //color: var(--color-text-disabled);
           background-color: var(--color-main-disabled);
         }
       }
@@ -50,7 +50,7 @@
           background-color: var(--color-primary-hover);
         }
         &.bp5-disabled {
-          color: var(--color-text-disabled);
+          //color: var(--color-text-disabled);
           background-color: var(--color-primary-disabled);
           box-shadow: none;
         }

@@ -13,6 +13,7 @@ import routes from 'const/routes';
 
 function PageContainer({path, lib, component, title, params = {}}) {
   const match = useMatch(path);
+  
   return <Page {...{match, title}}>
     {!!lib ? <LoadModule lib={lib} {...match.params} {...params} /> : component}
   </Page>
