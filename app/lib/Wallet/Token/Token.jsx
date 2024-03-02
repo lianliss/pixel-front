@@ -12,6 +12,7 @@ import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import {TelegramContext} from "services/telegramProvider";
 import History from "lib/Wallet/components/History/History";
 import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
+import wei from "utils/wei";
 
 function Token(props) {
   
@@ -28,7 +29,7 @@ function Token(props) {
   }, [symbol, tokens]);
   if (!token) return <></>;
   
-  const {name, logoURI, balance, price} = token;
+  const {name, logoURI, balance, price, decimals} = token;
   
   const icons = [
     {
@@ -53,7 +54,7 @@ function Token(props) {
     <div className={styles.tokenContainer}>
       <div className={styles.tokenBalance}>
         <div className={styles.tokenBalanceAmount}>
-          {getFinePrice(Number(balance) || 0)}
+          {getFinePrice(wei.from(balance, decimals))}
         </div>
         <div className={styles.tokenBalanceValue}>
           ≈ ${getFinePrice(0)}

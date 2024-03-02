@@ -10,6 +10,7 @@ import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import {Button, Input} from "ui";
 import {Button as BPButton, Tooltip} from "@blueprintjs/core";
 import {isAddress as web3IsAddress, toChecksumAddress} from 'web3-utils';
+import wei from "utils/wei";
 
 function Transfer() {
   
@@ -35,7 +36,7 @@ function Transfer() {
   const [address, setAddress] = React.useState('');
   const [value, setValue] = React.useState(0);
   
-  const {name, logoURI, balance, price} = token;
+  const {name, logoURI, balance, price, decimals} = token;
   
   const onQrClick = () => {
     scanQR(code => {
@@ -96,7 +97,7 @@ function Transfer() {
                type={'number'}
                indicator={<Button className={styles.transferMax}
                                   onClick={() => {
-                                    setValue(Number(balance))
+                                    setValue(wei.from(balance, decimals))
                                   }}>Max</Button>}
                onTextChange={setValue} />
       </WalletBlock>
