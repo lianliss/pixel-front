@@ -2,6 +2,7 @@ import wei from 'utils/wei';
 import get from 'lodash/get';
 import { DEFAULT_CHAIN } from 'services/multichain/chains';
 import Network from 'services/multichain/Network';
+import Contract from 'web3-eth-contract';
 
 class MasterChefContract {
 
@@ -16,10 +17,11 @@ class MasterChefContract {
     this.chainId = provider.state.chainId || DEFAULT_CHAIN;
     this.network = new Network(this.chainId || DEFAULT_CHAIN);
 
-    this.contract = new (this.eth.Contract)(
+    this.contract = new Contract(
       require('src/index/constants/ABI/MasterChef'),
       this.provider.network.contractAddresses.masterChefAddress,
     );
+    this.contract.setProvider(this.eth.currentProvider);
   }
 
   async getPoolsList() {

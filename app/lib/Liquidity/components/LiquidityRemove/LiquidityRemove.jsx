@@ -15,6 +15,7 @@ import {ModalContext} from "services/ModalProvider";
 // Styles
 import './LiquidityRemove.scss';
 import {Icon, Spinner} from "@blueprintjs/core";
+import {getContract} from "services/web3Provider/methods";
 
 const processError = error => {
   const {message} = error;
@@ -43,6 +44,7 @@ function LiquidityRemove({ onClose, currentPool }) {
     accountAddress, bnb,
     getBSCScanLink,
     addTokenToWallet,
+    getContract,
     approve,
   } = context;
   const { wrapToken, defaultSymbol } = network;
@@ -123,7 +125,7 @@ function LiquidityRemove({ onClose, currentPool }) {
     const tokenAmount = isToken0Wrap ? userAmount1 : userAmount0;
     const bnbAmount = isToken0Wrap ? userAmount0 : userAmount1;
     const deadline = Number(Date.now() / 1000 + 60 * 15).toFixed(0);
-    const routerContract = new (eth.Contract)(
+    const routerContract = await getContract(
       require('const/ABI/PancakeRouter'),
       routerAddress,
     );

@@ -1,4 +1,5 @@
 import wei from 'utils/wei';
+import Contract from 'web3-eth-contract';
 import NarfexOracleABI from 'const/ABI/NarfexOracle';
 import significant from 'utils/significant';
 
@@ -17,12 +18,13 @@ class TokenContract {
     this.chainId = provider.network.chainId;
     this.allowance = null;
 
-    this.contract = new (this.eth.Contract)(
+    this.contract = new Contract(
       isPairContract
         ? require('const/ABI/PancakePair')
         : require('const/ABI/Bep20Token'),
       this.address,
     );
+    this.contract.setProvider(this.eth.currentProvider);
   }
 
   getAllowance = (spender, account = this.provider.state.accountAddress) => new Promise((fulfill, reject) => {
@@ -99,10 +101,11 @@ class TokenContract {
   
   _updateTokensData = async (tokens) => {
     try {
-      const oracleContract = new (this.eth.Contract)(
+      const oracleContract = new Contract(
         NarfexOracleABI,
         this.network.contractAddresses.narfexOracle,
       );
+      oracleContract.setProvider(this.eth.currentProvider);
       const tokensData = (await oracleContract.methods.getTokensData(tokens.map(t => t.address), true).call())
         .map((tokenData, index) => {
         const token = tokens[index];

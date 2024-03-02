@@ -11,11 +11,16 @@ import Balance from "lib/Wallet/components/Balance/Balance";
 import Icons from "lib/Wallet/components/Icons/Icons";
 import Portfolio from "lib/Wallet/components/Portfolio/Portfolio";
 import Tokens from "lib/Wallet/components/Tokens/Tokens";
+import {loadAccountBalances} from "services/web3Provider/methods";
 
 function Wallet() {
   
   const navigate = useNavigate();
-  const {isConnected, tokens} = React.useContext(Web3Context);
+  const {
+    isConnected,
+    tokens,
+    loadAccountBalances,
+  } = React.useContext(Web3Context);
   const telegram = React.useContext(TelegramContext);
   const {
     privateKey,
@@ -39,6 +44,7 @@ function Wallet() {
     })
     if (isConnected) {
       setIsLoading(false);
+      loadAccountBalances();
     }
   }, [isConnected]);
   

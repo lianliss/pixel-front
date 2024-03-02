@@ -1,10 +1,12 @@
 import Eth from 'web3-eth';
+import Contract from 'web3-eth-contract';
 import * as CONNECTORS from "services/multiwallets/connectors";
 import {FiatToken, Token} from "services/web3Provider/Token";
 import {toHex, toWei, toChecksumAddress, toBigInt} from 'web3-utils';
 import {getCreate2Address} from "@ethersproject/address";
 import {keccak256, pack} from "@ethersproject/solidity";
 import getAllPairsCombinations from 'utils/getPairCombinations';
+import chunk from "lodash/chunk";
 import get from "lodash/get";
 import uniqBy from "lodash/uniqBy";
 import KNOWN_FIATS from "const/knownFiats";
@@ -234,7 +236,7 @@ export async function addCustomLP(_address) {
 export async function initCustomToken(_address) {
   const address = toChecksumAddress(_address);
   try {
-    const contract = this.getContract(this.network.tokenABI, address);
+    const contract = await this.getContract(this.network.tokenABI, address);
     const data = await Promise.all([
       contract.methods.name().call(),
       contract.methods.symbol().call(),
@@ -258,7 +260,7 @@ export async function initCustomToken(_address) {
 export async function initCustomLP(_address) {
   const address = toChecksumAddress(_address);
   try {
-    const contract = this.getContract(require('const/ABI/PancakePair'), address);
+    const contract = await this.getContract(require('const/ABI/PancakePair'), address);
     const data = await Promise.all([
       contract.methods.name().call(),
       contract.methods.symbol().call(),
@@ -334,10 +336,11 @@ export async function getPairs(_token0, _token1, maxHops = 3) {
   
   // Get a liquidity for each pair
   const results = await Promise.allSettled(addresses.map(pairAddress => {
-    const pairContract = new (this.getEth().eth.Contract)(
+    const pairContract = new Contract(
       require('const/ABI/PancakePair'),
       pairAddress,
     );
+    pairContract.setProvider(this.eth.currentProvider);
     return pairContract.methods.getReserves().call();
   }));
   
@@ -541,7 +544,7 @@ export async function getReserves(_token0, _token1) {
         ]
       }
     }
-    const contract = new (this.getEth().eth.Contract)(
+    const contract = await this.getContract(
       require('const/ABI/PancakePair'),
       pairAddress,
     );
@@ -609,7 +612,7 @@ export async function getTokensRelativePrice(_token0, _token1, amount = 1, isAmo
     const amountHex = this.getEth().utils.toHex(amountWei);
     
     // Get token0 address and decimals value from the pair
-    const routerContract = new (this.getEth().eth.Contract)(
+    const routerContract = await this.getContract(
       require('const/ABI/PancakeRouter'),
       this.network.contractAddresses.routerAddress,
     );
@@ -627,6 +630,12 @@ export async function getTokensRelativePrice(_token0, _token1, amount = 1, isAmo
   }
 }
 
+export async function getContract(abi, address) {
+  const contract = new Contract(abi, address);
+  contract.setProvider(this.eth.currentProvider);
+  return contract;
+}
+
 /**
  * Returns token price in USDC
  * @param token {object}
@@ -634,7 +643,7 @@ export async function getTokensRelativePrice(_token0, _token1, amount = 1, isAmo
  */
 export async function getTokenUSDPrice(token) {
   try {
-    const USDC = this.state.tokens.find(t => t.symbol === 'USDC');
+    const USDC = this.state.tokens.find(t => t.symbol === 'exUSDT');
     const address = token.address ? token.address.toLowerCase() : null;
     
     if (address === USDC.address.toLowerCase()) return 1;
@@ -664,7 +673,7 @@ export async function getTokenBalance(tokenContractAddress = null) {
     
     if (tokenContractAddress) {
       // Return token balance
-      const contract = new (this.getEth().eth.Contract)(
+      const contract = await this.getContract(
         require('const/ABI/Bep20Token'),
         tokenContractAddress,
       );
@@ -686,18 +695,19 @@ export async function getTokenBalance(tokenContractAddress = null) {
  */
 export async function getTokensBalances(contractAddresses) {
   try {
-    const contract = await new this.eth.Contract(
+    const contract = await this.getContract(
       require('const/ABI/NarfexOracle'),
       this.network.contractAddresses.narfexOracle,
     );
-    
     const results = await contract.methods
       .getBalances(this.state.accountAddress, contractAddresses)
       .call();
     
+    console.log('getTokensBalances', contractAddresses, results);
+    
     return results;
   } catch (error) {
-    console.log('[getTokensBalances]', error);
+    console.error('[getTokensBalances]', error);
     return [];
   }
 }
@@ -775,9 +785,10 @@ export async function loadAccountBalances(
   accountAddress = this.state.accountAddress,
 ) {
   try {
+    console.log('loadAccountBalances start');
     // Only MetaMask have a good provider
     // for send more requests on one time.
-    const isMetamask = this.state.connector === CONNECTORS.METAMASK &&
+    const isMetamask = IS_TELEGRAM || this.state.connector === CONNECTORS.METAMASK &&
       get(window, 'ethereum.isMetaMask');
     // Set positive balance tokens
     this.setBalances(this.state.tokens.filter((t) => t.balance > 0));
@@ -802,6 +813,7 @@ export async function loadAccountBalances(
     };
     
     const choosenTokens = !isMetamask ? await this.getChoosenTokens() : [];
+    console.log('choosenTokens', choosenTokens);
     const tokens = !isMetamask
       ? choosenTokens.filter(tokenIsFine)
       : this.state.tokens.filter(tokenIsFine);
@@ -814,6 +826,7 @@ export async function loadAccountBalances(
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
       const addresses = chunk.map((t) => t.address);
+      console.log('CHUNK', chunk);
       
       // Get request from the blockchain
       const results = await this.getTokensBalances(addresses);
@@ -867,7 +880,7 @@ export async function setChainTokenBalance() {
   try {
     // Get Chain token balance
     let chainToken = CHAIN_TOKENS[this.network.chainId];
-    const chainTokenBalance = await new this.eth.getBalance(
+    const chainTokenBalance = await this.eth.getBalance(
       this.state.accountAddress
     );
     
@@ -912,7 +925,7 @@ export async function setChainTokenBalance() {
  */
 export async function swap(pair, trade, slippageTolerance = 2, isExactIn = true, deadline = 20) {
   const {accountAddress} = this.state;
-  const routerContract = new (this.getEth().eth.Contract)(
+  const routerContract = await this.getContract(
     require('const/ABI/PancakeRouter'),
     this.network.contractAddresses.routerAddress,
   );
@@ -1236,7 +1249,7 @@ export async function updateFiats(symbol, rates) {
     let list = get(fiats, 'list', []);
     
     if (!list.length) {
-      const factoryContract = new (this.getEth().eth.Contract)(
+      const factoryContract = await this.getContract(
         require('const/ABI/fiatFactory'),
         this.network.contractAddresses.fiatFactory,
       );
@@ -1245,10 +1258,11 @@ export async function updateFiats(symbol, rates) {
     }
     
     const userFiats = (await Promise.all(list.map(fiatAddress => {
-      const fiatContract = new (this.getEth().eth.Contract)(
+      const fiatContract = new Contract(
         require('const/ABI/fiat'),
         fiatAddress,
       );
+      fiatContract.setProvider(this.eth.currentProvider);
       return fiatContract.methods.getInfo(accountAddress || ZERO_ADDRESS).call();
     }))).map((fiat, index) => {
       const known = KNOWN_FIATS.filter(f => f.chainId === chainId)

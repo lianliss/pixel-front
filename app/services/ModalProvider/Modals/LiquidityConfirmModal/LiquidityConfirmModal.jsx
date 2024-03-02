@@ -13,6 +13,7 @@ import toaster from "services/toaster";
 
 // Styles
 import './LiquidityConfirmModal.scss';
+import {getContract} from "services/web3Provider/methods";
 
 const processError = error => {
   const {message} = error;
@@ -54,6 +55,7 @@ function LiquidityConfirmModal(props) {
     getBSCScanLink,
     addTokenToWallet,
     addCustomLP,
+    getContract,
   } = context;
   const { wrapToken, defaultSymbol } = network;
   const { routerAddress } = network.contractAddresses;
@@ -117,7 +119,7 @@ function LiquidityConfirmModal(props) {
     setIsTransaction(true);
     setErrorText('');
     try {
-      const routerContract = new (eth.Contract)(
+      const routerContract = await getContract(
         require('const/ABI/PancakeRouter'),
         routerAddress,
       );
@@ -159,11 +161,10 @@ function LiquidityConfirmModal(props) {
     setIsTransaction(true);
     setErrorText('');
     try {
-      const routerContract = new (eth.Contract)(
+      const routerContract = await getContract(
         require('const/ABI/PancakeRouter'),
         routerAddress,
       );
-      console.log('routerContract', routerContract, routerAddress);
       let method = 'addLiquidityETH';
       const tokenIndex = Number(!selectedTokens[0].address);
       const token = selectedTokens[tokenIndex];

@@ -4,6 +4,7 @@ import {Web3Context} from "services/web3Provider";
 import getFinePrice from "utils/getFinePrice";
 import {Icon} from '@blueprintjs/core';
 import get from "lodash/get";
+import wei from "utils/wei";
 
 function Balance() {
   
@@ -13,7 +14,7 @@ function Balance() {
   React.useEffect(() => {
     const gasToken = tokens.find(t => !t.address);
     if (gasToken) {
-      setGas(get(gasToken, 'balance', 0));
+      setGas(wei.from(get(gasToken, 'balance', "0"), gasToken.decimals));
     }
   }, [tokens])
   

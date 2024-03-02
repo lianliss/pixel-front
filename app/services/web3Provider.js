@@ -587,10 +587,10 @@ class Web3Provider extends React.PureComponent {
    */
   getTokenContract = (token, isPair = false) => new TokenContract(token, this, isPair);
 
-  getContract = (abi, address) => new (this.eth.Contract)(
-    abi,
-    address,
-  );
+  getContract = async (abi, address) => {
+    await this.initEtherMethods();
+    return await this.getContract(abi, address);
+  };
 
   /**
    * Try to estimate contract method transaction

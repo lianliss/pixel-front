@@ -6,6 +6,7 @@ import getFinePrice from "utils/getFinePrice";
 import {Icon} from "@blueprintjs/core";
 import {useNavigate} from "react-router-dom";
 import routes from "const/routes";
+import wei from "utils/wei";
 
 function Tokens() {
   
@@ -14,7 +15,7 @@ function Tokens() {
   
   return <div className={styles.tokens}>
     {tokens.map((token, index) => {
-      const {logoURI, balance, symbol, name} = token;
+      const {logoURI, balance, symbol, name, decimals} = token;
       
       const route = routes.walletToken.path.replace(':symbol', symbol);
       
@@ -39,7 +40,7 @@ function Tokens() {
         <div className={styles.tokenBalance}>
           <div className={styles.tokenBalanceText}>
             <div className={styles.tokenBalanceTextAmount}>
-              {getFinePrice(Number(balance) || 0)}
+              {getFinePrice(wei.from(balance, decimals))}
             </div>
             <div className={styles.tokenBalanceTextValue}>
               ${getFinePrice(0)}
