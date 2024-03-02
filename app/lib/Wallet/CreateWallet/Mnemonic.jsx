@@ -30,7 +30,6 @@ function Mnemonic() {
         setPrivateKey(wallet.privateKey);
         telegram.hideMainButton();
         telegram.clearBackActions();
-        await telegram.setPrivateKey(wallet.privateKey);
         connectPixelWallet(wallet.privateKey);
         //navigate(routes.exchange.path);
       },

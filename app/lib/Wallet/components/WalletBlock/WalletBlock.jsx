@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './WalletBlock.module.scss';
 
-function WalletBlock({children, className, frame, onClick = () => {}}) {
+function WalletBlock({
+                       children,
+                       className,
+                       frame,
+                       title,
+                       onClick = () => {},
+}) {
   const classNames = [styles.walletBlock];
   if (className) {
     classNames.push(className);
@@ -18,6 +24,9 @@ function WalletBlock({children, className, frame, onClick = () => {}}) {
   
   return <div className={classNames.join(' ')}
               onClick={onClick}>
+    {!!title && <div className={styles.walletBlockTitle}>
+      {title}
+    </div>}
     {children}
   </div>
 }

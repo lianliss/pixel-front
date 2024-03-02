@@ -1,0 +1,33 @@
+@import 'styles/utils/mixins';
+
+.transfer {
+
+  &-container {
+    @include scrollbar();
+
+    min-height: calc(100vh - var(--size-header));
+    padding: 0 16px 16px;
+
+    background-image: url("styles/img/wallet-bg2.jpg");
+    background-position: top;
+    background-size: 100%;
+    background-repeat: repeat;
+    background-attachment: fixed;
+
+    overflow-y: scroll;
+
+    h1 {
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      margin: 16px auto 12px;
+    }
+  }
+
+  &-scan {
+    margin-right: -8px;
+  }
+  &-max {
+    margin-right: -8px;
+  }
+}

@@ -15,12 +15,10 @@ function CopyAddress() {
     <CopyToClipboard text={accountAddress}
                      className={styles.copyAddressContent}
                      onCopy={() => {
-                       console.log('COPY', accountAddress);
                        toaster.show({
                          intent: 'warning',
                          message: <>
-                           Address <b>{accountAddress}</b><br/>
-                           copied to clipboard
+                           Address copied to clipboard
                          </>,
                          icon: 'clipboard',
                        })

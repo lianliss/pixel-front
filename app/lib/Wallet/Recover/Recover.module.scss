@@ -1,0 +1,14 @@
+.recover {
+  display: block;
+
+  h2 {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    margin: 16px auto 12px;
+  }
+
+  &-paste {
+    margin-right: -8px;
+  }
+}

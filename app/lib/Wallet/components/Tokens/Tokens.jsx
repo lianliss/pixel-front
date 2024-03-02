@@ -39,7 +39,7 @@ function Tokens() {
         <div className={styles.tokenBalance}>
           <div className={styles.tokenBalanceText}>
             <div className={styles.tokenBalanceTextAmount}>
-              {getFinePrice(Number(balance) || 0)} {symbol}
+              {getFinePrice(Number(balance) || 0)}
             </div>
             <div className={styles.tokenBalanceTextValue}>
               ${getFinePrice(0)}

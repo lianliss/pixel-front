@@ -15,18 +15,23 @@ const routes = {
     icon: 'person',
     lib: 'Wallet',
   },
+  walletRecover: {
+    path: '/wallet/recover',
+    title: 'Wallet Recover',
+    icon: 'person',
+    lib: 'Wallet/Recover',
+  },
   walletToken: {
     path: '/wallet/token/:symbol',
     title: 'Wallet Token',
     icon: 'person',
     lib: 'Wallet/Token',
   },
-  walletTokenTransfer: {
-    path: '/wallet/token/:symbol/transfer',
+  walletTransfer: {
+    path: '/wallet/transfer/:symbol',
     title: 'Wallet Transfer',
     icon: 'person',
-    lib: 'Wallet/Token',
-    disabled: true,
+    lib: 'Wallet/Transfer',
   },
   dashboard: {
     path: '/dashboard/',
@@ -91,7 +96,7 @@ const routes = {
     path: '/wars/',
     title: 'Pixel Wars',
     icon: 'tank',
-    lib: 'Dashboard',
+    lib: 'Game',
     disabled: true,
   },
   collection: {

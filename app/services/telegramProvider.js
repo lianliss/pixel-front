@@ -7,14 +7,20 @@ export const TelegramContext = React.createContext();
 const app = get(window, 'Telegram.WebApp');
 const storage = get(window, 'Telegram.WebApp.CloudStorage');
 const COLOR_MAIN = '#A62CFF';
+const COLOR_MAIN_DISABLED = '#41275C';
 const COLOR_PRIMARY = '#20C997';
+const COLOR_PRIMARY_DISABLED = '#296555';
 const COLOR_TEXT = '#FFFFFF';
+const COLOR_TEXT_DISABLED = '#b7b7b7';
+const COLOR_PANEL = '#001A32';
 let backActions = [];
+let mainButtonClick = () => {};
 function TelegramProvider(props) {
   
   const [buttonText, setButtonText] = React.useState();
   const [buttonColor, setButtonColor] = React.useState(COLOR_MAIN);
   const [buttonTextColor, setButtonTextColor] = React.useState(COLOR_TEXT);
+  const [isButtonPrimary, setIsButtonPrimary] = React.useState(false);
   const [isButtonShown, setIsButtonShown] = React.useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
   const [isButtonLoading, setIsButtonLoading] = React.useState(false);
@@ -40,6 +46,18 @@ function TelegramProvider(props) {
     app.BackButton.hide();
   }
   
+  const getButtonColor = (isPrimary = isButtonPrimary, isDisabled = isButtonDisabled) => {
+    if (isPrimary) {
+      return isDisabled
+        ? COLOR_PRIMARY_DISABLED
+        : COLOR_PRIMARY;
+    } else {
+      return isDisabled
+        ? COLOR_MAIN_DISABLED
+        : COLOR_MAIN;
+    }
+  }
+  
   function setMainButton({
     text,
     onClick,
@@ -52,14 +70,17 @@ function TelegramProvider(props) {
       setButtonText(text);
     }
     if (typeof onClick === 'function') {
-      app.MainButton.onClick(onClick);
+      app.MainButton.offClick(mainButtonClick);
+      mainButtonClick = onClick;
+      app.MainButton.onClick(mainButtonClick);
     }
     setButtonText(text);
-    setButtonColor(isPrimary ? COLOR_PRIMARY : COLOR_MAIN);
-    setButtonTextColor(COLOR_TEXT);
+    setIsButtonPrimary(isPrimary);
     setIsButtonShown(true);
     setIsButtonDisabled(isDisabled);
     setIsButtonLoading(isLoading);
+    setButtonColor(getButtonColor(isPrimary, isDisabled));
+    setButtonTextColor(isDisabled ? COLOR_TEXT_DISABLED : COLOR_TEXT);
   }
   
   React.useEffect(() => {
@@ -88,10 +109,19 @@ function TelegramProvider(props) {
     if (!IS_TRUE_TELEGRAM) return;
     if (isButtonDisabled) {
       app.MainButton.disable();
+      setButtonColor(getButtonColor());
+      setButtonTextColor(isButtonDisabled ? COLOR_TEXT_DISABLED : COLOR_TEXT);
     } else {
       app.MainButton.enable();
+      setButtonColor(getButtonColor());
+      setButtonTextColor(isButtonDisabled ? COLOR_TEXT_DISABLED : COLOR_TEXT);
     }
   }, [isButtonDisabled])
+  
+  React.useEffect(() => {
+    setButtonColor(getButtonColor());
+    setButtonTextColor(isButtonDisabled ? COLOR_TEXT_DISABLED : COLOR_TEXT);
+  }, [isButtonPrimary]);
   
   React.useEffect(() => {
     if (!IS_TRUE_TELEGRAM) return;
@@ -170,6 +200,16 @@ function TelegramProvider(props) {
     _setPrivateKey(null);
   };
   
+  const scanQR = (callback, text = '') => {
+    app.showScanQrPopup({
+      text,
+    }, callback);
+  }
+  
+  const readFromClipboard = () => new Promise((fulfill, reject) => {
+    app.readTextFromClipboard(fulfill);
+  })
+  
   function initSettings() {
     if (!IS_TRUE_TELEGRAM) return;
     app.SettingsButton.show();
@@ -219,7 +259,7 @@ function TelegramProvider(props) {
   
   React.useEffect(() => {
     if (!IS_TRUE_TELEGRAM) return;
-    app.setHeaderColor('#001529');
+    app.setHeaderColor(COLOR_PANEL);
     app.ready();
     app.expand();
     initSettings();
@@ -240,6 +280,8 @@ function TelegramProvider(props) {
     getPrivateKey,
     setPrivateKey,
     clearPrivateKey,
+    scanQR,
+    readFromClipboard,
   }}>
     {props.children}
   </TelegramContext.Provider>

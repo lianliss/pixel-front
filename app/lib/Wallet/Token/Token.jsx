@@ -11,6 +11,7 @@ import Transfer from "lib/Wallet/components/Icons/Transfer";
 import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import {TelegramContext} from "services/telegramProvider";
 import History from "lib/Wallet/components/History/History";
+import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
 
 function Token(props) {
   
@@ -43,24 +44,12 @@ function Token(props) {
     {
       text: 'Transfer',
       Icon: Transfer,
-      route: routes.walletTokenTransfer,
+      route: routes.walletTransfer,
     },
   ];
   
   return <div className={styles.token}>
-    <div className={styles.tokenHeader}>
-      <div className={styles.tokenHeaderTitle}>
-        <div className={styles.tokenHeaderTitleIcon}>
-          <img src={logoURI} alt={symbol} />
-        </div>
-        <div className={styles.tokenHeaderTitleSymbol}>
-          {name}
-        </div>
-      </div>
-      <div className={styles.tokenHeaderPrice}>
-        1 {symbol} ≈ ${getFinePrice(Number(price) || 0)}
-      </div>
-    </div>
+    <TokenHeader token={token} />
     <div className={styles.tokenContainer}>
       <div className={styles.tokenBalance}>
         <div className={styles.tokenBalanceAmount}>
@@ -83,7 +72,7 @@ function Token(props) {
           return <WalletBlock className={classNames.join(' ')}
                               onClick={() => {
                                 if (!disabled) {
-                                  navigate(path);
+                                  navigate(path.replace(':symbol', symbol));
                                   setBackAction(() => {
                                     navigate(routes.walletToken.path.replace(':symbol', symbol));
                                   })

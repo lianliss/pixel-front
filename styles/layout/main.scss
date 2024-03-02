@@ -35,7 +35,7 @@ body {
   --color-icon-inactive: rgb(91, 90, 153);
   --color-main: rgb(166, 44, 255);
   --color-main-hover: rgb(182, 107, 255);
-  --color-main-disabled: rgba(133, 39, 212, 0.3);
+  --color-main-disabled: #41275C;
   --color-main-bg: rgba(166, 44, 255, 0.3);
   --color-primary: #20C997;
   --color-primary-hover: #51fabd;
@@ -46,10 +46,16 @@ body {
   --radius-button: 6px;
   --radius-wrapper: 16px;
 
+  --secondary-background: var(--color-bg);
+
   --size-scrollbar: 6px;
   --color-scrollbar: rgba(91, 90, 153, 0.2);
   --color-scrollbar-hover: rgba(91, 90, 153, 0.4);
   --color-scrollbar-bg: rgba(0,0,0,0);
+
+  &.telegram {
+    --size-header: 46px;
+  }
 }
 
 .container {
