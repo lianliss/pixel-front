@@ -184,6 +184,7 @@ export const getConnectorObject = (connector, chainID = DEFAULT_CHAIN) => {
  * @returns {Promise.<*>} - Fetch result.
  */
 export const fetchEthereumRequest = async function (requestObject, ethereum) {
+  console.log('fetchEthereumRequest', requestObject, ethereum, this.ethereum);
   if (!requestObject.method) return false;
   if (!this && !ethereum) return false;
 

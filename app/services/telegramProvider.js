@@ -136,12 +136,18 @@ function TelegramProvider(props) {
     setIsButtonShown(false);
   }
   
-  function mainButtonLoading() {
+  function mainButtonLoading(isDisable) {
     setIsButtonLoading(true);
+    if (isDisable) {
+      setIsButtonDisabled(true);
+    }
   }
   
-  function mainButtonStop() {
+  function mainButtonStop(isEnable) {
     setIsButtonLoading(false);
+    if (isEnable) {
+      setIsButtonDisabled(false);
+    }
   }
   
   function mainButtonEnable() {

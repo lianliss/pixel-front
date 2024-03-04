@@ -2,7 +2,7 @@ import Eth from 'web3-eth';
 import Contract from 'web3-eth-contract';
 import * as CONNECTORS from "services/multiwallets/connectors";
 import {FiatToken, Token} from "services/web3Provider/Token";
-import {toHex, toWei, toChecksumAddress, toBigInt} from 'web3-utils';
+import {toHex, toChecksumAddress, toBigInt, numberToHex} from 'web3-utils';
 import {getCreate2Address} from "@ethersproject/address";
 import {keccak256, pack} from "@ethersproject/solidity";
 import getAllPairsCombinations from 'utils/getPairCombinations';
@@ -59,7 +59,7 @@ export async function initProvider() {
   this.loadCustomLP();
   
   if (IS_TELEGRAM) {
-    window.pixelWallet = new PixelWallet(this);
+    window.pixelWallet = new PixelWallet(this, provider);
   }
 }
 
@@ -188,7 +188,7 @@ export async function logout() {
 export async function addCustomToken(_address) {
   let address, token;
   if (typeof _address === 'string') {
-    address = this.getEth().utils.toChecksumAddress(_address);
+    address = toChecksumAddress(_address);
   } else {
     token = _address;
     address = token.address;
@@ -212,7 +212,7 @@ export async function addCustomToken(_address) {
 export async function addCustomLP(_address) {
   let address, token;
   if (typeof _address === 'string') {
-    address = this.getEth().utils.toChecksumAddress(_address);
+    address = toChecksumAddress(_address);
   } else {
     token = _address;
     address = token.address;
@@ -609,7 +609,7 @@ export async function getTokensRelativePrice(_token0, _token1, amount = 1, isAmo
     const {toBN} = this;
     const decimals = Number(get(token0, 'decimals', 18));
     const amountWei = wei.to(amount, decimals);
-    const amountHex = this.getEth().utils.toHex(amountWei);
+    const amountHex = numberToHex(amountWei);
     
     // Get token0 address and decimals value from the pair
     const routerContract = await this.getContract(
@@ -680,7 +680,7 @@ export async function getTokenBalance(tokenContractAddress = null) {
       return await contract.methods.balanceOf(accountAddress).call();
     } else {
       // Return default balance
-      return await (this.getEth().eth.getBalance(accountAddress));
+      return await (this.eth.getBalance(accountAddress));
     }
   } catch (error) {
     console.error('[getTokenBalance]', this.getBSCScanLink(tokenContractAddress), error);
@@ -783,9 +783,9 @@ export async function getPairUSDTPrice(pairAddress, isForce = false) {
  */
 export async function loadAccountBalances(
   accountAddress = this.state.accountAddress,
+  forceUpdate = false,
 ) {
   try {
-    console.log('loadAccountBalances start');
     // Only MetaMask have a good provider
     // for send more requests on one time.
     const isMetamask = IS_TELEGRAM || this.state.connector === CONNECTORS.METAMASK &&
@@ -796,7 +796,7 @@ export async function loadAccountBalances(
     if (!this.state.isConnected) return;
     // Stop additional loads
     if (
-      this.state.balancesRequested === accountAddress &&
+      (this.state.balancesRequested === accountAddress && !forceUpdate) &&
       this.state.balancesChain === this.state.chainId
     ) return;
     this.setState({
@@ -813,7 +813,6 @@ export async function loadAccountBalances(
     };
     
     const choosenTokens = !isMetamask ? await this.getChoosenTokens() : [];
-    console.log('choosenTokens', choosenTokens);
     const tokens = !isMetamask
       ? choosenTokens.filter(tokenIsFine)
       : this.state.tokens.filter(tokenIsFine);
@@ -826,7 +825,6 @@ export async function loadAccountBalances(
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
       const addresses = chunk.map((t) => t.address);
-      console.log('CHUNK', chunk);
       
       // Get request from the blockchain
       const results = await this.getTokensBalances(addresses);
@@ -981,7 +979,7 @@ export async function swap(pair, trade, slippageTolerance = 2, isExactIn = true,
   options.push(path);
   
   options.push(accountAddress); // "to" field
-  options.push(this.getEth().utils.toHex(Math.round(Date.now() / 1000) + 60 * deadline)); // Deadline
+  options.push(numberToHex(Math.round(Date.now() / 1000) + 60 * deadline)); // Deadline
   
   try {
     try {
@@ -1021,25 +1019,31 @@ export async function estimateTransaction(contract, method, params) {
 export async function transaction(contract, method, params, value = 0) {
   try {
     const accountAddress = get(this, 'state.accountAddress');
-    const count = await this.eth.getTransactionCount(accountAddress);
     const data = contract.methods[method](...params);
-    const gasPrice = await this.eth.getGasPrice();
     const gasEstimationParams = {from: accountAddress, gas: 50000000000};
     if (value) {
       gasEstimationParams.value = value;
     }
-    const gasLimit = await data.estimateGas(gasEstimationParams);
+    const promises = await Promise.all([
+      this.eth.getTransactionCount(accountAddress),
+      this.eth.getGasPrice(),
+      data.estimateGas(gasEstimationParams),
+    ]);
+    const count = promises[0];
+    const gasPrice = promises[1];
+    const gasLimit = promises[2];
     const rawTransaction = {
+      chainId: this.state.chainId,
       from: accountAddress,
-      gasPrice: toHex(gasPrice),
-      gasLimit: toHex(gasLimit),
+      gasPrice: numberToHex(gasPrice),
+      gasLimit: numberToHex(gasLimit),
       gas: null,
       to: contract._address,
       data: data.encodeABI(),
-      nonce: toHex(count),
+      nonce: numberToHex(count),
     };
     if (value) {
-      rawTransaction.value = toHex(value);
+      rawTransaction.value = numberToHex(value);
     }
     return await this.fetchEthereumRequest({
       method: this.requestMethods.eth_sendTransaction,
@@ -1374,26 +1378,27 @@ export async function getSomeTimePricesPairMoralis(address, timeFrom, timeTo) {
  * @return {string|null} - TX result.
  */
 export async function sendTokens(token, address, value) {
-  const contract = this.getTokenContract(token).contract;
-  const amount = toWei(String(value));
-  // const accountBalance = await contract.methods
-  // .balanceOf(this.state.accountAddress)
-  // .call();
-  // const amount = accountBalance < wei.to(value)
-  //   ? accountBalance
-  //   : wei.to(value);
-  if (token.symbol === this.network.wrapToken.symbol) {
-    const gasPrice = await this.eth.getGasPrice();
-    const latestBlock = await this.eth.getBlock('latest');
-    const gasLimit = latestBlock.gasLimit;
+  const amount = wei.to(String(value), token.decimals);
+  if (!token.address || token.symbol === this.network.wrapToken.symbol) {
+    const promises = await Promise.all([
+      this.eth.getTransactionCount(this.state.accountAddress),
+      this.eth.getGasPrice(),
+      this.eth.estimateGas({
+        to: address,
+      })
+    ]);
+    const count = promises[0];
+    const gasPrice = promises[1];
+    const gasLimit = promises[2];
     
     const rawTransaction = {
-      gasPrice: toHex(gasPrice),
-      gasLimit: toHex(gasLimit),
+      gasPrice: numberToHex(gasPrice),
+      gasLimit: numberToHex(gasLimit),
       to: address,
       from: this.state.accountAddress,
-      value: toHex(amount),
-      chainId: toHex(this.state.chainId),
+      value: numberToHex(amount),
+      chainId: numberToHex(this.state.chainId),
+      nonce: numberToHex(count),
     };
     
     try {
@@ -1402,7 +1407,7 @@ export async function sendTokens(token, address, value) {
         params: [rawTransaction],
       });
     } catch (error) {
-      console.log('[sendTokens]', error);
+      console.error('[sendTokens]', error);
       return null;
     }
   }
@@ -1410,11 +1415,12 @@ export async function sendTokens(token, address, value) {
   const params = [address, amount];
   
   try {
+    const contract = this.getTokenContract(token).contract;
     const result = await this.transaction(contract, 'transfer', params);
-    
+    console.log('transaction', result);
     return result;
   } catch (error) {
-    console.log('[sendTokens]', error);
+    console.error('[sendTokens]', error);
     return null;
   }
 }

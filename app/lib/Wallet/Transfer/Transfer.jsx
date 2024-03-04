@@ -11,6 +11,7 @@ import {Button, Input} from "ui";
 import {Button as BPButton, Tooltip} from "@blueprintjs/core";
 import {isAddress as web3IsAddress, toChecksumAddress} from 'web3-utils';
 import wei from "utils/wei";
+import toaster from "services/toaster";
 
 function Transfer() {
   
@@ -23,10 +24,18 @@ function Transfer() {
     mainButtonDisable,
     setMainButton,
     hideMainButton,
+    mainButtonLoading,
+    mainButtonStop,
   } = React.useContext(TelegramContext);
   const {symbol} = match.params;
-  const {tokens} = React.useContext(Web3Context);
-  console.log('match', match);
+  const {
+    tokens,
+    sendTokens,
+    getContract,
+    loadAccountBalances,
+    updateTokenBalance,
+    getTokenBalance,
+  } = React.useContext(Web3Context);
   
   const [token, setToken] = React.useState({});
   React.useEffect(() => {
@@ -49,13 +58,39 @@ function Transfer() {
     }, 'Scan recipient address by QR-code');
   }
   
-  const onTransfer = () => {
+  const onTransfer = async () => {
     console.log('onTransfer');
+    mainButtonLoading(true);
+    try {
+      const result = await sendTokens(token, address, value);
+      const hash = result.transactionHash;
+      
+      // Redirect to token page
+      navigate(routes.walletToken.path.replace(':symbol', symbol));
+      const shortAddress = address.slice(0, 6)
+        + '...'
+        + address.slice(address.length - 4);
+      toaster.success(<>{getFinePrice(value)} {symbol} successfully<br/>sent to {shortAddress}</>);
+      
+      // Update current token balance
+      try {
+        updateTokenBalance(token.address, await getTokenBalance(token.address));
+      } catch (error) {
+        console.error('[onTransfer] updateTokenBalance', error);
+      }
+    } catch (error) {
+      console.error('[onTransfer]', error);
+    }
+    mainButtonStop(true);
   }
   
   React.useEffect(() => {
-    if (web3IsAddress(address) && value >= Number(balance)) {
-      mainButtonEnable();
+    if (web3IsAddress(address) && value <= wei.from(balance, decimals) && value > 0) {
+      setMainButton({
+        text: 'Transfer',
+        onClick: onTransfer,
+        isDisabled: false,
+      })
     } else {
       mainButtonDisable();
     }
