@@ -13,7 +13,57 @@
     align-items: center;
     justify-content: center;
     min-height: 140px;
+  }
+  &-no-history {
     color: var(--color-text-light);
     font-size: 14px;
+  }
+  &-list {
+    position: relative;
+    width: 100%;
+  }
+  &-event {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border-history);
+      margin-bottom: 8px;
+    }
+    &-data {
+      &-action {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      &-date {
+        font-size: 11px;
+        color: var(--color-text-light);
+      }
+    }
+    &-values {
+      text-align: right;
+
+      &-amount {
+        font-size: 14px;
+        font-weight: 600;
+        color: #07AA34;
+
+        &:global(.negative) {
+          color: #E62058;
+        }
+      }
+      &-gas {
+        font-size: 11px;
+        color: var(--color-text-light);
+
+        :global(.bp5-icon) {
+          color: var(--color-main);
+          opacity: 0.75;
+          transform: translateY(-2px);
+        }
+      }
+    }
   }
 }

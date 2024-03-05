@@ -129,7 +129,7 @@ export const getEthereum = (connector, chainID = DEFAULT_CHAIN) => {
  * Returns provider for web3(provider) of connector and ethereum.
  * @param connector {string} - Wallet connector name from constant.
  * @param ethereum {object} - ethereum object. May get with getEthereum(*).
- * @param chainID {number} - current network chainID - 56 mainnet, 97 testnet.
+ * @param chainID {number} - current networkApi chainID - 56 mainnet, 97 testnet.
  * @returns {object}
  */
 const getProviderOfConnector = (

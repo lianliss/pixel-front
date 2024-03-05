@@ -12,8 +12,8 @@ export const IS_DEVELOP = process.env.NODE_ENV === "development";
 const loc = document.location;
 export const API_URL =
   IS_DEVELOP
-    ? 'http://localhost:3000'
-    : `${loc.protocol}//api.${location.host}`;
+    ? 'https://hellopixel.network' //'http://localhost:3000'
+    : `${loc.protocol}//${location.host}`;
 export const STORAGE_URL = process.env.STORAGE_URL;
 export const BUILT_AT = process.env.BUILT_AT;
 

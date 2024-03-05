@@ -345,7 +345,7 @@ class Web3Provider extends React.PureComponent {
       this.cmcTokens = undefined;
       this.tokens = this.network.displayTokens;
 
-      // Object.assign(this, network);
+      // Object.assign(this, networkApi);
       this.pairs = {};
       this.setState({
         fiats: {
@@ -666,8 +666,8 @@ class Web3Provider extends React.PureComponent {
   };
 
   /**
-   * Asks user to switch a network
-   * @param chainId {number} - network chain id
+   * Asks user to switch a networkApi
+   * @param chainId {number} - networkApi chain id
    * @param firstAttempt {bool} - is there is a first call
    * @returns {Promise.<*>}
    */
