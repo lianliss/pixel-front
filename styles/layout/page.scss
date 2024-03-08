@@ -58,6 +58,22 @@
             background-color: var(--color-main);
         }
     }
+    .bp5-dark &-back-button.bp5-button.bp5-minimal {
+        position: fixed;
+        z-index: 10;
+        left: 15px;
+        bottom: 15px;
+        background: var(--color-panel);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--color-main);
+        box-shadow: 0 4px 10px 0 rgba(146, 44, 255, 0.4);
+
+        &:hover {
+            background-color: var(--color-main);
+        }
+    }
 }
 
 .dashboard {

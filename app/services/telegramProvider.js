@@ -24,26 +24,33 @@ function TelegramProvider(props) {
   const [isButtonShown, setIsButtonShown] = React.useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
   const [isButtonLoading, setIsButtonLoading] = React.useState(false);
+  const [backActionsLength, setBackActionsLength] = React.useState(0);
   
   const [privateKey, _setPrivateKey] = React.useState();
   
+  function backActionClick() {
+    const action = backActions.pop();
+    action();
+    if (!backActions.length) {
+      app.BackButton.hide();
+    }
+    setBackActionsLength(backActions.length);
+  }
+  
+  function initBackButton() {
+    app.BackButton.onClick(backActionClick);
+  }
+  
   function setBackAction(action) {
     backActions.push(action);
-    console.log('backActions', backActions);
-    app.BackButton.onClick(() => {
-      console.log('backActions', backActions);
-      backActions.pop()();
-      console.log('backActions poped', backActions);
-      if (!backActions.length) {
-        app.BackButton.hide();
-      }
-    });
     app.BackButton.show();
+    setBackActionsLength(backActions.length);
   }
   
   function clearBackActions() {
     backActions = [];
     app.BackButton.hide();
+    setBackActionsLength(0);
   }
   
   const getButtonColor = (isPrimary = isButtonPrimary, isDisabled = isButtonDisabled) => {
@@ -268,10 +275,11 @@ function TelegramProvider(props) {
     app.setHeaderColor(COLOR_PANEL);
     app.ready();
     app.expand();
+    initBackButton();
     initSettings();
   }, []);
   
-  backActions = [];
+  //backActions = [];
   
   return <TelegramContext.Provider value={{
     privateKey,
@@ -288,6 +296,8 @@ function TelegramProvider(props) {
     clearPrivateKey,
     scanQR,
     readFromClipboard,
+    backActionsLength,
+    backActionClick,
   }}>
     {props.children}
   </TelegramContext.Provider>

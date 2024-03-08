@@ -7,10 +7,12 @@ import {Icon} from "@blueprintjs/core";
 import {useNavigate} from "react-router-dom";
 import routes from "const/routes";
 import wei from "utils/wei";
+import {TelegramContext} from "services/telegramProvider";
 
 function Tokens() {
   
   const {tokens} = React.useContext(Web3Context);
+  const {setBackAction} = React.useContext(TelegramContext);
   const navigate = useNavigate();
   
   return <div className={styles.tokens}>
@@ -22,6 +24,9 @@ function Tokens() {
       return <WalletBlock className={styles.token}
                           onClick={() => {
                             navigate(route);
+                            setBackAction(() => {
+                              navigate(routes.wallet.path);
+                            })
                           }}
                           key={index}>
         <div className={styles.tokenInfo}>

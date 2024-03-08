@@ -10,9 +10,11 @@ import {
 } from '@blueprintjs/core';
 import {IS_TELEGRAM} from "const";
 import {Web3Context} from "services/web3Provider";
+import {TelegramContext} from "services/telegramProvider";
 
 function Page({children, match, title}) {
   const {isConnected} = React.useContext(Web3Context);
+  const {backActionsLength, backActionClick} = React.useContext(TelegramContext);
   const adaptive = useSelector(adaptiveSelector);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return <div className={cn('page-container', adaptive && 'adaptive')}>
@@ -25,6 +27,10 @@ function Page({children, match, title}) {
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                                     className={"page-menu-button"}
                                     minimal />}
+      {(IS_TELEGRAM && !!backActionsLength) && <BluePrintButton icon={<Icon icon={'chevron-left'} size={20} />}
+                                                        onClick={() => backActionClick()}
+                                                        className={"page-back-button"}
+                                                        minimal />}
       <div className={cn("page-content", (adaptive && isMenuOpen) && 'menu-open')}>
         {children || <>Empty page</>}
       </div>
