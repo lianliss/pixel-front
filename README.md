@@ -1,15 +1,23 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 Hello Pixel frontend
 
-This project has been created using **webpack-cli**, you can now run
+## Requirements
 
+**Nodejs** version 16.14.2
+
+## Install
+
+```shell
+npm i
 ```
+
+## Run Developer Mode
+
+```shell
+npm run local
+```
+
+## Build
+
+```shell
 npm run build
 ```
-
-or
-
-```
-yarn build
-```
-
-to bundle your application
