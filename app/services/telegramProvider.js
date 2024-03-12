@@ -28,6 +28,11 @@ function TelegramProvider(props) {
   
   const [privateKey, _setPrivateKey] = React.useState();
   
+  const [telegramId, setTelegramId] = React.useState();
+  const [telegramUserName, setTelegramUserName] = React.useState();
+  const [telegramFirstName, setTelegramFirstName] = React.useState();
+  const [telegramLastName, setTelegramLastName] = React.useState();
+  
   function backActionClick() {
     const action = backActions.pop();
     action();
@@ -277,6 +282,10 @@ function TelegramProvider(props) {
     app.expand();
     initBackButton();
     initSettings();
+    setTelegramId(app.initDataUnsafe.user.id);
+    setTelegramUserName(app.initDataUnsafe.user.username);
+    setTelegramFirstName(app.initDataUnsafe.user.first_name);
+    setTelegramLastName(app.initDataUnsafe.user.last_name);
   }, []);
   
   //backActions = [];
@@ -298,6 +307,10 @@ function TelegramProvider(props) {
     readFromClipboard,
     backActionsLength,
     backActionClick,
+    telegramId,
+    telegramUserName,
+    telegramFirstName,
+    telegramLastName,
   }}>
     {props.children}
   </TelegramContext.Provider>

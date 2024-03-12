@@ -278,6 +278,13 @@ export const TOKENS = {
       DEFAULT_DECIMALS,
       'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png'
     ),
+    PXLs: new BaseChainToken(
+      'Pixel Shard',
+      'PXLs',
+      SONGBIRD,
+      DEFAULT_DECIMALS,
+      require('styles/svg/logo_icon.svg'),
+    ),
     wrapSGB: new Token(
       'Wrapped Songbird',
       'WSGB',

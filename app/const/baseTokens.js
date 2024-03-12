@@ -1,4 +1,6 @@
-import { Token } from 'services/web3Provider/Token';
+import {BaseChainToken, Token} from 'services/web3Provider/Token';
+import {SONGBIRD} from "services/multichain/chains";
+import {DEFAULT_DECIMALS} from "services/multichain/initialTokens";
 
 const TESTNET_BASE_TOKENS = [
   new Token(
@@ -144,6 +146,14 @@ const ARBITRUM_BASE_TOKENS = [
 ];
 
 const SONGBIRD_BASE_TOKENS = [
+  new Token(
+    'Pixel Shard',
+    'PXLs',
+    '0x297c76FED3436d65cf4361686f63B4b8E5Ea4198',
+    19,
+    18,
+    require('styles/svg/logo_icon.svg'),
+  ),
   new Token(
     'Wrapped Songbird',
     'WSGB',
