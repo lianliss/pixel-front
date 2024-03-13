@@ -18,6 +18,7 @@ function Recover() {
     readFromClipboard,
     setPrivateKey,
     clearBackActions,
+    haptic,
   } = React.useContext(TelegramContext);
   const {
     connectPixelWallet,
@@ -29,6 +30,7 @@ function Recover() {
   
   const onRecover = (isSeed) => {
     try {
+      haptic.click();
       const wallet = isSeed
         ? ethers.Wallet.fromPhrase(seed)
         : new ethers.Wallet(privateKey);
@@ -38,14 +40,17 @@ function Recover() {
       connectPixelWallet(wallet.privateKey);
     } catch (error) {
       console.error('[onRecover]', error);
+      haptic.error();
     }
   }
   
   const onSeedPasteClick = async () => {
+    haptic.soft();
     setSeed(await readFromClipboard());
   }
   
   const onPrivateKeyPasteClick = async () => {
+    haptic.soft();
     setPrivateKey(await readFromClipboard());
   }
   
@@ -96,6 +101,7 @@ function Recover() {
     {!isPrivate && <WalletBlock title={'Seed phrase'}>
       <Input value={seed}
              placeholder={'words...'}
+             onClick={() => haptic.tiny()}
              indicator={<Tooltip content={'Paste from clipboard'}>
                <BPButton icon={'clipboard'}
                          onClick={onSeedPasteClick}
@@ -110,6 +116,7 @@ function Recover() {
     {!isSeed && <WalletBlock title={'Private Key'}>
       <Input value={privateKey}
              placeholder={'0xA29b9...'}
+             onClick={() => haptic.tiny()}
              indicator={<Tooltip content={'Paste from clipboard'}>
                <BPButton icon={'clipboard'}
                                   onClick={onPrivateKeyPasteClick}

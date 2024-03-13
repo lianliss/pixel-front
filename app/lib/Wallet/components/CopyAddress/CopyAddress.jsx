@@ -6,15 +6,18 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {
   Icon,
 } from '@blueprintjs/core';
+import {TelegramContext} from "services/telegramProvider";
 
 
 function CopyAddress() {
   const {accountAddress} = React.useContext(Web3Context);
+  const {haptic} = React.useContext(TelegramContext);
   
   return <div className={styles.copyAddress}>
     <CopyToClipboard text={accountAddress}
                      className={styles.copyAddressContent}
                      onCopy={() => {
+                       haptic.medium();
                        toaster.show({
                          intent: 'warning',
                          message: <>

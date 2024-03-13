@@ -140,7 +140,7 @@ class TokenSelect extends React.PureComponent {
       )
       .sort(
         (a, b) =>
-          (b.balance && b.balance !== '0') - (a.balance && a.balance !== '0')
+          wei.from(b.balance && b.balance !== '0') - wei.from(a.balance && a.balance !== '0')
       )
       .map((token) => {
         const { symbol, name, logoURI, price, balance } = token;

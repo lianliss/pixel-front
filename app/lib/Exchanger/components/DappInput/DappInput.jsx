@@ -10,6 +10,7 @@ import trimStart from 'lodash/trimStart';
 
 // Styles
 import './DappInput.scss';
+import {TelegramContext} from "services/telegramProvider";
 
 function DappInput({
   textPosition,
@@ -33,6 +34,7 @@ function DappInput({
   onEnter = () => {},
   ...otherProps
 }) {
+  const {haptic} = React.useContext(TelegramContext);
   const [inputState, setInputState] = React.useState(value || '');
   const adaptive = useSelector(adaptiveSelector);
   const indicatorRef = React.useRef(null);
@@ -108,7 +110,8 @@ function DappInput({
 
   const handleFocus = (e) => {
     e.preventDefault();
-
+  
+    haptic.tiny();
     onFocus(e);
 
     if (!selectLastSymbol) return;

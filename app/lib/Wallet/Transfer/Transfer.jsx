@@ -27,6 +27,7 @@ function Transfer() {
     hideMainButton,
     mainButtonLoading,
     mainButtonStop,
+    haptic,
   } = React.useContext(TelegramContext);
   const {symbol} = match.params;
   const {
@@ -49,6 +50,7 @@ function Transfer() {
   const {name, logoURI, balance, price, decimals} = token;
   
   const onQrClick = () => {
+    haptic.soft();
     scanQR(code => {
       if (web3IsAddress(code)) {
         setAddress(code);
@@ -60,7 +62,7 @@ function Transfer() {
   }
   
   const onTransfer = async () => {
-    console.log('onTransfer');
+    haptic.click();
     mainButtonLoading(true);
     try {
       const result = await sendTokens(token, address, value);
@@ -72,6 +74,7 @@ function Transfer() {
         + '...'
         + address.slice(address.length - 4);
       toaster.success(<>{getFinePrice(value)} {symbol} successfully<br/>sent to {shortAddress}</>);
+      haptic.success();
       
       // Update current token balance
       try {
@@ -81,6 +84,7 @@ function Transfer() {
       }
     } catch (error) {
       console.error('[onTransfer]', error);
+      haptic.error();
       const details = processError(error);
       if (details.isGas) {
         toaster.gas(details.gas);
@@ -125,6 +129,7 @@ function Transfer() {
       <WalletBlock title={'Recipient address'}>
         <Input value={address}
                placeholder={'0xa38d84...'}
+               onClick={() => haptic.tiny()}
                indicator={<Tooltip content={'Scan QR-code'}>
                  <BPButton icon={'detection'}
                                     onClick={onQrClick}
@@ -137,6 +142,7 @@ function Transfer() {
         <Input value={value}
                placeholder={'0'}
                type={'number'}
+               onClick={() => haptic.tiny()}
                indicator={<Button className={styles.transferMax}
                                   onClick={() => {
                                     setValue(wei.from(balance, decimals))

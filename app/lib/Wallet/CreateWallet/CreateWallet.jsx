@@ -15,7 +15,7 @@ function CreateWallet() {
     telegram.setMainButton({
       text: 'Create new wallet',
       onClick: () => {
-        console.log('CREATE!!!');
+        telegram.haptic.click();
         setIsCreate(true);
         telegram.setBackAction(() => {
           setIsCreate(false);
@@ -35,6 +35,7 @@ function CreateWallet() {
   }, [])
   
   const onRecover = () => {
+    telegram.haptic.click();
     setIsRecover(true);
     telegram.setBackAction(() => {
       setIsRecover(false);

@@ -19,7 +19,10 @@ function Token(props) {
   const navigate = useNavigate();
   const routePath = routes.walletToken.path;
   const match = useMatch(routePath);
-  const {setBackAction} = React.useContext(TelegramContext);
+  const {
+    setBackAction,
+    haptic,
+  } = React.useContext(TelegramContext);
   const {symbol} = match.params;
   const {tokens} = React.useContext(Web3Context);
   
@@ -73,6 +76,7 @@ function Token(props) {
           return <WalletBlock className={classNames.join(' ')}
                               onClick={() => {
                                 if (!disabled) {
+                                  haptic.normal();
                                   navigate(path.replace(':symbol', symbol));
                                   setBackAction(() => {
                                     navigate(routes.walletToken.path.replace(':symbol', symbol));

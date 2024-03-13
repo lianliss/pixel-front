@@ -12,7 +12,10 @@ import {TelegramContext} from "services/telegramProvider";
 function Tokens() {
   
   const {tokens} = React.useContext(Web3Context);
-  const {setBackAction} = React.useContext(TelegramContext);
+  const {
+    setBackAction,
+    haptic,
+  } = React.useContext(TelegramContext);
   const navigate = useNavigate();
   
   return <div className={styles.tokens}>
@@ -24,6 +27,7 @@ function Tokens() {
       return <WalletBlock className={styles.token}
                           onClick={() => {
                             navigate(route);
+                            haptic.small();
                             setBackAction(() => {
                               navigate(routes.wallet.path);
                             })

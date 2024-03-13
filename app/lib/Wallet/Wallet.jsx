@@ -41,7 +41,7 @@ function Wallet() {
       if (isConnected && privateKey) {
         telegram.clearBackActions();
         telegram.hideMainButton();
-        //navigate(routes.exchange.path);
+        telegram.haptic.soft();
       }
       if (!privateKey) {
         setIsLoading(false);
@@ -72,9 +72,11 @@ function Wallet() {
         } else {
           console.log('Mining in progress', result);
         }
-      setIsMiningChecked(true);
+        setIsMiningChecked(true);
+        telegram.haptic.tiny();
     }).catch(error => {
       console.log('Grant Access Error', error);
+      telegram.haptic.error();
     })
   }, [isConnected]);
   

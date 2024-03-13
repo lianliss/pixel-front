@@ -71,14 +71,16 @@ function ExchangerSwap({
         : 'Swap',
       isDisabled: !fiatAmount || !coinAmount,
       isLoading: isProcessing,
-      onClick: () =>
+      onClick: () => {
+        telegram.haptic.click();
         exchangerModal({
           isExactOut,
           fiat,
           coin,
           fiatAmount,
           coinAmount,
-        }),
+        });
+      },
     });
     
     return () => {
@@ -91,7 +93,10 @@ function ExchangerSwap({
       <div className="SwapForm__formWrapper">
         <div className="SwapForm__form">
           <div className="SwapForm__form__control">
-            <div className="ExchangerSwap__dropdown" onClick={fiatSelector}>
+            <div className="ExchangerSwap__dropdown" onClick={() => {
+              telegram.haptic.medium();
+              fiatSelector();
+            }}>
               <div
                 className="ExchangerSwap__icon"
                 style={{
@@ -130,6 +135,7 @@ function ExchangerSwap({
           <div
             className="ExchangerSwap__switchButton"
             onClick={() => {
+              telegram.haptic.soft();
               setFiat(coin);
               setCoin(fiat);
             }}
@@ -143,7 +149,10 @@ function ExchangerSwap({
         </div>
         <div className="SwapForm__form">
           <div className="SwapForm__form__control">
-            <div className="ExchangerSwap__dropdown" onClick={coinSelector}>
+            <div className="ExchangerSwap__dropdown" onClick={() => {
+              telegram.haptic.medium();
+              coinSelector();
+            }}>
               <div
                 className="ExchangerSwap__icon"
                 style={{

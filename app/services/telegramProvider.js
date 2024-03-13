@@ -33,7 +33,50 @@ function TelegramProvider(props) {
   const [telegramFirstName, setTelegramFirstName] = React.useState();
   const [telegramLastName, setTelegramLastName] = React.useState();
   
+  const _haptic = weight => {
+    if (!IS_TRUE_TELEGRAM) return;
+    switch (weight) {
+      case 0:
+        app.HapticFeedback.impactOccurred('light');
+        break;
+      case 1:
+        app.HapticFeedback.impactOccurred('medium');
+        break;
+      case 2:
+        app.HapticFeedback.impactOccurred('heavy');
+        break;
+      case 'soft':
+        app.HapticFeedback.impactOccurred('soft');
+        break;
+      case 'tiny':
+        app.HapticFeedback.selectionChanged();
+        break;
+      case 'success':
+      case 'warning':
+      case 'error':
+        app.HapticFeedback.notificationOccurred(weight);
+        break;
+      case 3:
+      default:
+        app.HapticFeedback.impactOccurred('rigid');
+    }
+  }
+  
+  const haptic = {
+    click: weight => _haptic(weight),
+    soft: () => _haptic('soft'),
+    small: () => _haptic(0),
+    normal: () => _haptic(1),
+    medium: () => _haptic(1),
+    heavy: () => _haptic(2),
+    error: () => _haptic('error'),
+    success: () => _haptic('success'),
+    warn: () => _haptic('warning'),
+    tiny: () => _haptic('tiny'),
+  }
+  
   function backActionClick() {
+    haptic.medium();
     const action = backActions.pop();
     action();
     if (!backActions.length) {
@@ -145,10 +188,12 @@ function TelegramProvider(props) {
   }, [isButtonLoading])
   
   function hideMainButton() {
+    if (!IS_TRUE_TELEGRAM) return;
     setIsButtonShown(false);
   }
   
   function mainButtonLoading(isDisable) {
+    if (!IS_TRUE_TELEGRAM) return;
     setIsButtonLoading(true);
     if (isDisable) {
       setIsButtonDisabled(true);
@@ -156,6 +201,7 @@ function TelegramProvider(props) {
   }
   
   function mainButtonStop(isEnable) {
+    if (!IS_TRUE_TELEGRAM) return;
     setIsButtonLoading(false);
     if (isEnable) {
       setIsButtonDisabled(false);
@@ -163,10 +209,12 @@ function TelegramProvider(props) {
   }
   
   function mainButtonEnable() {
+    if (!IS_TRUE_TELEGRAM) return;
     setIsButtonDisabled(false);
   }
   
   function mainButtonDisable() {
+    if (!IS_TRUE_TELEGRAM) return;
     setIsButtonDisabled(true);
   }
   
@@ -204,27 +252,32 @@ function TelegramProvider(props) {
   })
   
   const getPrivateKey = async () => {
+    if (!IS_TRUE_TELEGRAM) return;
     const privateKey = await getItem('wallet-privateKey');
     _setPrivateKey(privateKey);
     return privateKey;
   };
   const setPrivateKey = async (privateKey) => {
+    if (!IS_TRUE_TELEGRAM) return;
     await setItem('wallet-privateKey', privateKey);
     _setPrivateKey(privateKey);
   };
   
   const clearPrivateKey = async () => {
+    if (!IS_TRUE_TELEGRAM) return;
     await removeItem('wallet-privateKey');
     _setPrivateKey(null);
   };
   
   const scanQR = (callback, text = '') => {
+    if (!IS_TRUE_TELEGRAM) return;
     app.showScanQrPopup({
       text,
     }, callback);
   }
   
   const readFromClipboard = () => new Promise((fulfill, reject) => {
+    if (!IS_TRUE_TELEGRAM) return fulfill();
     app.readTextFromClipboard(fulfill);
   })
   
@@ -311,6 +364,7 @@ function TelegramProvider(props) {
     telegramUserName,
     telegramFirstName,
     telegramLastName,
+    haptic,
   }}>
     {props.children}
   </TelegramContext.Provider>

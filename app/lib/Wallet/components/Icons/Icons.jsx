@@ -12,7 +12,10 @@ import {TelegramContext} from "services/telegramProvider";
 function Icons() {
   
   const navigate = useNavigate();
-  const {setBackAction} = React.useContext(TelegramContext);
+  const {
+    setBackAction,
+    haptic,
+  } = React.useContext(TelegramContext);
   
   const icons = [
     {
@@ -50,6 +53,7 @@ function Icons() {
       return <div className={classNames.join(' ')}
                   onClick={() => {
                     if (!disabled) {
+                      haptic.medium();
                       navigate(path);
                       setBackAction(() => {
                         navigate(routes.wallet.path);

@@ -26,6 +26,7 @@ function Portfolio({isMiningChecked}) {
   } = React.useContext(Web3Context);
   const {
     telegramId,
+    haptic,
   } = React.useContext(TelegramContext);
   const [token, setToken] = React.useState();
   const [claimed, setClaimed] = React.useState(0);
@@ -90,15 +91,19 @@ function Portfolio({isMiningChecked}) {
   
   const onClaim = async () => {
     setIsClaiming(true);
+    haptic.click();
     try {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
       const tx = await transaction(contract, 'claimReward', [telegramId]);
       toaster.success('Pixel Shards claimed');
+      haptic.success();
       console.log('[onClaim]', tx);
       await loadData();
+      haptic.tiny();
     } catch (error) {
       console.error('[onClaim]', error);
       const details = processError(error);
+      haptic.error();
       if (details.isGas) {
         toaster.gas(details.gas);
       } else {

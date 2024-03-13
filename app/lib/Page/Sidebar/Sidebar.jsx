@@ -18,6 +18,7 @@ import {classNames as cn} from 'utils';
 import {Web3Context} from "services/web3Provider";
 import {ModalContext} from "services/ModalProvider";
 import {IS_TELEGRAM} from "const";
+import {TelegramContext} from "services/telegramProvider";
 
 const sections = [
   {
@@ -91,6 +92,7 @@ function DisabledLink(props) {
 function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
   const context = React.useContext(Web3Context);
   const modal = React.useContext(ModalContext);
+  const {haptic} = React.useContext(TelegramContext);
   const {accountAddress, isConnected, logout} = context;
   const {connectToWalletModal} = modal;
   const account = {
@@ -125,9 +127,11 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
               ? e => {
                 e.preventDefault();
                 setIsMenuOpen(false);
+                haptic.medium();
                 return item.onClick(account);
               }
               : () => {
+                haptic.medium();
                 setIsMenuOpen(false);
               };
             const LinkComponent = isDisabled ? DisabledLink : Link;

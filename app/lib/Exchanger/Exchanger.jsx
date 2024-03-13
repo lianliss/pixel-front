@@ -18,6 +18,7 @@ import { Web3Context } from 'services/web3Provider';
 
 // Styles
 import './Exchanger.scss';
+import {TelegramContext} from "services/telegramProvider";
 
 function ExchangerContent() {
   const {
@@ -57,11 +58,13 @@ function LiquidityContent() {
 function Exchanger() {
   const { accountAddress, isConnected, chainId } =
     React.useContext(Web3Context);
+  const {haptic} = React.useContext(TelegramContext);
   const navigate = useNavigate();
   const matchLiquidity = useMatch(routes.liquidity.path);
   const [tab, setTab] = React.useState(!!matchLiquidity ? 'liquidity' : 'exchanger');
   
   const onTabChange = (id) => {
+    haptic.soft();
     if (id === 'exchanger') {
       navigate(routes.exchange.path, {replace: true});
     }
@@ -79,15 +82,6 @@ function Exchanger() {
 
   return (
     <div className="Exchanger__wrap">
-      {isDebug && <>
-        <div>{window.navigator.userAgent}</div>
-        <div>initData: {get(window, 'Telegram.WebApp.initData')}</div>
-        <div>version: {get(window, 'Telegram.WebApp.version')}</div>
-        <div>platform: {get(window, 'Telegram.WebApp.platform')}</div>
-        <div>username: {get(window, 'Telegram.WebApp.WebAppInitData.user.username')}</div>
-        <div>user.id: {get(window, 'Telegram.WebApp.WebAppInitData.user.id')}</div>
-        <div>chat.id: {get(window, 'Telegram.WebApp.WebAppInitData.chat.id')}</div>
-      </>}
       <Tabs id="Exchanger"
             renderActiveTabPanelOnly
             onChange={onTabChange}

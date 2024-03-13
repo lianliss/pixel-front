@@ -14,9 +14,23 @@ import {TelegramContext} from "services/telegramProvider";
 
 function Page({children, match, title}) {
   const {isConnected} = React.useContext(Web3Context);
-  const {backActionsLength, backActionClick} = React.useContext(TelegramContext);
+  const {
+    backActionsLength,
+    backActionClick,
+    haptic,
+  } = React.useContext(TelegramContext);
   const adaptive = useSelector(adaptiveSelector);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  
+  const onMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+    haptic.click();
+  }
+  
+  const onBackClick = () => {
+    backActionClick();
+  }
+  
   return <div className={cn('page-container', adaptive && 'adaptive')}>
     <Sidebar match={match}
              setIsMenuOpen={setIsMenuOpen}
@@ -24,11 +38,11 @@ function Page({children, match, title}) {
     <div className="page">
       {!IS_TELEGRAM && <Header setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
       {(IS_TELEGRAM && isConnected) && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
-                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                    onClick={onMenuClick}
                                     className={"page-menu-button"}
                                     minimal />}
       {(IS_TELEGRAM && !!backActionsLength) && <BluePrintButton icon={<Icon icon={'chevron-left'} size={20} />}
-                                                        onClick={() => backActionClick()}
+                                                        onClick={onBackClick}
                                                         className={"page-back-button"}
                                                         minimal />}
       <div className={cn("page-content", (adaptive && isMenuOpen) && 'menu-open')}>

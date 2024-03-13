@@ -27,6 +27,7 @@ function Mnemonic() {
     telegram.setMainButton({
       text: 'Continue',
       onClick: async () => {
+        telegram.haptic.click();
         setPrivateKey(wallet.privateKey);
         telegram.hideMainButton();
         telegram.clearBackActions();
@@ -43,13 +44,16 @@ function Mnemonic() {
       Save this phrase in a safe place. With it you can restore your wallet at any time
     </p>
     <CopyToClipboard text={mnemonic}
-                     onCopy={() => toaster.show({
-                       intent: 'warning',
-                       message: <>
-                         Secret phrase copied to clipboard
-                       </>,
-                       icon: 'clipboard',
-                     })}>
+                     onCopy={() => {
+                       telegram.haptic.medium();
+                       toaster.show({
+                         intent: 'warning',
+                         message: <>
+                           Secret phrase copied to clipboard
+                         </>,
+                         icon: 'clipboard',
+                       })
+                     }}>
       <div className={styles.createWalletMnemonicCopy}>
         <div className={styles.createWalletMnemonicCopyText}>
           {mnemonic}

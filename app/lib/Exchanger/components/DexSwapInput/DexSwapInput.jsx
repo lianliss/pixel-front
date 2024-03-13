@@ -14,6 +14,7 @@ import {Input} from 'ui';
 
 // Styles.
 import './DexSwapInput.scss';
+import {TelegramContext} from "services/telegramProvider";
 
 const isNullOrNaN = value => isNull(value) || isNaN(value);
 
@@ -31,6 +32,7 @@ function DexSwapInput({
                       }) {
   // States
   const [textValue, setTextValue] = React.useState(value);
+  const {haptic} = React.useContext(TelegramContext);
   const adaptive = useSelector((store) => store.App.adaptive);
 
   // Refs
@@ -119,6 +121,7 @@ function DexSwapInput({
             type={adaptive ? 'number' : 'text'}
             onTextChange={handleInput}
             value={textValue}
+            onClick={() => haptic.tiny()}
             placeholder="0"
           />
         </div>
