@@ -12,6 +12,7 @@ import {Button as BPButton, Tooltip} from "@blueprintjs/core";
 import {isAddress as web3IsAddress, toChecksumAddress} from 'web3-utils';
 import wei from "utils/wei";
 import toaster from "services/toaster";
+import {processError} from "utils";
 
 function Transfer() {
   
@@ -80,6 +81,12 @@ function Transfer() {
       }
     } catch (error) {
       console.error('[onTransfer]', error);
+      const details = processError(error);
+      if (details.isGas) {
+        toaster.gas(details.gas);
+      } else {
+        toaster.error(details.message);
+      }
     }
     mainButtonStop(true);
   }

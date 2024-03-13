@@ -38,3 +38,4 @@ export const getFixedNumber = (number, fixedNumber) => {
 };
 
 export { default as wei } from './wei';
+export { default as processError } from './processError';

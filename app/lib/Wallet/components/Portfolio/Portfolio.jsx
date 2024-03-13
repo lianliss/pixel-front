@@ -10,6 +10,7 @@ import {wei} from "utils";
 import {setIn} from "immutable";
 import {transaction} from "services/web3Provider/methods";
 import toaster from "services/toaster";
+import processError from "utils/processError";
 
 let interval, _mined, start, _reward;
 
@@ -97,6 +98,12 @@ function Portfolio({isMiningChecked}) {
       await loadData();
     } catch (error) {
       console.error('[onClaim]', error);
+      const details = processError(error);
+      if (details.isGas) {
+        toaster.gas(details.gas);
+      } else {
+        toaster.error(details.message);
+      }
     }
     setIsClaiming(false);
   }
@@ -114,7 +121,7 @@ function Portfolio({isMiningChecked}) {
             Pixel Shard
           </div>
           <div className={styles.portfolioActionsTitleBottom}>
-            {getFinePrice(mined)}
+            {getFinePrice(value)}
           </div>
         </div>
       </div>
