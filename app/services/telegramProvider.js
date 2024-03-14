@@ -42,23 +42,23 @@ function TelegramProvider(props) {
       case 1:
         app.HapticFeedback.impactOccurred('medium');
         break;
-      case 2:
-        app.HapticFeedback.impactOccurred('heavy');
-        break;
       case 'soft':
         app.HapticFeedback.impactOccurred('soft');
         break;
       case 'tiny':
         app.HapticFeedback.selectionChanged();
         break;
+      case 'rigid':
+        app.HapticFeedback.impactOccurred('rigid');
+        break;
       case 'success':
       case 'warning':
       case 'error':
         app.HapticFeedback.notificationOccurred(weight);
         break;
-      case 3:
+      case 2:
       default:
-        app.HapticFeedback.impactOccurred('rigid');
+        app.HapticFeedback.impactOccurred('heavy');
     }
   }
   
@@ -73,6 +73,7 @@ function TelegramProvider(props) {
     success: () => _haptic('success'),
     warn: () => _haptic('warning'),
     tiny: () => _haptic('tiny'),
+    rigid: () => _haptic('rigid'),
   }
   
   function backActionClick() {
