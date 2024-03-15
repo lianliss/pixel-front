@@ -173,9 +173,6 @@ function Mining() {
               {hours}h {minutes}m {seconds}s to fill
             </>}
           </div>}
-        <div className={styles.miningStorageActionsSpeed}>
-          {getFinePrice(rewardPerHour)} PXLs / hour
-        </div>
         <Button large
                 disabled={!value}
                 loading={notReady}
