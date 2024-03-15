@@ -154,14 +154,9 @@ function Mining() {
           <div className={styles.miningStorageTextTitle}>
             Storage
           </div>
-          {notReady ? <div className={styles.miningStorageTextStatus}>
-              Calculating
-            </div>
-            : <div className={styles.miningStorageTextStatus}>
-              {isFull ? 'Storage is full' : <>
-                {hours}h {minutes}m {seconds}s to fill
-              </>}
-            </div>}
+          <div className={styles.miningStorageTextStatus}>
+            {getFinePrice(rewardPerHour)} PXLs / hour
+          </div>
         </div>
         <div className={styles.miningStorageBar}>
           <div className={styles.miningStorageBarProgress} style={{
@@ -170,6 +165,14 @@ function Mining() {
         </div>
       </div>
       <div className={styles.miningStorageActions}>
+        {notReady ? <div className={styles.miningStorageActionsSpeed}>
+            Calculating
+          </div>
+          : <div className={styles.miningStorageActionsSpeed}>
+            {isFull ? 'Storage is full' : <>
+              {hours}h {minutes}m {seconds}s to fill
+            </>}
+          </div>}
         <div className={styles.miningStorageActionsSpeed}>
           {getFinePrice(rewardPerHour)} PXLs / hour
         </div>
@@ -179,29 +182,6 @@ function Mining() {
                 onClick={onClaim}>
           CLAIM PXLs
         </Button>
-      </div>
-    </WalletBlock>
-    <WalletBlock className={styles.token}
-                 onClick={() => {
-                   window.open('https://docs.hellopixel.network/gamification/pixel-extractor', '_blank');
-                 }}>
-      <div className={styles.tokenInfo}>
-        <div className={styles.tokenInfoIcon}>
-          <img src={require('assets/mining/synthesizing.png')} alt={''} />
-        </div>
-        <div className={styles.tokenInfoTitle}>
-          <div className={styles.tokenInfoTitleSymbol}>
-            Start Synthesizing
-          </div>
-          <div className={styles.tokenInfoTitleName}>
-            Generate Interdimensional Shift Box
-          </div>
-        </div>
-      </div>
-      <div className={styles.tokenBalance}>
-        <div className={styles.tokenBalanceAction}>
-          <Icon icon={'chevron-right'} />
-        </div>
       </div>
     </WalletBlock>
     <WalletBlock className={styles.token}
@@ -218,6 +198,29 @@ function Mining() {
           </div>
           <div className={styles.tokenInfoTitleName}>
             The more you know, the more you mine
+          </div>
+        </div>
+      </div>
+      <div className={styles.tokenBalance}>
+        <div className={styles.tokenBalanceAction}>
+          <Icon icon={'chevron-right'} />
+        </div>
+      </div>
+    </WalletBlock>
+    <WalletBlock className={styles.token}
+                 onClick={() => {
+                   window.open('https://docs.hellopixel.network/gamification/pixel-extractor', '_blank');
+                 }}>
+      <div className={styles.tokenInfo}>
+        <div className={styles.tokenInfoIcon}>
+          <img src={require('assets/mining/synthesizing.png')} alt={''} />
+        </div>
+        <div className={styles.tokenInfoTitle}>
+          <div className={styles.tokenInfoTitleSymbol}>
+            Start Synthesizing
+          </div>
+          <div className={styles.tokenInfoTitleName}>
+            Generate Interdimensional Shift Box
           </div>
         </div>
       </div>
