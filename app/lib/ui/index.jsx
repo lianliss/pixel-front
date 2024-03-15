@@ -8,3 +8,4 @@ export { default as BottomSheetModal } from './BottomSheetModal/BottomSheetModal
 export { default as DoubleWallets } from './DoubleWallets/DoubleWallets';
 export { default as DropdownElement } from './DropdownElement/DropdownElement';
 export { default as Range } from './Range/Range';
+export { default as Countdown } from './Countdown/Countdown';

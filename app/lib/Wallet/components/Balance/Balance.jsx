@@ -18,13 +18,18 @@ function Balance() {
     }
   }, [tokens])
   
+  let balance = 0;
+  tokens.map(token => {
+    balance += (token.price || 0) * wei.from(token.balance || 0, token.decimals);
+  })
+  
   return <div className={styles.balance}>
     <div className={styles.balanceLeft}>
       <div className={styles.balanceTitle}>
         Total Balance
       </div>
       <div className={styles.balanceValue}>
-        ${getFinePrice(0)}
+        ${getFinePrice(balance)}
       </div>
     </div>
     <div className={styles.balanceRight}>

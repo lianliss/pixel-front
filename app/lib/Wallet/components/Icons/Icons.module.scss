@@ -11,32 +11,39 @@
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
+  color: #4E99DE;
+  transition: color 0.2s ease;
 
-  &:global(.disabled) {
-    cursor: default;
-    opacity: 0.5;
-  }
-  svg {
-
-  }
   &-image-wrap {
     width: 64px;
     height: 64px;
     border-radius: 50%;
     border: 1px solid #0D2F4E;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+
+    svg {
+      width: 32px;
+    }
   }
-  &-image {
-    background: url('styles/img/icon-bg.jpg');
-    background-size: 200%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    width: 20px;
-    height: 20px;
-    transform: scale(1.6);
+  &:global(.disabled) {
+    cursor: default;
+    opacity: 0.5;
+  }
+  &:global(.disabled) &-image-wrap {
+    svg {
+      opacity: 0.3;
+    }
+  }
+  &:not(:global(.disabled)):hover {
+    color: var(--color-primary);
+  }
+  &:not(:global(.disabled)):hover &-image-wrap {
+    border-color: var(--color-primary);
+    box-shadow: inset 0 0 10px 0 rgba(32, 201, 151, 0.25);
   }
   &-title {
     font-size: 11px;

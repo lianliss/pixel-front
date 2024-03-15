@@ -58,11 +58,6 @@
     &:hover {
       background: rgba(13, 47, 78, 1);
     }
-    &:global(.disabled) {
-      cursor: default;
-      opacity: 0.5;
-      pointer-events: none;
-    }
     &-image-wrap {
       width: 64px;
       height: 64px;
@@ -71,15 +66,15 @@
       align-items: center;
       justify-content: center;
     }
-    &-image {
-      background: url('styles/img/icon-bg.jpg');
-      background-size: 200%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      width: 20px;
-      height: 20px;
-      transform: scale(1.6);
+    &:global(.disabled) {
+      cursor: default;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    &:global(.disabled) &-image-wrap {
+      svg {
+        opacity: 0.3;
+      }
     }
     &-title {
       font-size: 11px;

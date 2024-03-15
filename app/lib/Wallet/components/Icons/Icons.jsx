@@ -1,13 +1,14 @@
 import React from 'react';
 import styles from './Icons.module.scss';
 import {Icon as BP} from "@blueprintjs/core";
-import P2p from './P2p';
-import Swap from './Swap';
-import Nft from './Nft';
-import Soul from './Soul';
 import routes from 'const/routes';
 import {useNavigate} from 'react-router-dom';
 import {TelegramContext} from "services/telegramProvider";
+
+import P2pIcon from './components/p2p';
+import ExchangeIcon from './components/exchange';
+import NftIcon from './components/nft';
+import SoulIcon from './components/soul';
 
 function Icons() {
   
@@ -20,22 +21,22 @@ function Icons() {
   const icons = [
     {
       text: 'P2P',
-      Icon: P2p,
+      Icon: P2pIcon,
       route: routes.p2p,
     },
     {
       text: 'Exchange',
-      Icon: Swap,
+      Icon: ExchangeIcon,
       route: routes.exchange,
     },
     {
       text: 'NFT',
-      Icon: Nft,
+      Icon: NftIcon,
       route: routes.nftMarket,
     },
     {
       text: 'Digital Soul',
-      Icon: Soul,
+      Icon: SoulIcon,
       route: routes.p2p,
     },
   ];
@@ -62,12 +63,7 @@ function Icons() {
                   }}
                   key={id}>
         <div className={styles.iconImageWrap}>
-          <div className={styles.iconImage}
-               style={{
-                 clipPath: `url(#${id})`
-               }}>
-            <Icon id={id} size={64} />
-          </div>
+          <Icon />
         </div>
         <div className={styles.iconTitle}>
           {text}

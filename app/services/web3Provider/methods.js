@@ -847,6 +847,9 @@ export async function loadAccountBalances(
           // Get token price for non-zero balance
           if (balance !== "0") {
             this.getTokenUSDPrice(token).then(price => {
+              if (!price) {
+                return;
+              }
               // Save to the state
               this.setState(state => {
                 const tokenState = state.tokens

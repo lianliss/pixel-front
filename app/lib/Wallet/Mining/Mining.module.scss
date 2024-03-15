@@ -1,0 +1,224 @@
+@import 'styles/utils/mixins';
+
+.mining {
+  @include scrollbar();
+
+  min-height: calc(100vh);
+  padding: 0 16px 16px;
+
+  background-image: url("styles/img/wallet-bg2.jpg");
+  background-position: top;
+  background-size: 100%;
+  background-repeat: repeat;
+  background-attachment: fixed;
+
+  overflow-y: scroll;
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+
+    &-logo {
+      img {
+        width: 32px;
+        filter: blur(0);
+        transform: translateZ(0);
+        image-rendering: pixelated;
+      }
+    }
+    &-balance {
+      font-weight: 700;
+      font-size: 40px;
+      margin: 0 0;
+    }
+    &-mined {
+
+    }
+  }
+
+  &-storage {
+    margin-top: var(--margin);
+
+    &-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 0 2px;
+
+      &-title {
+
+      }
+      &-status {
+        color: var(--color-text-light);
+        font-size: 11px;
+      }
+    }
+    &-bar {
+      height: 14px;
+      width: 100%;
+      border-radius: 6px;
+      background: rgba(1, 19, 36, 1);
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.03),
+      inset 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+      padding: 3px;
+
+      &-progress {
+        background: var(--color-main);
+        height: 8px;
+        border-radius: 4px;
+        width: 30%;
+      }
+    }
+    &-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &-speed {
+        font-size: 13px;
+        color: var(--color-text-light);
+        margin: 16px 0;
+      }
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    justify-content: stretch;
+    width: 100%;
+    margin-top: 32px;
+  }
+  &-button {
+    position: relative;
+    height: 64px;
+    background: linear-gradient(180deg, #420972 0%, #011A39 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+    flex-grow: 1;
+    cursor: pointer;
+    --radius: 16px;
+
+    &:not(:first-child) {
+      margin-left: 1px;
+    }
+    &:first-child {
+      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
+    }
+    &:last-child {
+      border-top-right-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+    &-icon {
+      position: relative;
+
+      &:before {
+        content: "";
+        display: block;
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        border-radius: 50%;
+        box-shadow: 0 6px 12px 0 rgba(0,0,0,0.66),
+          inset 0 6px 12px 0 rgba(0,0,0,0.66);
+        z-index: 1;
+        left: 50%;
+        margin-left: -16px;
+        top: -16px;
+      }
+      img {
+        transition: all 0.2s ease;
+        width: 64px;
+        z-index: 2;
+        position: absolute;
+        left: 50%;
+        top: -28px;
+        margin-left: -32px;
+      }
+    }
+    &-text {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+
+    &:global(.disabled) {
+      cursor: default;
+    }
+    &:global(.disabled) &-text {
+      opacity: 0.5;
+    }
+    &:global(.disabled) &-icon {
+      opacity: 0.5;
+    }
+    &:hover:not(:global(.disabled)) &-icon img {
+      top: -32px;
+    }
+  }
+}
+
+.token {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease 0s;
+
+  &:hover {
+    background: rgba(13, 47, 78, 1);
+  }
+  &-info {
+    display: flex;
+    align-items: center;
+
+    &-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(0, 21, 41, 1);
+      border: 1px solid rgba(13, 47, 78, 1);
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 40px;
+      }
+    }
+    &-title {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-left: 8px;
+      font-size: 12px;
+
+      &-symbol {
+
+      }
+      &-name {
+        color: var(--color-text-light);
+
+      }
+    }
+  }
+  &-balance {
+    display: flex;
+    align-items: center;
+
+    &-action {
+      padding: 16px 16px;
+      margin-right: -16px;
+    }
+  }
+}

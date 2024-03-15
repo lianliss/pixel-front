@@ -276,14 +276,18 @@ export const TOKENS = {
       'SGB',
       SONGBIRD,
       DEFAULT_DECIMALS,
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png'
+      'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png',
+      0.015
     ),
-    PXLs: new BaseChainToken(
+    PXLs: new Token(
       'Pixel Shard',
       'PXLs',
+      '0x5d3E63C044B018A07385e087Ce98Aa64F67c41D7',
       SONGBIRD,
       DEFAULT_DECIMALS,
       require('styles/svg/logo_icon.svg'),
+      false,
+      0.175
     ),
     wrapSGB: new Token(
       'Wrapped Songbird',
@@ -291,7 +295,9 @@ export const TOKENS = {
       '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED',
       SONGBIRD,
       DEFAULT_DECIMALS,
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png'
+      'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png',
+      false,
+      0.015
     ),
     usdc: new Token(
       'Experimental USDT',
@@ -300,14 +306,8 @@ export const TOKENS = {
       SONGBIRD,
       6,
       'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
-    ),
-    canary: new Token(
-      'Canary',
-      'CANARY',
-      '0xB2cD91b79df296ea181AA5f6d729E5136e1853A4',
-      SONGBIRD,
-      18,
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/10555.png',
+      false,
+      1
     ),
   },
 };

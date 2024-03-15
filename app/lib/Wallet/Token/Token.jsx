@@ -4,15 +4,16 @@ import {useMatch, useNavigate} from 'react-router-dom';
 import routes from 'const/routes';
 import {Web3Context} from "services/web3Provider";
 import getFinePrice from "utils/getFinePrice";
-import P2p from "lib/Wallet/components/Icons/P2p";
-import Swap from "lib/Wallet/components/Icons/Swap";
-import Nft from "lib/Wallet/components/Icons/Nft";
-import Transfer from "lib/Wallet/components/Icons/Transfer";
 import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import {TelegramContext} from "services/telegramProvider";
 import History from "lib/Wallet/components/History/History";
 import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
 import wei from "utils/wei";
+
+import P2pIcon from 'lib/Wallet/components/Icons/components/p2p';
+import ExchangeIcon from 'lib/Wallet/components/Icons/components/exchange';
+import NftIcon from 'lib/Wallet/components/Icons/components/nft';
+import SoulIcon from 'lib/Wallet/components/Icons/components/soul';
 
 function Token(props) {
   
@@ -37,30 +38,34 @@ function Token(props) {
   const icons = [
     {
       text: 'P2P',
-      Icon: P2p,
+      Icon: P2pIcon,
       route: routes.p2p,
     },
     {
       text: 'Exchange',
-      Icon: Swap,
+      Icon: ExchangeIcon,
       route: routes.exchange,
     },
     {
       text: 'Transfer',
-      Icon: Transfer,
+      Icon: SoulIcon,
       route: routes.walletTransfer,
     },
   ];
+  
+  const amount = wei.from(balance, decimals);
+  const value = (price || 0) * amount;
+  
   
   return <div className={styles.token}>
     <TokenHeader token={token} />
     <div className={styles.tokenContainer}>
       <div className={styles.tokenBalance}>
         <div className={styles.tokenBalanceAmount}>
-          {getFinePrice(wei.from(balance, decimals))}
+          {getFinePrice(amount)}
         </div>
         <div className={styles.tokenBalanceValue}>
-          ≈ ${getFinePrice(0)}
+          ≈ ${getFinePrice(value)}
         </div>
       </div>
       <div className={styles.tokenIcons}>
@@ -85,12 +90,7 @@ function Token(props) {
                               }}
                               key={index}>
             <div className={styles.tokenIconImageWrap}>
-              <div className={styles.tokenIconImage}
-                   style={{
-                     clipPath: `url(#${id})`
-                   }}>
-                <Icon id={id} size={64} />
-              </div>
+              <Icon />
             </div>
             <div className={styles.tokenIconTitle}>
               {text}

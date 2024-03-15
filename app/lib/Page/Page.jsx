@@ -23,8 +23,8 @@ function Page({children, match, title}) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   
   const onMenuClick = () => {
+    isMenuOpen ? haptic.rigid() : haptic.click();
     setIsMenuOpen(!isMenuOpen);
-    haptic.click();
   }
   
   const onBackClick = () => {
@@ -41,10 +41,10 @@ function Page({children, match, title}) {
                                     onClick={onMenuClick}
                                     className={"page-menu-button"}
                                     minimal />}
-      {(IS_TELEGRAM && !!backActionsLength) && <BluePrintButton icon={<Icon icon={'chevron-left'} size={20} />}
-                                                        onClick={onBackClick}
-                                                        className={"page-back-button"}
-                                                        minimal />}
+      {/*{(IS_TELEGRAM && !!backActionsLength) && <BluePrintButton icon={<Icon icon={'chevron-left'} size={20} />}*/}
+      {/*                                                  onClick={onBackClick}*/}
+      {/*                                                  className={"page-back-button"}*/}
+      {/*                                                  minimal />}*/}
       <div className={cn("page-content", (adaptive && isMenuOpen) && 'menu-open')}>
         {children || <>Empty page</>}
       </div>

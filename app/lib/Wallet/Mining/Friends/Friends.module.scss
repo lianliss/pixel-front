@@ -1,0 +1,135 @@
+@import 'styles/utils/mixins';
+
+.friends {
+  @include scrollbar();
+
+  min-height: calc(100vh);
+  padding: 0 16px 16px;
+
+  background-image: url("styles/img/wallet-bg2.jpg");
+  background-position: top;
+  background-size: 100%;
+  background-repeat: repeat;
+  background-attachment: fixed;
+
+  overflow-y: scroll;
+
+  &-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+
+    &-amount {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    p {
+      color: var(--color-text-light);
+      max-width: 300px;
+      text-align: center;
+      margin: 12px 0;
+
+      a {
+        color: var(--color-main);
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &-title {
+    padding-left: 24px;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  &-block {
+    margin: 0 -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+  }
+  &-no-friends {
+    color: var(--color-text-light);
+    font-size: 14px;
+    height: 140px;
+  }
+  &-list {
+    position: relative;
+    width: 100%;
+  }
+  &-event {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:not(:last-child) {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border-history);
+      margin-bottom: 8px;
+    }
+    &-data {
+      display: flex;
+      align-items: center;
+
+      &-icon {
+        --size: 48px;
+        width: var(--size);
+        height: var(--size);
+        overflow: hidden;
+        border-radius: 50%;
+        margin-right: 8px;
+
+        img {
+          width: var(--size);
+        }
+      }
+      &-text {
+        line-height: 1.6em;
+      }
+      &-action {
+        font-size: 14px;
+        font-weight: 600;
+        display: block;
+        color: var(--color-text);
+        text-decoration: none;
+
+        &:hover {
+          color: var(--color-main);
+        }
+      }
+      &-date {
+        font-size: 11px;
+        color: var(--color-text-light);
+      }
+    }
+    &-values {
+      text-align: right;
+
+      &-amount {
+        font-size: 14px;
+        font-weight: 600;
+        color: #07AA34;
+
+        &:global(.negative) {
+          color: #E62058;
+        }
+      }
+      &-gas {
+        font-size: 11px;
+        color: var(--color-text-light);
+
+        :global(.bp5-icon) {
+          color: var(--color-main);
+          opacity: 0.75;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}

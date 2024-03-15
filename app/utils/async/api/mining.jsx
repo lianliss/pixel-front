@@ -14,6 +14,18 @@ const methods = {
       return;
     }
   },
+  getFriends: async (telegramId) => {
+    try {
+      return await api.get('children', {
+        params: {
+          telegramId,
+        },
+      });
+    } catch (error) {
+      console.error('[getFriends]', error);
+      return;
+    }
+  },
 };
 
 export default methods;

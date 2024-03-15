@@ -5,6 +5,7 @@ function WalletBlock({
                        children,
                        className,
                        frame,
+                       bold,
                        title,
                        onClick = () => {},
 }) {
@@ -14,6 +15,9 @@ function WalletBlock({
   }
   if (frame) {
     classNames.push(styles.framed);
+    if (bold) {
+      classNames.push(styles.bold);
+    }
     return <div className={classNames.join(' ')}
                 onClick={onClick}>
       <div className={styles.walletBlockFrame}>

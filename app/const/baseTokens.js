@@ -153,14 +153,8 @@ const SONGBIRD_BASE_TOKENS = [
     19,
     18,
     require('styles/svg/logo_icon.svg'),
-  ),
-  new Token(
-    'Wrapped Songbird',
-    'WSGB',
-    '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED',
-    19,
-    18,
-    'https://s2.coinmarketcap.com/static/img/coins/64x64/12186.png'
+    false,
+    0.175,
   ),
   new Token(
     'Experimental USDT',
@@ -169,22 +163,8 @@ const SONGBIRD_BASE_TOKENS = [
     19,
     6,
     'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
-  ),
-  new Token(
-    'Lion',
-    'LION',
-    '0x1137E464B8adD7B9b022CB1acFc592f53c6Db6B5',
-    19,
-    6,
-    require('assets/img/lion.jpg'),
-  ),
-  new Token(
-    'Oracle',
-    'ORACLE',
-    '0xD7565b16b65376e2Ddb6c71E7971c7185A7Ff3Ff',
-    19,
-    18,
-    'https://dex.oracleswap.io/_next/static/media/ORACLE.93ef2661.png',
+    false,
+    1,
   ),
 ];
 

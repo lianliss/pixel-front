@@ -33,7 +33,7 @@ function TelegramProvider(props) {
   const [telegramFirstName, setTelegramFirstName] = React.useState();
   const [telegramLastName, setTelegramLastName] = React.useState();
   
-  const _haptic = (weight = 1) => {
+  const _haptic = weight => {
     if (!IS_TRUE_TELEGRAM) return;
     switch (weight) {
       case 0:

@@ -20,7 +20,8 @@ function Tokens() {
   
   return <div className={styles.tokens}>
     {tokens.map((token, index) => {
-      const {logoURI, balance, symbol, name, decimals} = token;
+      const {logoURI, balance, symbol, name, decimals, price} = token;
+      if (symbol === 'WSGB') return;
       
       const route = routes.walletToken.path.replace(':symbol', symbol);
       
@@ -52,7 +53,7 @@ function Tokens() {
               {getFinePrice(wei.from(balance, decimals))}
             </div>
             <div className={styles.tokenBalanceTextValue}>
-              ${getFinePrice(0)}
+              ${getFinePrice(Number(price) || 0)}
             </div>
           </div>
           <div className={styles.tokenBalanceAction}>

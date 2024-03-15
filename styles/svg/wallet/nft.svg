@@ -1,0 +1,13 @@
+<svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="0.3">
+        <rect opacity="0.2" x="15" y="15" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="1" y="15" width="8" height="8" rx="1" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect opacity="0.6" x="29" y="15" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect opacity="0.8" x="15" y="1" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect opacity="0.5" x="1" y="1" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="29" y="1" width="8" height="8" rx="1" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="15" y="29" width="8" height="8" rx="1" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect opacity="0.5" x="1" y="29" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect opacity="0.7" x="29" y="29" width="8" height="8" rx="1" fill="currentcolor" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+</svg>

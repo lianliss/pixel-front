@@ -21,6 +21,18 @@ const routes = {
     icon: 'person',
     lib: 'Wallet/Recover',
   },
+  walletMining: {
+    path: '/wallet/mining/',
+    title: 'Wallet Mining',
+    icon: 'person',
+    lib: 'Wallet/Mining',
+  },
+  walletFriends: {
+    path: '/wallet/friends/',
+    title: 'Wallet Friends',
+    icon: 'person',
+    lib: 'Wallet/Mining/Friends',
+  },
   walletToken: {
     path: '/wallet/token/:symbol',
     title: 'Wallet Token',
