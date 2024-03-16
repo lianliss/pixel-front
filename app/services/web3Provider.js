@@ -803,6 +803,21 @@ class Web3Provider extends React.PureComponent {
     await this.initEtherMethods();
     return await this.backendRequest('mining/claim', {}, 'post');
   }
+  
+  async apiGetQuests() {
+    await this.initEtherMethods();
+    return await this.backendRequest('quests');
+  }
+  
+  async apiCheckQuests() {
+    await this.initEtherMethods();
+    return await this.backendRequest('quests/checked');
+  }
+  
+  async apiCheckQuest(questIndex) {
+    await this.initEtherMethods();
+    return await this.backendRequest('quests/check', {questIndex});
+  }
 
   render() {
     window.web3Provider = this;
@@ -864,6 +879,9 @@ class Web3Provider extends React.PureComponent {
       apiGetHistory: this.apiGetHistory.bind(this),
       apiGetTokenHistory: this.apiGetTokenHistory.bind(this),
       apiClaim: this.apiClaim.bind(this),
+      apiGetQuests: this.apiGetQuests.bind(this),
+      apiCheckQuests: this.apiCheckQuests.bind(this),
+      apiCheckQuest: this.apiCheckQuest.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>

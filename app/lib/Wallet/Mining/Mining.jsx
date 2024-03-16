@@ -135,12 +135,12 @@ function Mining() {
     setIsClaiming(false);
   }
   
-  const onFriends = async () => {
+  const onNavigate = async (route) => {
     haptic.click();
     setBackAction(() => {
-      navigate(routes.walletMining.path);
+      navigate(route.walletMining.path);
     })
-    navigate(routes.walletFriends.path);
+    navigate(route.path);
   }
   
   const notReady = isClaiming;
@@ -259,7 +259,8 @@ function Mining() {
       </div>
     </WalletBlock>
     <div className={styles.miningButtons}>
-      <div className={[styles.miningButton, 'disabled'].join(' ')}>
+      <div className={[styles.miningButton].join(' ')}
+           onClick={() => onNavigate(routes.walletQuests)}>
         <div className={styles.miningButtonIcon}>
           <img src={require('assets/mining/mining1.png')} alt={''} />
         </div>
@@ -275,7 +276,8 @@ function Mining() {
           Build
         </div>
       </div>
-      <div className={[styles.miningButton].join(' ')} onClick={onFriends}>
+      <div className={[styles.miningButton].join(' ')}
+           onClick={() => onNavigate(routes.walletFriends)}>
         <div className={styles.miningButtonIcon}>
           <img src={require('assets/mining/mining3.png')} alt={''} />
         </div>

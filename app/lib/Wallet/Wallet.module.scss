@@ -1,24 +1,12 @@
-@import 'styles/utils/mixins';
+@import 'styles/layout/wallet';
 
 .wallet {
-  @include scrollbar();
-
-  min-height: 100vh;
-  padding: 0 16px 16px;
-
-  background-image: url("styles/img/wallet-bg2.jpg");
-  background-position: top;
-  background-size: 100%;
-  background-repeat: repeat;
-  background-attachment: fixed;
-
-  overflow-y: scroll;
+  @include wallet();
 
   &-portfolio {
     margin: 20px 0 0;
 
     &-title {
-      //color: var(--color-text-light);
       font-size: 13px;
       font-weight: 600;
       margin-left: 16px;

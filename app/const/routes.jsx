@@ -33,6 +33,12 @@ const routes = {
     icon: 'person',
     lib: 'Wallet/Mining/Friends',
   },
+  walletQuests: {
+    path: '/wallet/quests/',
+    title: 'Wallet Quests',
+    icon: 'person',
+    lib: 'Wallet/Mining/Quests',
+  },
   walletToken: {
     path: '/wallet/token/:symbol',
     title: 'Wallet Token',

@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Friends.module.scss';
-import api from 'utils/async/api/mining';
 import {TelegramContext} from "services/telegramProvider";
 import {Loading} from "utils/async/load-module";
 import {wei} from "utils";

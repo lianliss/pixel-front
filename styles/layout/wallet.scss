@@ -1,0 +1,16 @@
+@import '../utils/mixins';
+
+@mixin wallet($header-size: 0px) {
+  @include scrollbar();
+
+  min-height: calc(100vh - $header-size);
+  padding: 0 16px 16px;
+
+  background-image: url("styles/img/wallet-bg2.jpg");
+  background-position: top;
+  background-size: 100%;
+  background-repeat: repeat;
+  background-attachment: fixed;
+
+  overflow-y: scroll;
+}
