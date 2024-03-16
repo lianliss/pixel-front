@@ -13,6 +13,10 @@ import routes from "const/routes";
 import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import {Icon, Tooltip} from "@blueprintjs/core";
 import Countdown from "../../ui/Countdown/Countdown";
+import {useDispatch, useSelector} from "react-redux";
+import {gaslessSelector} from "app/store/selectors";
+import {appSetGasless} from "slices/App";
+import get from "lodash/get";
 
 let interval, _mined, start, _reward;
 function Mining() {
@@ -24,6 +28,7 @@ function Mining() {
     network,
     tokens,
     transaction,
+    apiClaim,
   } = React.useContext(Web3Context);
   const {
     telegramId,
@@ -31,7 +36,10 @@ function Mining() {
     setBackAction,
   } = React.useContext(TelegramContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const gasless = useSelector(gaslessSelector);
   const [token, setToken] = React.useState();
+  const [gasToken, setGasToken] = React.useState();
   const [claimed, setClaimed] = React.useState(0);
   const [mined, setMined] = React.useState(0);
   const [rewardPerSecond, setRewardPerSecond] = React.useState(0.00001);
@@ -42,8 +50,12 @@ function Mining() {
   React.useEffect(() => {
     if (!isConnected) return;
     const token = tokens.find(t => t.symbol === 'PXLs');
+    const gasToken = tokens.find(t => !t.address);
     if (token) {
       setToken(token);
+    }
+    if (gasToken) {
+      setGasToken(gasToken);
     }
   }, [isConnected, tokens]);
   
@@ -57,7 +69,6 @@ function Mining() {
     try {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
       const data = await contract.methods.getStorage(telegramId).call();
-      console.log('DATA', data);
       setClaimed(wei.from(data.claimed));
       _mined = wei.from(data.mined);
       _reward = wei.from(data.rewardPerSecond);
@@ -98,8 +109,14 @@ function Mining() {
     setIsClaiming(true);
     haptic.click();
     try {
-      const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-      const tx = await transaction(contract, 'claimReward', [telegramId]);
+      let tx;
+      if (gasless) {
+        tx = await apiClaim();
+        dispatch(appSetGasless(tx.gasless));
+      } else {
+        const contract = await getContract(PXLsABI, network.contractAddresses.mining);
+        tx = await transaction(contract, 'claimReward', [telegramId]);
+      }
       toaster.success('Pixel Shards claimed');
       haptic.success();
       console.log('[onClaim]', tx);
@@ -135,6 +152,7 @@ function Mining() {
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = Math.floor(secondsLeft % 60);
   const rewardPerHour = rewardPerSecond * 3600;
+  const gas = wei.from(get(gasToken, 'balance', 0));
 
   return <div className={styles.mining}>
     <div className={styles.miningHeader}>
@@ -145,7 +163,18 @@ function Mining() {
         {getFinePrice(claimed)}
       </div>
       <div className={styles.miningHeaderMined}>
-        In storage {getFinePrice(value)}
+        <span className={styles.miningHeaderMinedStorage}>
+          {getFinePrice(rewardPerHour)} PXLs / hour
+        </span>
+        {!!gasless
+          ? <span className={styles.miningHeaderMinedGasless}>
+                <Icon icon={'flame'} />
+                <span>{gasless} gas free claims</span>
+              </span>
+          : <span className={!gas ? styles.miningHeaderMinedEmpty : styles.miningHeaderMinedGas}>
+                <Icon icon={'flame'} />
+                <span>{getFinePrice(gas)} SGB</span>
+              </span>}
       </div>
     </div>
     <WalletBlock frame bold>
@@ -155,7 +184,9 @@ function Mining() {
             Storage
           </div>
           <div className={styles.miningStorageTextStatus}>
-            {getFinePrice(rewardPerHour)} PXLs / hour
+            <span className={styles.miningStorageTextStatusStorage}>
+              In storage {getFinePrice(value)} PXLs
+            </span>
           </div>
         </div>
         <div className={styles.miningStorageBar}>

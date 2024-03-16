@@ -3,6 +3,11 @@ import {wei} from "app/utils/index";
 const processError = (error) => {
   const { message } = error;
   try {
+    if (typeof message !== 'string') {
+      return {
+        message: 'Unknown error',
+      }
+    }
     if (message.indexOf('Internal JSON-RPC error.') >= 0) {
       const internal = JSON.parse(message.split('Internal JSON-RPC error.')[1]);
       return {

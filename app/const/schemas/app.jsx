@@ -5,5 +5,6 @@ export const INITIAL_APP_STATE = {
     isAuthorized: true,
     settings: {},
     adaptive: false,
+    gasless: 0,
 };
 export default INITIAL_APP_STATE;

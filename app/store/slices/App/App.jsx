@@ -18,7 +18,10 @@ export const AppSlice = createSlice({
     },
     appSetAdaptive: (state, {payload}) => {
       state.adaptive = payload;
-    }
+    },
+    appSetGasless: (state, {payload}) => {
+      state.gasless = Number(payload);
+    },
   },
 });
 
@@ -27,6 +30,7 @@ export const {
   appUpdateAccount,
   appUpdateAuth,
   appSetAdaptive,
+  appSetGasless,
 } = AppSlice.actions;
 
 export default AppSlice.reducer;

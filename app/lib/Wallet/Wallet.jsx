@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Wallet.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadModule, {Loading} from  'utils/async/load-module';
 import {Web3Context} from "services/web3Provider";
 import {useNavigate} from 'react-router-dom';
@@ -14,10 +15,12 @@ import Tokens from "lib/Wallet/components/Tokens/Tokens";
 import {loadAccountBalances} from "services/web3Provider/methods";
 import miningApi from "utils/async/api/mining";
 import toaster from "services/toaster";
+import {appSetGasless} from "slices/App";
 
 function Wallet() {
   
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     isConnected,
     tokens,
@@ -62,14 +65,15 @@ function Wallet() {
       return;
     }
     apiGetTelegramUser().then(result => {
-        if (result.status === 'created' || result.status === true) {
-          toaster.success('Mining access granted');
-          console.log('Mining access granted', result);
-        } else {
-          console.log('Mining in progress', result);
-        }
-        setIsMiningChecked(true);
-        telegram.haptic.tiny();
+      if (result.status === 'created' || result.status === true) {
+        toaster.success('Mining access granted');
+        console.log('Mining access granted', result);
+      } else {
+        console.log('Mining in progress', result);
+      }
+      dispatch(appSetGasless(result.gasless));
+      setIsMiningChecked(true);
+      telegram.haptic.tiny();
     }).catch(error => {
       console.log('Grant Access Error', error);
       telegram.haptic.error();

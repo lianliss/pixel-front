@@ -34,7 +34,25 @@
       margin: 0 0;
     }
     &-mined {
+      &-storage {
 
+      }
+      &-gasless, &-gas, &-empty {
+        margin-left: 12px;
+
+        :global(.bp5-icon) {
+          margin-right: 4px;
+        }
+      }
+      &-gasless {
+        color: var(--color-primary);
+      }
+      &-gas {
+        color: var(--color-text-light);
+      }
+      &-empty {
+        color: var(--color-red);
+      }
     }
   }
 

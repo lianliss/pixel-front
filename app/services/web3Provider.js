@@ -798,6 +798,11 @@ class Web3Provider extends React.PureComponent {
       ? response.result
       : []
   }
+  
+  async apiClaim() {
+    await this.initEtherMethods();
+    return await this.backendRequest('mining/claim');
+  }
 
   render() {
     window.web3Provider = this;
@@ -858,6 +863,7 @@ class Web3Provider extends React.PureComponent {
       apiGetTelegramFriends: this.apiGetTelegramFriends.bind(this),
       apiGetHistory: this.apiGetHistory.bind(this),
       apiGetTokenHistory: this.apiGetTokenHistory.bind(this),
+      apiClaim: this.apiClaim.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>
