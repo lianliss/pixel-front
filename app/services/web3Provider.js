@@ -801,7 +801,7 @@ class Web3Provider extends React.PureComponent {
   
   async apiClaim() {
     await this.initEtherMethods();
-    return await this.backendRequest('mining/claim');
+    return await this.backendRequest('mining/claim', {}, 'post');
   }
 
   render() {
