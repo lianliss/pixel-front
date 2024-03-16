@@ -16,7 +16,14 @@ TimeAgo.addDefaultLocale(en);
 
 function History({token}) {
   
-  const {chainId, isConnected, accountAddress, tokens} = React.useContext(Web3Context);
+  const {
+    chainId,
+    isConnected,
+    accountAddress,
+    tokens,
+    apiGetHistory,
+    apiGetTokenHistory,
+  } = React.useContext(Web3Context);
   const [history, setHistory] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   
@@ -26,8 +33,8 @@ function History({token}) {
     if (!token || !isConnected) return;
     setIsLoading(true);
     const promise = token.symbol === chainToken.symbol
-      ? historyApi.getHistory(accountAddress, chainId)
-      : historyApi.getTokenHistory(accountAddress, token.address, chainId)
+      ? apiGetHistory()
+      : apiGetTokenHistory(token.address)
     promise.then(result => {
       setIsLoading(false);
       setHistory(result);

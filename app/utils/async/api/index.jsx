@@ -71,3 +71,5 @@ class Api extends Request {
 }
 
 export default Api;
+
+export const api = new Api('/api/');

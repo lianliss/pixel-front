@@ -282,7 +282,7 @@ export const TOKENS = {
     PXLs: new Token(
       'Pixel Shard',
       'PXLs',
-      '0x378b6D81f58A7A2AA25d6E8B2B38351F046DA2Ec',
+      '0xe2E6562077E349a4eB7f8b6911BF67C953701fDc',
       SONGBIRD,
       DEFAULT_DECIMALS,
       require('styles/svg/logo_icon.svg'),

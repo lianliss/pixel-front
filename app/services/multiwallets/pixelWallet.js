@@ -3,6 +3,7 @@ import {
   privateKeyToAccount,
   Transaction,
   signTransaction,
+  sign,
   Common,
 } from 'web3-eth-accounts';
 
@@ -21,28 +22,26 @@ class PixelWallet {
   connect(privateKey) {
     pKey = privateKey;
     const account = privateKeyToAccount(privateKey);
-    console.log('account', account);
     this.selectedAddress = account.address;
-    this.sign = account.sign;
+    this.sign = data => sign(data, privateKey);
     this.signTransaction = (tx) => signTransaction(tx, privateKey);
     this.encrypt = account.encrypt;
     return account;
   }
   
   sign = async (data) => {
-    console.log('[PixelWallet][sign] Wallet is not connected');
+    console.error('[PixelWallet][sign] Wallet is not connected');
   }
   
   signTransaction = async (tx) => {
-    console.log('[PixelWallet][signTransaction] Wallet is not connected');
+    console.error('[PixelWallet][signTransaction] Wallet is not connected');
   }
   
   encrypt = (password) => {
-    console.log('[PixelWallet][encrypt] Wallet is not connected');
+    console.error('[PixelWallet][encrypt] Wallet is not connected');
   }
   
   request = async ({method, params = []}) => {
-    console.log('[request]', method, params);
     try {
       switch (method) {
         case 'eth_requestAccounts':
@@ -51,9 +50,9 @@ class PixelWallet {
           const common = Common.custom({chainId: this.networkVersion});
           const tx = new Transaction(params[0],{common});
           const signed = await this.signTransaction(tx);
-          const result = await this.eth.sendSignedTransaction(signed.rawTransaction)
-          console.log('[request] result', result);
-          return result;
+          return await this.eth.sendSignedTransaction(signed.rawTransaction)
+        case 'personal_sign':
+          return this.sign(params[0]).signature;
         default:
           return null;
       }

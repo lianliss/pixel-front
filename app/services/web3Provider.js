@@ -57,6 +57,7 @@ class Web3Provider extends React.PureComponent {
   connectionCheckTimeout;
   successConnectionCheck = false;
   requestMethods = {};
+  signs = {};
   storage = new ExchangerStorage();
   walletConnectorStorage = () => new WalletConnectorStorage(this);
 
@@ -761,10 +762,41 @@ class Web3Provider extends React.PureComponent {
     await this.initEtherMethods();
     return await this.sendTokens(token, address, value);
   }
-
+  
+  async backendRequest(path, params, method, additionalOptions) {
+    await this.initEtherMethods();
+    return await this.backendRequest(path, params, method, additionalOptions);
+  }
+  
   async getChoosenTokens() {
     await this.initEtherMethods();
     return await this.getChoosenTokens();
+  }
+  
+  async apiGetTelegramUser() {
+    await this.initEtherMethods();
+    return await this.backendRequest('mining');
+  }
+  
+  async apiGetTelegramFriends() {
+    await this.initEtherMethods();
+    return await this.backendRequest('mining/children');
+  }
+  
+  async apiGetHistory() {
+    await this.initEtherMethods();
+    const response = await this.backendRequest('history');
+    return response.message === 'OK'
+      ? response.result.filter(e => e.input.length <= 2)
+      : []
+  }
+  
+  async apiGetTokenHistory(tokenAddress) {
+    await this.initEtherMethods();
+    const response = await this.backendRequest('history/token', {tokenAddress});
+    return response.message === 'OK'
+      ? response.result
+      : []
   }
 
   render() {
@@ -822,6 +854,10 @@ class Web3Provider extends React.PureComponent {
       updateTokenBalance: this.updateTokenBalance.bind(this),
       cmcTokens: this.cmcTokens,
       getTokenFromSymbol: getTokenFromSymbol.bind(this),
+      apiGetTelegramUser: this.apiGetTelegramUser.bind(this),
+      apiGetTelegramFriends: this.apiGetTelegramFriends.bind(this),
+      apiGetHistory: this.apiGetHistory.bind(this),
+      apiGetTokenHistory: this.apiGetTokenHistory.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>

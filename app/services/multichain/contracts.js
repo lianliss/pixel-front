@@ -116,7 +116,7 @@ export const CONTRACT_ADDRESSES = {
     exchangerRouter: '0x48F01417d1ce1160202eBc35F5f00Ac8Ce7859Cb',
     narfexOracle: '0xF0608d2332C29CF2bf46028A9337D3a6755344ce',
     providerAddress: noderealRPC[SONGBIRD],
-    mining: '0x378b6D81f58A7A2AA25d6E8B2B38351F046DA2Ec',
+    mining: '0xe2E6562077E349a4eB7f8b6911BF67C953701fDc',
   },
 };
 

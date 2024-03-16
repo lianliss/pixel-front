@@ -23,6 +23,7 @@ function Wallet() {
     tokens,
     loadAccountBalances,
     accountAddress,
+    apiGetTelegramUser,
   } = React.useContext(Web3Context);
   const telegram = React.useContext(TelegramContext);
   const {
@@ -60,12 +61,7 @@ function Wallet() {
     if (!isConnected) {
       return;
     }
-    miningApi.getMiningAccessUnsafe({
-      address: accountAddress,
-      telegramId,
-      telegramUserName,
-      telegramFirstName,
-      telegramLastName}).then(result => {
+    apiGetTelegramUser().then(result => {
         if (result.status === 'created' || result.status === true) {
           toaster.success('Mining access granted');
           console.log('Mining access granted', result);

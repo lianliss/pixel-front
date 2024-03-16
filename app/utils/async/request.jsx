@@ -2,6 +2,7 @@ import axios from 'axios';
 import https from 'https';
 import get from 'lodash/get';
 import getCookie from 'utils/get-cookie';
+import {IS_DEVELOP} from "const";
 
 const TIMEOUT_CODE = 'ETIMEDOUT';
 const RESET_CODE = 'ECONNRESET';
@@ -44,6 +45,14 @@ export class Request {
                 const customUrlMod = get(options, 'customUrlMod');
                 const url = customUrlMod ? customUrlMod(rawUrl) : this.urlMod(rawUrl);
                 const params = this.paramsMod(get(options, 'params', {}));
+                const headers = get(options, 'headers', {});
+                const telegramAuth = get(window, 'Telegram.WebApp.initData');
+                if (telegramAuth) {
+                    headers.TelegramAuth = telegramAuth;
+                    if (IS_DEVELOP) {
+                        headers.IsDevelop = true;
+                    }
+                }
 
                 try {
                     response = await instance({
@@ -51,6 +60,7 @@ export class Request {
                         httpsAgent: this.agent,
                         ...options,
                         params,
+                        headers,
                         withCredentials: true,
                     });
                     fulfill(response.data);

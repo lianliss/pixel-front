@@ -12,11 +12,15 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import toaster from "services/toaster";
 import userImage from 'assets/img/avatar.png';
+import {Web3Context} from "services/web3Provider";
 
 TimeAgo.addDefaultLocale(en);
 
 function Friends() {
   
+  const {
+    apiGetTelegramFriends,
+  } = React.useContext(Web3Context);
   const {
     telegramId,
     haptic,
@@ -29,7 +33,7 @@ function Friends() {
   const loadFriends = async () => {
     setIsLoading(true);
     try {
-      const friends = await api.getFriends(telegramId);
+      const friends = await apiGetTelegramFriends();
       setFriends(friends.filter(t => !!t.telegramId));
     } catch (error) {
       console.error('[Friends][loadFriends]', error);

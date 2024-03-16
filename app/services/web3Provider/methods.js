@@ -2,9 +2,11 @@ import Eth from 'web3-eth';
 import Contract from 'web3-eth-contract';
 import * as CONNECTORS from "services/multiwallets/connectors";
 import {FiatToken, Token} from "services/web3Provider/Token";
-import {toHex, toChecksumAddress, toBigInt, numberToHex} from 'web3-utils';
+import {toHex, toChecksumAddress, toBigInt, numberToHex, utf8ToHex} from 'web3-utils';
 import {getCreate2Address} from "@ethersproject/address";
 import {keccak256, pack} from "@ethersproject/solidity";
+import hmacSha256 from 'crypto-js/hmac-sha256';
+import encoderHex from 'crypto-js/enc-hex';
 import getAllPairsCombinations from 'utils/getPairCombinations';
 import chunk from "lodash/chunk";
 import get from "lodash/get";
@@ -28,6 +30,7 @@ import PixelWallet from "services/multiwallets/pixelWallet";
 import {Pair, Trade, Percent, JSBI, TokenAmount, CurrencyAmount, Token as TokenSDK, Fraction} from '@narfex/sdk';
 import wei from "utils/wei";
 import significant from "utils/significant";
+import {api} from "utils/async/api";
 
 const AWAITING_DELAY = 2000;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -43,6 +46,72 @@ export function getEth() {
     return this.eth;
   } else {
     return this.ethHost;
+  }
+}
+
+export async function getBackendSign(hash, message) {
+  const {isConnected, accountAddress} = this.state;
+  if (!isConnected) throw new Error('Wallet is not connected');
+  try {
+    const key = `pixel-sign-${hash}`;
+    let sign = window.localStorage.getItem(key);
+    if (sign) {
+      return sign;
+    }
+    if (!this.signs[accountAddress]) {
+      this.signs[accountAddress] = new Promise(async (fulfill, reject) => {
+        try {
+          sign = await this.fetchEthereumRequest({
+            method: this.requestMethods.personal_sign,
+            params: [
+              utf8ToHex(message),
+              accountAddress,
+            ],
+          });
+          window.localStorage.setItem(key, sign);
+          fulfill(sign);
+        } catch (error) {
+          console.error('[getBackendSign][fetchEthereumRequest]', error);
+          reject(error);
+          this.signs[accountAddress] = undefined;
+        }
+      })
+    }
+    return await this.signs[accountAddress];
+  } catch (error) {
+    console.error('[getBackendSign]', error);
+    throw error;
+  }
+}
+
+export async function backendRequest(path, params = {}, method = 'get', additionalOptions = {}) {
+  const {isConnected, accountAddress} = this.state;
+  if (!isConnected) throw new Error('Wallet is not connected');
+  try {
+    const hash = hmacSha256(accountAddress, 'pixel-signature').toString(encoderHex);
+    const message = `Sign up with code ${hash}`;
+    const sign = await this.getBackendSign(hash, message);
+    
+    let additionalHeaders = {};
+    if (additionalOptions.headers) {
+      additionalHeaders = additionalOptions.headers;
+      delete additionalOptions.headers;
+    }
+    return await api[method](path, {
+      headers: {
+        'Pixel-Message': hash,
+        'Pixel-Sign': sign,
+        ...additionalHeaders,
+      },
+      params: {
+        ...params,
+        chainId: get(this.network, 'chainId'),
+      },
+      ...additionalOptions,
+    });
+  } catch (error) {
+    console.error('[backendRequest]', error);
+    throw error;
   }
 }
 
@@ -69,7 +138,7 @@ export async function connectPixelWallet(privateKey) {
     const account = window.pixelWallet.connect(privateKey);
     this.connectWallet(CONNECTORS.PIXEL, false, account);
   } catch (error) {
-    console.log('[connectPixelWallet]', error);
+    console.error('[connectPixelWallet]', error);
   }
 }
 
