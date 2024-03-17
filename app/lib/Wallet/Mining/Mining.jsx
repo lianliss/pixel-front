@@ -153,6 +153,8 @@ function Mining() {
   const seconds = Math.floor(secondsLeft % 60);
   const rewardPerHour = rewardPerSecond * 3600;
   const gas = wei.from(get(gasToken, 'balance', 0));
+  
+  const isDisabled = !isFull && gasless;
 
   return <div className={styles.mining}>
     <div className={styles.miningHeader}>
@@ -205,7 +207,7 @@ function Mining() {
             </>}
           </div>}
         <Button large
-                disabled={!value}
+                disabled={!value || isDisabled}
                 loading={notReady}
                 onClick={onClaim}>
           CLAIM PXLs
