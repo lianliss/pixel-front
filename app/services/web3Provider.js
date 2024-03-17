@@ -783,6 +783,11 @@ class Web3Provider extends React.PureComponent {
     return await this.backendRequest('mining/children');
   }
   
+  async apiGetGasless() {
+    await this.initEtherMethods();
+    return await this.backendRequest('mining/gasless');
+  }
+  
   async apiGetHistory() {
     await this.initEtherMethods();
     const response = await this.backendRequest('history');
@@ -812,11 +817,6 @@ class Web3Provider extends React.PureComponent {
   async apiCheckQuests() {
     await this.initEtherMethods();
     return await this.backendRequest('quests/checked');
-  }
-  
-  async apiCheckQuest(questIndex) {
-    await this.initEtherMethods();
-    return await this.backendRequest('quests/check', {questIndex});
   }
 
   render() {
@@ -879,9 +879,9 @@ class Web3Provider extends React.PureComponent {
       apiGetHistory: this.apiGetHistory.bind(this),
       apiGetTokenHistory: this.apiGetTokenHistory.bind(this),
       apiClaim: this.apiClaim.bind(this),
+      apiGetGasless: this.apiGetGasless.bind(this),
       apiGetQuests: this.apiGetQuests.bind(this),
       apiCheckQuests: this.apiCheckQuests.bind(this),
-      apiCheckQuest: this.apiCheckQuest.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>

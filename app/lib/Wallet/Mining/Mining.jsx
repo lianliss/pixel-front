@@ -138,7 +138,7 @@ function Mining() {
   const onNavigate = async (route) => {
     haptic.click();
     setBackAction(() => {
-      navigate(route.walletMining.path);
+      navigate(routes.walletMining.path);
     })
     navigate(route.path);
   }

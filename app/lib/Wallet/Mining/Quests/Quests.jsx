@@ -7,6 +7,8 @@ import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
 import getFinePrice from "utils/getFinePrice";
 import wei from "utils/wei";
 import {Icon} from "@blueprintjs/core";
+import {useDispatch} from "react-redux";
+import {appSetGasless} from "slices/App";
 
 const images = [
   require('assets/social/telegram-45px.svg'),
@@ -28,9 +30,10 @@ function Quests() {
   const {
     apiGetQuests,
     apiCheckQuests,
-    apiCheckQuest,
+    apiGetGasless,
   } = React.useContext(Web3Context);
   
+  const dispatch = useDispatch();
   const [quests, setQuests] = React.useState([]);
   
   const getQuests = async () => {
@@ -45,6 +48,7 @@ function Quests() {
       mainButtonLoading();
       setQuests(await apiCheckQuests());
       haptic.warning();
+      dispatch(appSetGasless((await apiGetGasless()).gasless))
     } catch (error) {
       console.error('[Quests][getQuests]', error);
     }
