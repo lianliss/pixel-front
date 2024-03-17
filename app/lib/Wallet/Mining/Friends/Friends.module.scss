@@ -38,6 +38,18 @@
           text-decoration: underline;
         }
       }
+
+      .fiendsStats {
+        text-align: left;
+        justify-self: center;
+      }
+      b {
+        color: var(--color-text);
+      }
+      span {
+        color: var(--color-primary);
+        font-weight: bold;
+      }
     }
   }
 

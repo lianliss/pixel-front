@@ -67,6 +67,12 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({'process.env': WEBPACK_ENV}),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
     new HtmlWebpackPlugin({
       template: "index.html",
       hash: true,
@@ -163,6 +169,7 @@ const config = {
       "http": require.resolve("stream-http"),
       'stream': require.resolve('stream-browserify'),
       'buffer': require.resolve('buffer'),
+      'zlib': require.resolve('browserify-zlib'),
     }
   },
   optimization: !isProduction ? {} : {

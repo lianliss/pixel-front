@@ -773,6 +773,16 @@ class Web3Provider extends React.PureComponent {
     return await this.getChoosenTokens();
   }
   
+  async getPastLogs(params) {
+    await this.initEtherMethods();
+    return await this.eth.getPastLogs(params);
+  }
+  
+  async getBlockNumber() {
+    await this.initEtherMethods();
+    return await this.eth.getBlockNumber();
+  }
+  
   async apiGetTelegramUser() {
     await this.initEtherMethods();
     return await this.backendRequest('mining');
@@ -802,6 +812,11 @@ class Web3Provider extends React.PureComponent {
     return response.message === 'OK'
       ? response.result
       : []
+  }
+  
+  async apiGetRewardsLogs() {
+    await this.initEtherMethods();
+    return await this.backendRequest('history/logs/rewards');
   }
   
   async apiClaim() {
@@ -874,10 +889,13 @@ class Web3Provider extends React.PureComponent {
       updateTokenBalance: this.updateTokenBalance.bind(this),
       cmcTokens: this.cmcTokens,
       getTokenFromSymbol: getTokenFromSymbol.bind(this),
+      getPastLogs: this.getPastLogs.bind(this),
+      getBlockNumber: this.getBlockNumber.bind(this),
       apiGetTelegramUser: this.apiGetTelegramUser.bind(this),
       apiGetTelegramFriends: this.apiGetTelegramFriends.bind(this),
       apiGetHistory: this.apiGetHistory.bind(this),
       apiGetTokenHistory: this.apiGetTokenHistory.bind(this),
+      apiGetRewardsLogs: this.apiGetRewardsLogs.bind(this),
       apiClaim: this.apiClaim.bind(this),
       apiGetGasless: this.apiGetGasless.bind(this),
       apiGetQuests: this.apiGetQuests.bind(this),

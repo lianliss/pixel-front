@@ -12,13 +12,47 @@ import en from "javascript-time-ago/locale/en";
 import toaster from "services/toaster";
 import userImage from 'assets/img/avatar.png';
 import {Web3Context} from "services/web3Provider";
+import LogsDecoder from 'logs-decoder';
+import topics from 'const/topics/mining';
+import ABI from 'const/ABI/PXLs';
+import {decodeParameter} from 'web3-eth-abi';
+
+import {toNumber} from 'web3-utils';
 
 TimeAgo.addDefaultLocale(en);
+
+function processLog(log) {
+  try {
+    const logsDecoder = LogsDecoder.create();
+    logsDecoder.addABI(ABI);
+    const logs = logsDecoder.decodeLogs([log]);
+    return logs.map(log => {
+      const events = {};
+      log.events.map(event => {
+        const {type, value, name} = event;
+        if (type !== 'address') {
+          try {
+            event.value = decodeParameter(type, value);
+          } catch (error) {
+          
+          }
+        }
+        events[name] = event.value;
+      })
+      return events;
+    });
+  } catch (error) {
+    console.error('[processLog]', error);
+  }
+}
 
 function Friends() {
   
   const {
     apiGetTelegramFriends,
+    apiGetRewardsLogs,
+    blocksPerSecond,
+    network,
   } = React.useContext(Web3Context);
   const {
     telegramId,
@@ -28,16 +62,35 @@ function Friends() {
   } = React.useContext(TelegramContext);
   const [friends, setFriends] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [total, setTotal] = React.useState(0);
+  const [other, setOther] = React.useState(0);
   
   const loadFriends = async () => {
-    setIsLoading(true);
     try {
       const friends = await apiGetTelegramFriends();
-      setFriends(friends.filter(t => !!t.telegramId));
+      return friends.filter(t => !!t.telegramId);
     } catch (error) {
       console.error('[Friends][loadFriends]', error);
     }
-    setIsLoading(false);
+  }
+  
+  const getLogs = async () => {
+    try {
+      const logs = await apiGetRewardsLogs();
+      const tx = logs.map(processLog);
+      console.log('tx', tx);
+      const rewards = {};
+      tx.map(log => {
+        const claimer = toNumber(log[0].claimerId);
+        if (typeof rewards[claimer] === 'undefined') {
+          rewards[claimer] = 0;
+        }
+        rewards[claimer] += wei.from(log[0].amount);
+      })
+      return rewards;
+    } catch (error) {
+      console.error('[Friends][getLogs]', error);
+    }
   }
   
   const copyLink = async () => {
@@ -48,7 +101,29 @@ function Friends() {
   }
   
   React.useEffect(() => {
-    loadFriends();
+    Promise.all([loadFriends(), getLogs()]).then(data => {
+      const friends = data[0];
+      const rewards = data[1];
+      let total = 0;
+      let unknownTotal = 0;
+      friends.map(friend => {
+        friend.amount = rewards[friend.telegramId] || 0;
+        total += friend.amount;
+        delete rewards[friend.telegramId];
+      })
+      const unknown = Object.keys(rewards);
+      unknown.map(telegramId => {
+        unknownTotal += rewards[telegramId];
+      })
+      setFriends(friends);
+      setTotal(total);
+      setOther(unknownTotal);
+      setIsLoading(false);
+    }).catch(error => {
+      console.error('[Friends]', error);
+      setFriends([]);
+      setIsLoading(false);
+    })
     setMainButton({
       text: 'Invite a friend',
       onClick: copyLink,
@@ -73,6 +148,7 @@ function Friends() {
             telegramFirstName,
             telegramLastName,
             telegramId,
+            amount,
           } = friend;
           const valuesClassName = [styles.friendsEventValuesAmount];
           const time = created;
@@ -98,7 +174,7 @@ function Friends() {
             </div>
             <div className={styles.friendsEventValues}>
               <div className={valuesClassName.join(' ')}>
-                {getFinePrice(0)}
+                {getFinePrice(amount)}
               </div>
             </div>
           </div>
@@ -123,6 +199,15 @@ function Friends() {
         <a href={'https://docs.hellopixel.network/hello-pixel/pixel-wallet/refer-a-friend'}>
           Full guide
         </a>
+      </p>
+      <p>
+        <b>Received last week</b>
+        <br/>
+        <div className={styles.fiendsStats}>
+          <span>{getFinePrice(total)}</span> from friends
+          <br/>
+          <span>{getFinePrice(other)}</span> from friends of friends
+        </div>
       </p>
     </div>
     <div className={styles.friendsTitle}>

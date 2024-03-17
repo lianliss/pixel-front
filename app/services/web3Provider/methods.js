@@ -2,7 +2,14 @@ import Eth from 'web3-eth';
 import Contract from 'web3-eth-contract';
 import * as CONNECTORS from "services/multiwallets/connectors";
 import {FiatToken, Token} from "services/web3Provider/Token";
-import {toHex, toChecksumAddress, toBigInt, numberToHex, utf8ToHex} from 'web3-utils';
+import {
+  toHex,
+  toChecksumAddress,
+  toBigInt,
+  numberToHex,
+  utf8ToHex,
+  toNumber,
+} from 'web3-utils';
 import {getCreate2Address} from "@ethersproject/address";
 import {keccak256, pack} from "@ethersproject/solidity";
 import hmacSha256 from 'crypto-js/hmac-sha256';
@@ -1288,12 +1295,13 @@ export async function switchToChain(chainId, firstAttempt = true) {
 export async function getBlocksPerSecond() {
   if (!this.eth) return;
   try {
-    const currentBlockNumber = await this.eth.getBlockNumber();
+    const currentBlockNumber = toNumber(await this.eth.getBlockNumber());
     const data = await Promise.all([
       this.eth.getBlock(currentBlockNumber),
       this.eth.getBlock(currentBlockNumber - 10000),
     ]);
-    const blocksPerSecond = (data[0].number - data[1].number) / (data[0].timestamp - data[1].timestamp);
+    const blocksPerSecond = toNumber(data[0].number - data[1].number)
+      / toNumber(data[0].timestamp - data[1].timestamp);
     this.setState({
       blocksPerSecond,
     });
@@ -1636,3 +1644,11 @@ export async function removeCustomToken(_address) {
     })});
   this.updateStateCustomTokens();
 }
+
+// export async function getPastLogs(params) {
+//   try {
+//     return await this.eth.getPastLogs(params);
+//   } catch (error) {
+//     console.error('[getPastLogs]', error);
+//   }
+// }
