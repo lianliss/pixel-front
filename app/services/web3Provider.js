@@ -783,9 +783,13 @@ class Web3Provider extends React.PureComponent {
     return await this.eth.getBlockNumber();
   }
   
-  async apiGetTelegramUser() {
+  async apiGetTelegramUser(isForce) {
     await this.initEtherMethods();
-    return await this.backendRequest('mining');
+    const params = {}
+    if (isForce) {
+      params.isForce = true;
+    }
+    return await this.backendRequest('mining', params);
   }
   
   async apiGetTelegramFriends() {

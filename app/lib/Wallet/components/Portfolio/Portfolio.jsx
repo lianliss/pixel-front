@@ -23,6 +23,7 @@ function Portfolio({isMiningChecked}) {
     network,
     tokens,
     transaction,
+    apiGetTelegramUser,
   } = React.useContext(Web3Context);
   const {
     telegramId,
@@ -55,8 +56,12 @@ function Portfolio({isMiningChecked}) {
   const loadData = async () => {
     try {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-      const data = await contract.methods.getStorage(telegramId).call();
-      console.log('DATA', data);
+      let data = await contract.methods.getStorage(telegramId).call();
+      console.log('data', data);
+      if (!data.claimTimestamp) {
+        await apiGetTelegramUser(true);
+        data = await contract.methods.getStorage(telegramId).call();
+      }
       setClaimed(wei.from(data.claimed));
       _mined = wei.from(data.mined);
       _reward = wei.from(data.rewardPerSecond);
