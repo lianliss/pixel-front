@@ -101,20 +101,22 @@ function Friends() {
   }
   
   React.useEffect(() => {
-    Promise.all([loadFriends(), getLogs()]).then(data => {
-      const friends = data[0];
-      const rewards = data[1];
+    Promise.allSettled([loadFriends(), getLogs()]).then(data => {
+      const friends = data[0].value;
+      const rewards = data[1].value;
       let total = 0;
       let unknownTotal = 0;
-      friends.map(friend => {
-        friend.amount = rewards[friend.telegramId] || 0;
-        total += friend.amount;
-        delete rewards[friend.telegramId];
-      })
-      const unknown = Object.keys(rewards);
-      unknown.map(telegramId => {
-        unknownTotal += rewards[telegramId];
-      })
+      if (rewards) {
+        friends.map(friend => {
+          friend.amount = rewards[friend.telegramId] || 0;
+          total += friend.amount;
+          delete rewards[friend.telegramId];
+        })
+        const unknown = Object.keys(rewards);
+        unknown.map(telegramId => {
+          unknownTotal += rewards[telegramId];
+        })
+      }
       setFriends(friends);
       setTotal(total);
       setOther(unknownTotal);
