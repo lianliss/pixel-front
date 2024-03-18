@@ -56,7 +56,6 @@ const config = {
     chunkFilename: '[name]chunk[hash].js',
     path: __dirname + '/dist',
     publicPath: isProduction ? '/dist/' : '/',
-    clean: true,
   },
   devServer: {
     port: DEV_PORT,
