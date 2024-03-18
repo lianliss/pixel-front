@@ -17,6 +17,7 @@ const images = [
 const links = [
   'https://t.me/hellopixelverse',
   'https://twitter.com/hellopixelverse',
+  'https://t.me/pixelswap',
 ];
 
 function Quests() {
