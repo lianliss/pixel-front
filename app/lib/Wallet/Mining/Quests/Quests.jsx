@@ -92,6 +92,7 @@ function Quests() {
                             onClick={() => {
                               haptic.small();
                               window.open(url, '_blank');
+                              console.log('LINK', url);
                               if (index === 1) {
                                 setTimeout(apiTwitterQuest, 2000);
                               }
