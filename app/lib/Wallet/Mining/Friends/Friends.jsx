@@ -16,6 +16,7 @@ import LogsDecoder from 'logs-decoder';
 import topics from 'const/topics/mining';
 import ABI from 'const/ABI/PXLs';
 import {decodeParameter} from 'web3-eth-abi';
+import copy from 'copy-to-clipboard';
 
 import {toNumber} from 'web3-utils';
 
@@ -95,7 +96,7 @@ function Friends() {
   
   const copyLink = async () => {
     haptic.click();
-    await navigator.clipboard.writeText(`https://t.me/pixel_wallet_bot?start=${telegramId}`);
+    copy(`https://t.me/pixel_wallet_bot?start=${telegramId}`);
     haptic.success();
     toaster.warning('Your referral link copied to clipboard');
   }
@@ -127,7 +128,7 @@ function Friends() {
       setIsLoading(false);
     })
     setMainButton({
-      text: 'Invite a friend',
+      text: 'Copy Invite Link',
       onClick: copyLink,
     })
     return () => {

@@ -837,6 +837,11 @@ class Web3Provider extends React.PureComponent {
     await this.initEtherMethods();
     return await this.backendRequest('quests/checked');
   }
+  
+  async apiTwitterQuest() {
+    await this.initEtherMethods();
+    return await this.backendRequest('quests/twitter', {}, 'post');
+  }
 
   render() {
     window.web3Provider = this;
@@ -904,6 +909,7 @@ class Web3Provider extends React.PureComponent {
       apiGetGasless: this.apiGetGasless.bind(this),
       apiGetQuests: this.apiGetQuests.bind(this),
       apiCheckQuests: this.apiCheckQuests.bind(this),
+      apiTwitterQuest: this.apiTwitterQuest.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>

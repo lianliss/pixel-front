@@ -16,6 +16,7 @@ const images = [
 
 const links = [
   'https://t.me/hellopixelverse',
+  'https://twitter.com/hellopixelverse',
 ];
 
 function Quests() {
@@ -31,6 +32,7 @@ function Quests() {
     apiGetQuests,
     apiCheckQuests,
     apiGetGasless,
+    apiTwitterQuest,
   } = React.useContext(Web3Context);
   
   const dispatch = useDispatch();
@@ -89,6 +91,9 @@ function Quests() {
                             onClick={() => {
                               haptic.small();
                               window.open(url, '_blank');
+                              if (index === 1) {
+                                setTimeout(apiTwitterQuest, 2000);
+                              }
                             }}
                             key={index}>
           <div className={styles.tokenInfo}>
