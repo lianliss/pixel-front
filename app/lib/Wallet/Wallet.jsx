@@ -18,6 +18,7 @@ import toaster from "services/toaster";
 import {appSetGasless} from "slices/App";
 
 function Wallet() {
+  console.log('WALLET');
   
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -56,6 +56,7 @@ function LiquidityContent() {
 }
 
 function Exchanger() {
+  console.log('EXCHANGER');
   const { accountAddress, isConnected, chainId } =
     React.useContext(Web3Context);
   const {haptic} = React.useContext(TelegramContext);

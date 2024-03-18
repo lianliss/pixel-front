@@ -389,7 +389,6 @@ export const DISPLAY_TOKENS = {
     TOKENS[SONGBIRD].sgb,
     TOKENS[SONGBIRD].usdc,
     TOKENS[SONGBIRD].wrapSGB,
-    TOKENS[SONGBIRD].canary,
     ...baseTokens.filter((t) => t.chainId === SONGBIRD),
   ],
 };

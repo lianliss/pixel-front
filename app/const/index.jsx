@@ -19,5 +19,4 @@ export const BUILT_AT = process.env.BUILT_AT;
 
 export const TIMEZONE_OFFSET = 0; //(new Date()).getTimezoneOffset() * 60;
 
-export const IS_TELEGRAM = IS_DEVELOP
-  || !!get(window, 'Telegram.WebApp.initData', '').length;
+export const IS_TELEGRAM = !!get(window, 'Telegram.WebApp.initData', '').length;

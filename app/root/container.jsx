@@ -37,13 +37,17 @@ function AppContainer() {
   React.useEffect(() => {
     window.addEventListener("resize", onResize.bind(this));
     onResize();
-    telegram.getPrivateKey().then(privateKey => {
-      web3Context.connectPixelWallet(privateKey);
+    if (IS_TELEGRAM) {
+      telegram.getPrivateKey().then(privateKey => {
+        web3Context.connectPixelWallet(privateKey);
+        setIsLoading(false);
+      }).catch(error => {
+        console.error('[container][getPrivateKey]', error);
+        setIsLoading(false);
+      });
+    } else {
       setIsLoading(false);
-    }).catch(error => {
-      console.error('[container][getPrivateKey]', error);
-      setIsLoading(false);
-    });
+    }
     return () => {
       window.removeEventListener("resize", onResize.bind(this));
     }
