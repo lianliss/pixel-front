@@ -38,6 +38,7 @@ import {Pair, Trade, Percent, JSBI, TokenAmount, CurrencyAmount, Token as TokenS
 import wei from "utils/wei";
 import significant from "utils/significant";
 import {api} from "utils/async/api";
+import includes from "lodash/includes";
 
 const AWAITING_DELAY = 2000;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -182,6 +183,7 @@ export async function connectWallet(connector = this.state.connector, showErrorM
     }
     
     this.eth = new Eth(provider);
+    this.eth.handleRevert = true;
     
     // Set account address
     const accountAddress = (
@@ -234,7 +236,6 @@ export async function connectWallet(connector = this.state.connector, showErrorM
 }
 
 export async function logout() {
-  console.log('logout');
   this.setBalances([], 'clear');
   this.setState({
     tokens: this.network.displayTokens,
@@ -707,8 +708,9 @@ export async function getTokensRelativePrice(_token0, _token1, amount = 1, isAmo
 }
 
 export async function getContract(abi, address) {
-  const contract = new Contract(abi, address);
-  contract.setProvider(this.eth.currentProvider);
+  const contract = new Contract(abi, address, {
+    provider: this.eth.currentProvider,
+  });
   return contract;
 }
 
@@ -778,8 +780,6 @@ export async function getTokensBalances(contractAddresses) {
     const results = await contract.methods
       .getBalances(this.state.accountAddress, contractAddresses)
       .call();
-    
-    console.log('getTokensBalances', contractAddresses, results);
     
     return results;
   } catch (error) {
@@ -987,7 +987,7 @@ export async function setChainTokenBalance() {
     
     return true;
   } catch (error) {
-    console.log('[setChainTokenBalance]', error);
+    console.error('[setChainTokenBalance]', error);
     return false;
   }
 }
@@ -1065,7 +1065,7 @@ export async function swap(pair, trade, slippageTolerance = 2, isExactIn = true,
       // Try to estimate transaction without fee support
       await this.estimateTransaction(routerContract, method, options);
     } catch (error) {
-      console.log(`[swap] Estimate method "${method}" error. Try to add "SupportingFeeOnTransferTokens"`);
+      console.error(`[swap] Estimate method "${method}" error. Try to add "SupportingFeeOnTransferTokens"`);
       // Add fee support
       method += 'SupportingFeeOnTransferTokens';
     }
@@ -1129,7 +1129,11 @@ export async function transaction(contract, method, params, value = 0) {
       params: [rawTransaction],
     });
   } catch (error) {
-    console.error('[Web3Provider][transaction]', method, error);
+    const revert = get(error, 'innerError.message', '').split('execution reverted: ')[1];
+    if (revert) {
+      error.message = revert;
+    }
+    console.error('[Web3Provider][transaction]', method, error, error.innerError);
     throw error;
   }
 };
@@ -1170,7 +1174,7 @@ export async function getTransactionReceipt(txHash) {
     await wait(1000);
     return await this.getTransactionReceipt(txHash);
   } catch (error) {
-    console.log('[getTransactionReceipt]', error);
+    console.error('[getTransactionReceipt]', error);
     return null;
   }
 }
@@ -1181,17 +1185,12 @@ export async function getTransactionReceipt(txHash) {
  * @returns {Promise.<*>}
  */
 export async function updatePoolData(pool) {
-  console.log('[updatePoolData]', pool);
   if (!this.state.isConnected) return;
   try {
     const farm = this.getFarmContract();
     const addon = {};
     const poolData = await farm.getPoolData(pool);
     addon[poolData.address] = poolData;
-    console.log('poolData', poolData, addon, {
-      ...this.state.pools,
-      ...addon,
-    });
     this.setState({
       pools: {
         ...this.state.pools,
@@ -1279,7 +1278,7 @@ export async function switchToChain(chainId, firstAttempt = true) {
     });
     return true;
   } catch (error) {
-    console.log('[switchToChain]', error);
+    console.error('[switchToChain]', error);
     
     toaster.warning(`Switch to chain ${get(NETWORKS_DATA[chainId], 'title', '')}`);
     if (this.requiredChain === chainId) {
