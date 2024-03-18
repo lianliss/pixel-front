@@ -1,0 +1,251 @@
+@import 'styles/layout/wallet';
+
+.build {
+  @include wallet();
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+
+    &-logo {
+      img {
+        width: 32px;
+        filter: blur(0);
+        transform: translateZ(0);
+        image-rendering: pixelated;
+      }
+    }
+    &-balance {
+      font-weight: 700;
+      font-size: 40px;
+      margin: 0 0;
+    }
+    &-mined {
+      &-storage {
+        color: var(--color-text-light);
+        span {
+          color: var(--color-text);
+        }
+      }
+    }
+  }
+}
+
+.token {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease 0s;
+
+  &:hover {
+    background: rgba(13, 47, 78, 1);
+  }
+  &-info {
+    display: flex;
+    align-items: center;
+    --icon-size: 80px;
+
+    &-icon {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      background: rgba(0, 21, 41, 1);
+      border: 1px solid rgba(13, 47, 78, 1);
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: calc(var(--icon-size) - 2px);
+      }
+    }
+    &-title {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-left: 8px;
+      font-size: 12px;
+
+      &-symbol {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      &-name {
+        color: var(--color-text-light);
+        margin: 4px 0;
+      }
+      &-params {
+        display: flex;
+
+        &-item {
+          :global(.bp5-icon) {
+            color: var(--color-main);
+            margin-right: 4px;
+          }
+          &:not(:first-child) {
+            margin-left: 4px;
+            padding-left: 4px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+
+            :global(.bp5-icon) {
+              color: var(--color-main);
+              margin-right: 2px;
+            }
+          }
+          span {
+            span {
+              color: var(--color-text-light);
+            }
+          }
+        }
+      }
+    }
+  }
+  &-balance {
+    display: flex;
+    align-items: center;
+
+    &-action {
+      padding: 16px 16px;
+      margin-right: -16px;
+    }
+  }
+}
+
+@keyframes moveUp {
+  0% {transform: translateY(100%)}
+  100% {transform: translateY(0)}
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.upgrade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  &-overlay {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.75);
+    animation: fadeIn 0.5s forwards;
+  }
+  &-container {
+    z-index: 2;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 24px 16px;
+    border-top-left-radius: var(--radius-panel);
+    border-top-right-radius: var(--radius-panel);
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: moveUp 0.5s forwards;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 900;
+      margin: 0;
+    }
+    p {
+      font-size: 12px;
+      color: var(--color-text-light);
+      text-align: center;
+    }
+  }
+
+  :global(.bp5-icon) {
+    margin: 4px 0;
+    color: var(--color-text-light);
+  }
+  &-tokens {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  &-token {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    transition: background 0.2s ease 0s;
+    width: 100%;
+    border: 1px solid var(--color-main);
+
+    &:first-child {
+      box-shadow: 0 9px 24px 0 rgba(66, 118, 246, 0.4);
+    }
+    &-info {
+      display: flex;
+      align-items: center;
+      --icon-size: 64px;
+
+      &-icon {
+        width: var(--icon-size);
+        height: var(--icon-size);
+        background: rgba(0, 21, 41, 1);
+        border: 1px solid rgba(13, 47, 78, 1);
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: calc(var(--icon-size) - 2px);
+        }
+      }
+      &-title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        margin-left: 8px;
+        font-size: 12px;
+
+        &-level {
+          color: var(--color-text-light);
+          margin-bottom: 2px;
+        }
+        &-text {
+          font-size: 16px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  &-cost {
+    color: var(--color-text-light);
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 8px;
+      width: 24px;
+    }
+  }
+}

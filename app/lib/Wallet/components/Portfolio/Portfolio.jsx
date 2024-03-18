@@ -56,18 +56,24 @@ function Portfolio({isMiningChecked}) {
   const loadData = async () => {
     try {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-      let data = await contract.methods.getStorage(telegramId).call();
-      console.log('data', data);
-      if (!data.claimTimestamp) {
+      let data = await Promise.all([
+        contract.methods.getStorage(telegramId).call(),
+        contract.methods.balanceOf(accountAddress).call(),
+      ]);
+      if (!data[0].claimTimestamp) {
         await apiGetTelegramUser(true);
-        data = await contract.methods.getStorage(telegramId).call();
+        data = await Promise.all([
+          contract.methods.getStorage(telegramId).call(),
+          contract.methods.balanceOf(accountAddress).call(),
+        ]);
       }
-      setClaimed(wei.from(data.claimed));
-      _mined = wei.from(data.mined);
-      _reward = wei.from(data.rewardPerSecond);
+      console.log('data', data);
+      setClaimed(wei.from(data[1]));
+      _mined = wei.from(data[0].mined);
+      _reward = wei.from(data[0].rewardPerSecond);
       setMined(_mined);
       setRewardPerSecond(_reward);
-      setSizeLimit(wei.from(data.sizeLimit));
+      setSizeLimit(wei.from(data[0].sizeLimit));
       
       start = Date.now();
       setTimestamp(Date.now());

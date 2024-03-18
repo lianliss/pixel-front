@@ -4,7 +4,7 @@ const getFinePrice = (number, options = {}) => {
     : options.minPrice;
   let price = Math.abs(number);
   let digits = 0;
-  const minDigits = price < 1 ? 3 : 2;
+  const minDigits = price < 1 ? 2 : 2;
   if (!price || price < minPrice) return '0.00';
   while (price < 100) {
     digits++;
