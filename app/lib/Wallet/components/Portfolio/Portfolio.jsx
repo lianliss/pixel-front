@@ -11,6 +11,7 @@ import toaster from "services/toaster";
 import processError from "utils/processError";
 import {useNavigate} from "react-router-dom";
 import routes from "const/routes";
+import Countdown from "../../../ui/Countdown/Countdown";
 
 let interval, _mined, start, _reward;
 
@@ -162,10 +163,12 @@ function Portfolio({isMiningChecked}) {
       </div>
       <div className={styles.portfolioActionsRight}>
         <Button large
-                disabled={!value}
-                loading={notReady}
-                onClick={onMining}>
-          MINING
+                //disabled={!value}
+                //loading={notReady}
+                //onClick={onMining}
+                disabled={true}
+        >
+          <Countdown time={1710849769187} />
         </Button>
       </div>
     </div>

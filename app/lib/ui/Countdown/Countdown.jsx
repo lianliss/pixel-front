@@ -15,9 +15,9 @@ const timeRenderer = ({ hours, minutes, seconds, completed }) => {
 };
 
 function Countdown({time, onComplete = () => {}}) {
-  return <Countdown renderer={timeRenderer}
-                    onComplete={onComplete}
-                    date={time} />
+  return <ReactCountdown renderer={timeRenderer}
+                         onComplete={onComplete}
+                         date={time} />
 }
 
 export default Countdown;
