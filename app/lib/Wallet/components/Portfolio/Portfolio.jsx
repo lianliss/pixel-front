@@ -163,12 +163,11 @@ function Portfolio({isMiningChecked}) {
       </div>
       <div className={styles.portfolioActionsRight}>
         <Button large
-                //disabled={!value}
-                //loading={notReady}
-                //onClick={onMining}
-                disabled={true}
+                disabled={!value}
+                loading={notReady}
+                onClick={onMining}
         >
-          <Countdown time={1710849769187} />
+          MINING
         </Button>
       </div>
     </div>

@@ -53,7 +53,7 @@ function Tokens() {
               {getFinePrice(wei.from(balance, decimals))}
             </div>
             <div className={styles.tokenBalanceTextValue}>
-              ${getFinePrice(Number(price) || 0)}
+              {price ? `$${getFinePrice(Number(price) || 0)}` : ''}
             </div>
           </div>
           <div className={styles.tokenBalanceAction}>

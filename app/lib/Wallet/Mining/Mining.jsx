@@ -71,16 +71,14 @@ function Mining() {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
       let data = await Promise.all([
         contract.methods.getStorage(telegramId).call(),
-        contract.methods.balanceOf(accountAddress).call(),
       ]);
       if (!data[0].claimTimestamp) {
         await apiGetTelegramUser(true);
         data = await Promise.all([
           contract.methods.getStorage(telegramId).call(),
-          contract.methods.balanceOf(accountAddress).call(),
         ]);
       }
-      setClaimed(wei.from(data[1]));
+      setClaimed(wei.from(data[0].balance));
       _mined = wei.from(data[0].mined);
       _reward = wei.from(data[0].rewardPerSecond);
       setMined(_mined);

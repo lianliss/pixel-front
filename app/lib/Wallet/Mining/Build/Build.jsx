@@ -115,16 +115,14 @@ function Build() {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
       let data = await Promise.all([
         contract.methods.getStorage(telegramId).call(),
-        contract.methods.balanceOf(accountAddress).call(),
       ]);
       if (!data[0].claimTimestamp) {
         await apiGetTelegramUser(true);
         data = await Promise.all([
           contract.methods.getStorage(telegramId).call(),
-          contract.methods.balanceOf(accountAddress).call(),
         ]);
       }
-      setClaimed(wei.from(data[1]));
+      setClaimed(wei.from(data[0].balance));
       setRewardPerSecond(wei.from(data[0].rewardPerSecond));
       setSizeLimit(wei.from(data[0].sizeLimit));
       setSizeLevel(Number(data[0].sizeLevel));
@@ -189,8 +187,7 @@ function Build() {
     const level = isStorage ? size : speed;
     const next = isStorage ? nextSize : nextSpeed;
     const getClaim = levelValue => {
-      const divider = speedLevels[speedLevel].value / baseSpeed;
-      const value = levelValue / baseSpeed / divider;
+      const value = levelValue / baseSpeed;
       const hours = Math.floor(value);
       const minutes = Math.floor((value - hours) * 60);
       return minutes

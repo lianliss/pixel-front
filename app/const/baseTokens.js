@@ -149,12 +149,12 @@ const SONGBIRD_BASE_TOKENS = [
   new Token(
     'Pixel Shard',
     'PXLs',
-    '0xe2E6562077E349a4eB7f8b6911BF67C953701fDc',
+    '0x086FAB41D9c20eee0bDE52e89a70c928EC16B0fD',
     19,
     18,
     require('styles/svg/logo_icon.svg'),
     false,
-    0.175,
+    0,
   ),
   new Token(
     'Experimental USDT',
