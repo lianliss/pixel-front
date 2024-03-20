@@ -19,15 +19,19 @@ import {Web3Context} from "services/web3Provider";
 import {ModalContext} from "services/ModalProvider";
 import {IS_TELEGRAM} from "const";
 import {TelegramContext} from "services/telegramProvider";
+import flatten from "lodash-es/flatten";
 
 const sections = [
   {
+    isAvailable: account => IS_TELEGRAM,
+    menu: [
+      routes.wallet,
+      routes.walletSettings,
+    ],
+  },
+  {
     isAvailable: account => true,
     menu: [
-      {
-        ...routes.wallet,
-        isAvailable: () => IS_TELEGRAM,
-      },
       routes.dashboard,
       routes.exchange,
       routes.bridge,
@@ -62,7 +66,6 @@ const sections = [
         icon: 'git-repo',
       },
       routes.history,
-      routes.settings,
       {
         title: 'Logout',
         icon: 'log-out',
@@ -85,6 +88,14 @@ const sections = [
   },
 ];
 
+const getAvailableMenus = account => flatten(sections.map(section => {
+  if (section.isAvailable(account)) {
+    return section.menu;
+  } else {
+    return [];
+  }
+}));
+
 function DisabledLink(props) {
   return <div className="sidebar-item disabled" {...props} />
 }
@@ -104,6 +115,20 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
   const navigate = useNavigate();
   const adaptive = useSelector(adaptiveSelector);
   
+  const menus = getAvailableMenus(account);
+  const currentPath = get(match, 'pattern.path');
+  const activeMenu = menus.find(menu => menu.path === currentPath);
+  const matchMenus = currentPath
+    ? menus.filter(menu => includes(currentPath, menu.path))
+    : [];
+  const lastMatchingMenu = matchMenus[matchMenus.length - 1] || {};
+  
+  const getIsActive = (path) => {
+    return activeMenu
+      ? path === activeMenu.path
+      : path === lastMatchingMenu.path;
+  }
+  
   return <div className={cn('sidebar', adaptive && 'adaptive', isMenuOpen && 'is-open')}>
     <img className="sidebar-logo" onClick={() => {
       navigate(routes.dashboard.path);
@@ -119,7 +144,7 @@ function Sidebar({match, isMenuOpen, setIsMenuOpen}) {
           {section.menu.map((item, itemIndex) => {
             if (typeof item.isAvailable === 'function' && !item.isAvailable(account)) return;
             const path = get(item, 'path');
-            const isActive = includes(match.pathname, path);
+            const isActive = getIsActive(path);
             const isDisabled = typeof item.disabled === 'function'
               ? item.disabled(account)
               : !!item.disabled;

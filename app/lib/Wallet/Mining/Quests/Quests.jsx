@@ -3,7 +3,7 @@ import styles from './Quests.module.scss';
 import {TelegramContext} from "services/telegramProvider";
 import {Web3Context} from "services/web3Provider";
 import routes from "const/routes";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import getFinePrice from "utils/getFinePrice";
 import wei from "utils/wei";
 import {Icon} from "@blueprintjs/core";

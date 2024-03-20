@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import Web3Provider from "services/web3Provider";
 import ModalProvider from "services/ModalProvider";
 import TelegramProvider from "services/telegramProvider";
+import WalletProvider from "lib/Wallet/walletProvider";
 
 export const Context = React.createContext({});
 export const ContextConsumer = Component => props => (
@@ -14,15 +15,18 @@ export const ContextConsumer = Component => props => (
         {values => <Component {...props} contextValues={values} />}
     </Context.Consumer>
 );
+
 export const ContextProvider = ({id, store, shadowNode, children}) => (
   <StrictMode disabled>
     <Context.Provider value={{id, store, shadowNode}}>
       <Provider store={store}>
         <TelegramProvider>
           <Web3Provider>
-            <ModalProvider>
-              {children}
-            </ModalProvider>
+            <WalletProvider>
+              <ModalProvider>
+                {children}
+              </ModalProvider>
+            </WalletProvider>
           </Web3Provider>
         </TelegramProvider>
       </Provider>

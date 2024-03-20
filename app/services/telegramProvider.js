@@ -1,5 +1,6 @@
 import React from "react";
 import get from "lodash/get";
+import {useDispatch} from "react-redux";
 
 const IS_TRUE_TELEGRAM = !!get(window, 'Telegram.WebApp.initData', '').length;
 export const TelegramContext = React.createContext();
@@ -209,6 +210,11 @@ function TelegramProvider(props) {
     }
   }
   
+  function mainButtonPrimary(isPrimary = true) {
+    if (!IS_TRUE_TELEGRAM) return;
+    setIsButtonPrimary(isPrimary);
+  }
+  
   function mainButtonEnable() {
     if (!IS_TRUE_TELEGRAM) return;
     setIsButtonDisabled(false);
@@ -282,51 +288,15 @@ function TelegramProvider(props) {
     app.readTextFromClipboard(fulfill);
   })
   
-  function initSettings() {
+  const setSettingsButton = onClick => {
     if (!IS_TRUE_TELEGRAM) return;
     app.SettingsButton.show();
-    app.SettingsButton.onClick(() => {
-      app.showPopup({
-        title: 'Settings',
-        message: 'The application is in Development mode',
-        buttons: [
-          {
-            id: 'scanQR',
-            type: 'default',
-            text: 'ScanQR',
-          },
-          {
-            id: 'Show Secret',
-            type: 'default',
-            text: 'Show Secret',
-          },
-          {
-            id: 'clearPrivateKey',
-            type: 'destructive',
-            text: 'Logout',
-          },
-        ],
-      }, id => {
-        switch (id) {
-          case 'clearPrivateKey':
-            app.showConfirm('The private key will be deleted. It will be possible to restore the wallet only using a secret phrase. Are you sure you want to delete your wallet?', (isOk) => {
-              if (isOk) {
-                clearPrivateKey();
-                window.location.reload();
-              }
-            });
-            break;
-          case 'scanQR':
-          default:
-            app.showScanQrPopup({
-              text: `${id}`,
-            }, code => {
-              app.showConfirm(code);
-              return true;
-            });
-        }
-      });
-    });
+    app.SettingsButton.onClick(onClick);
+  }
+  
+  const hideSettingsButton = () => {
+    if (!IS_TRUE_TELEGRAM) return;
+    app.SettingsButton.hide();
   }
   
   React.useEffect(() => {
@@ -335,7 +305,6 @@ function TelegramProvider(props) {
     app.ready();
     app.expand();
     initBackButton();
-    initSettings();
     setTelegramId(app.initDataUnsafe.user.id);
     setTelegramUserName(app.initDataUnsafe.user.username);
     setTelegramFirstName(app.initDataUnsafe.user.first_name);
@@ -347,6 +316,8 @@ function TelegramProvider(props) {
   return <TelegramContext.Provider value={{
     privateKey,
     setBackAction,
+    setSettingsButton,
+    hideSettingsButton,
     clearBackActions,
     setMainButton,
     hideMainButton,
@@ -354,6 +325,7 @@ function TelegramProvider(props) {
     mainButtonStop,
     mainButtonEnable,
     mainButtonDisable,
+    mainButtonPrimary,
     getPrivateKey,
     setPrivateKey,
     clearPrivateKey,

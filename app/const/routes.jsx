@@ -39,6 +39,12 @@ const routes = {
     icon: 'person',
     lib: 'Wallet/Mining/Build',
   },
+  walletSettings: {
+    path: '/wallet/settings/',
+    title: 'Settings',
+    icon: 'cog',
+    lib: 'Wallet/Settings',
+  },
   walletQuests: {
     path: '/wallet/quests/',
     title: 'Wallet Quests',
@@ -169,13 +175,6 @@ const routes = {
     path: '/history/',
     title: 'History',
     icon: 'pulse',
-    lib: 'Dashboard',
-    disabled: true,
-  },
-  settings: {
-    path: '/settings/',
-    title: 'Settings',
-    icon: 'cog',
     lib: 'Dashboard',
     disabled: true,
   },

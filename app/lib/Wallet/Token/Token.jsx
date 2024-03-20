@@ -4,7 +4,7 @@ import {useMatch, useNavigate} from 'react-router-dom';
 import routes from 'const/routes';
 import {Web3Context} from "services/web3Provider";
 import getFinePrice from "utils/getFinePrice";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {TelegramContext} from "services/telegramProvider";
 import History from "lib/Wallet/components/History/History";
 import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";

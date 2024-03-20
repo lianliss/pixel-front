@@ -6,7 +6,7 @@ import {wei} from "utils";
 import {Icon, Tooltip} from "@blueprintjs/core";
 import ReactTimeAgo from "react-time-ago";
 import getFinePrice from "utils/getFinePrice";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import toaster from "services/toaster";

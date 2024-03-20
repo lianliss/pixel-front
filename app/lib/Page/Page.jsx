@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from 'lib/Page/Header/Header';
 import Sidebar from 'lib/Page/Sidebar/Sidebar';
-import {adaptiveSelector} from 'app/store/selectors';
+import {adaptiveSelector, isHideMenuButtonSelector} from 'app/store/selectors';
 import {classNames as cn} from 'utils';
 import {
   Button as BluePrintButton, Icon,
@@ -20,6 +20,7 @@ function Page({children, match, title}) {
     haptic,
   } = React.useContext(TelegramContext);
   const adaptive = useSelector(adaptiveSelector);
+  const isHideMenuButton = useSelector(isHideMenuButtonSelector);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   
   const onMenuClick = () => {
@@ -37,7 +38,7 @@ function Page({children, match, title}) {
              isMenuOpen={isMenuOpen} />
     <div className="page">
       {!IS_TELEGRAM && <Header setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
-      {(IS_TELEGRAM && isConnected) && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
+      {(IS_TELEGRAM && isConnected && !isHideMenuButton) && <BluePrintButton icon={<Icon icon={isMenuOpen ? 'cross' : 'menu'} size={20} />}
                                     onClick={onMenuClick}
                                     className={"page-menu-button"}
                                     minimal />}

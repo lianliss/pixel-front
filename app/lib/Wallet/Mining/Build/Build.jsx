@@ -5,10 +5,13 @@ import PXLsABI from "const/ABI/PXLs";
 import {wei} from "utils";
 import {Web3Context} from "services/web3Provider";
 import {TelegramContext} from "services/telegramProvider";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Icon} from "@blueprintjs/core";
 import toaster from "services/toaster";
 import processError from "../../../../utils/processError";
+import {WalletPopup} from "ui";
+import useMining from "app/hooks/useMining";
+import {WalletContext} from "lib/Wallet/walletProvider";
 
 const baseSpeed = 0.01;
 const sizeLevels = [
@@ -83,61 +86,30 @@ const speedLevels = [
 function Build() {
   
   const {
-    isConnected,
-    accountAddress,
+    mining,
+  } = React.useContext(WalletContext);
+  const {
+    loadMiningData,
+    claimed,
+    rewardPerSecond,
+    sizeLimit,
+    sizeLevel,
+    speedLevel,
+  } = mining;
+  const {
     getContract,
     network,
-    tokens,
     transaction,
-    apiClaim,
-    apiGetTelegramUser,
     loadAccountBalances,
   } = React.useContext(Web3Context);
   const {
     telegramId,
     haptic,
-    setBackAction,
     setMainButton,
     hideMainButton,
     mainButtonLoading,
-    mainButtonStop,
   } = React.useContext(TelegramContext);
-  const [claimed, setClaimed] = React.useState(0);
-  const [rewardPerSecond, setRewardPerSecond] = React.useState(0.00001);
-  const [sizeLimit, setSizeLimit] = React.useState(100);
-  const [sizeLevel, setSizeLevel] = React.useState(0);
-  const [speedLevel, setSpeedLevel] = React.useState(0);
-  const [isClaiming, setIsClaiming] = React.useState(true);
   const [method, setMethod] = React.useState();
-  
-  const loadData = async () => {
-    try {
-      const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-      let data = await Promise.all([
-        contract.methods.getStorage(telegramId).call(),
-      ]);
-      if (!data[0].claimTimestamp) {
-        await apiGetTelegramUser(true);
-        data = await Promise.all([
-          contract.methods.getStorage(telegramId).call(),
-        ]);
-      }
-      setClaimed(wei.from(data[0].balance));
-      setRewardPerSecond(wei.from(data[0].rewardPerSecond));
-      setSizeLimit(wei.from(data[0].sizeLimit));
-      setSizeLevel(Number(data[0].sizeLevel));
-      setSpeedLevel(Number(data[0].speedLevel));
-    } catch (error) {
-      console.error('[Build]', error);
-    }
-    setIsClaiming(false);
-  }
-  
-  React.useEffect(() => {
-    if (!telegramId || !isConnected) return;
-    if (!network.contractAddresses.mining) return;
-    loadData();
-  }, [accountAddress])
   
   const rewardPerHour = rewardPerSecond * 3600;
   const size = sizeLevels[sizeLevel];
@@ -154,7 +126,7 @@ function Build() {
       const contract = await getContract(PXLsABI, network.contractAddresses.mining);
       await transaction(contract, method, [telegramId]);
       loadAccountBalances();
-      await loadData();
+      await loadMiningData();
       toaster.success(`${name} upgraded`);
       haptic.success();
     } catch (error) {
@@ -195,65 +167,63 @@ function Build() {
         : `${hours}h`;
     }
     
-    return <div className={styles.upgrade}>
-      <div className={styles.upgradeOverlay} onClick={() => {
-        setMethod();
-        hideMainButton();
-      }} />
-      <div className={styles.upgradeContainer}>
-        <h2>{isStorage ? 'Storage' : 'Drill'}</h2>
-        <p>
-          {isStorage
-            ? 'Increased storage allows you to hold a larger amount of mined PXLs'
-            : 'Improved drill allows you to get more PXLs per hour'}
-        </p>
-        <div className={styles.upgradeTokens}>
-          <WalletBlock className={styles.upgradeToken}>
-            <div className={styles.upgradeTokenInfo}>
-              <div className={styles.upgradeTokenInfoIcon}>
-                <img src={next.image} alt={''} />
+    return <WalletPopup className={styles.upgrade}
+                        onClose={() => {
+                          setMethod();
+                          hideMainButton();
+                        }}>
+      <h2>{isStorage ? 'Storage' : 'Drill'}</h2>
+      <p>
+        {isStorage
+          ? 'Increased storage allows you to hold a larger amount of mined PXLs'
+          : 'Improved drill allows you to get more PXLs per hour'}
+      </p>
+      <div className={styles.upgradeTokens}>
+        <WalletBlock className={styles.upgradeToken}>
+          <div className={styles.upgradeTokenInfo}>
+            <div className={styles.upgradeTokenInfoIcon}>
+              <img src={next.image} alt={''} />
+            </div>
+            <div className={styles.upgradeTokenInfoTitle}>
+              <div className={styles.upgradeTokenInfoTitleLevel}>
+                {isStorage ? sizeLevel + 1 : speedLevel + 1} level
               </div>
-              <div className={styles.upgradeTokenInfoTitle}>
-                <div className={styles.upgradeTokenInfoTitleLevel}>
-                  {isStorage ? sizeLevel + 1 : speedLevel + 1} level
-                </div>
-                <div className={styles.upgradeTokenInfoTitleText}>
-                  {isStorage
-                    ? next.value
-                      ? `Claim every ${getClaim(next.value)}`
-                      : 'Unlimited storage'
-                    : `Mine ${getFinePrice(next.value)} PXLs/hour`}
-                </div>
+              <div className={styles.upgradeTokenInfoTitleText}>
+                {isStorage
+                  ? next.value
+                    ? `Claim every ${getClaim(next.value)}`
+                    : 'Unlimited storage'
+                  : `Mine ${getFinePrice(next.value)} PXLs/hour`}
               </div>
             </div>
-          </WalletBlock>
-          <Icon icon={'double-chevron-up'} />
-          <WalletBlock className={styles.upgradeToken}>
-            <div className={styles.upgradeTokenInfo}>
-              <div className={styles.upgradeTokenInfoIcon}>
-                <img src={level.image} alt={''} />
+          </div>
+        </WalletBlock>
+        <Icon icon={'double-chevron-up'} />
+        <WalletBlock className={styles.upgradeToken}>
+          <div className={styles.upgradeTokenInfo}>
+            <div className={styles.upgradeTokenInfoIcon}>
+              <img src={level.image} alt={''} />
+            </div>
+            <div className={styles.upgradeTokenInfoTitle}>
+              <div className={styles.upgradeTokenInfoTitleLevel}>
+                {isStorage ? sizeLevel : speedLevel} level
               </div>
-              <div className={styles.upgradeTokenInfoTitle}>
-                <div className={styles.upgradeTokenInfoTitleLevel}>
-                  {isStorage ? sizeLevel : speedLevel} level
-                </div>
-                <div className={styles.upgradeTokenInfoTitleText}>
-                  {isStorage
-                    ? level.value
-                      ? `Claim every ${getClaim(level.value)}`
-                      : 'Unlimited storage'
-                    : `Mine ${getFinePrice(level.value)} PXLs/hour`}
-                </div>
+              <div className={styles.upgradeTokenInfoTitleText}>
+                {isStorage
+                  ? level.value
+                    ? `Claim every ${getClaim(level.value)}`
+                    : 'Unlimited storage'
+                  : `Mine ${getFinePrice(level.value)} PXLs/hour`}
               </div>
             </div>
-          </WalletBlock>
-        </div>
-        <div className={styles.upgradeCost}>
-          <img src={require('styles/svg/logo_icon.svg')}
-               alt={'PXLs'} /> {getFinePrice(next.price)}
-        </div>
+          </div>
+        </WalletBlock>
       </div>
-    </div>;
+      <div className={styles.upgradeCost}>
+        <img src={require('styles/svg/logo_icon.svg')}
+             alt={'PXLs'} /> {getFinePrice(next.price)}
+      </div>
+    </WalletPopup>;
   }
   
   return <div className={styles.build}>

@@ -22,6 +22,9 @@ export const AppSlice = createSlice({
     appSetGasless: (state, {payload}) => {
       state.gasless = Number(payload);
     },
+    appSetIsHideMenuButton: (state, {payload}) => {
+      state.isHideMenuButton = !!payload;
+    },
   },
 });
 
@@ -31,6 +34,7 @@ export const {
   appUpdateAuth,
   appSetAdaptive,
   appSetGasless,
+  appSetIsHideMenuButton,
 } = AppSlice.actions;
 
 export default AppSlice.reducer;

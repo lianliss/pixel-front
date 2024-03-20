@@ -305,7 +305,7 @@ export const TOKENS = {
       '0x1a7b46656B2b8b29B1694229e122d066020503D0',
       SONGBIRD,
       6,
-      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA48jn1mm2sqYeYWqM2ODLpS3ZrCW7DgE0ZE6NN8omWtc2wql22mhyC5wTlfi7UN9XPLQ&usqp=CAU',
       false,
       1
     ),

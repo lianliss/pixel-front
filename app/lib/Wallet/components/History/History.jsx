@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './History.module.scss';
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Web3Context} from "services/web3Provider";
 import historyApi from "utils/async/api/history";
 import ReactTimeAgo from 'react-time-ago';

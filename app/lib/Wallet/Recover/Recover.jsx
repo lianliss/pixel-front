@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Recover.module.scss';
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Button as BPButton} from "@blueprintjs/core/lib/esm/components/button/buttons";
 import {Tooltip} from "@blueprintjs/core";
 import {Input} from "ui";

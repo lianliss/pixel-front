@@ -10,139 +10,39 @@ import toaster from "services/toaster";
 import processError from "utils/processError";
 import {useNavigate} from "react-router-dom";
 import routes from "const/routes";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Icon, Tooltip} from "@blueprintjs/core";
 import Countdown from "../../ui/Countdown/Countdown";
 import {useDispatch, useSelector} from "react-redux";
 import {gaslessSelector} from "app/store/selectors";
 import {appSetGasless} from "slices/App";
 import get from "lodash/get";
+import useMining from "app/hooks/useMining";
+import {WalletContext} from "lib/Wallet/walletProvider";
 
 let interval, _mined, start, _reward;
 function Mining() {
   
   const {
-    isConnected,
-    accountAddress,
-    getContract,
-    network,
-    tokens,
-    transaction,
-    apiClaim,
-    apiGetTelegramUser,
-  } = React.useContext(Web3Context);
+    mining,
+  } = React.useContext(WalletContext);
   const {
-    telegramId,
+    gasToken,
+    claimed,
+    rewardPerSecond,
+    sizeLimit,
+    isClaiming,
+    minedValue,
+    minedPercents,
+    onClaim,
+    gasless,
+    isFull,
+  } = mining;
+  const {
     haptic,
     setBackAction,
   } = React.useContext(TelegramContext);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const gasless = useSelector(gaslessSelector);
-  const [token, setToken] = React.useState();
-  const [gasToken, setGasToken] = React.useState();
-  const [claimed, setClaimed] = React.useState(0);
-  const [mined, setMined] = React.useState(0);
-  const [rewardPerSecond, setRewardPerSecond] = React.useState(0.00001);
-  const [sizeLimit, setSizeLimit] = React.useState(100);
-  const [timestamp, setTimestamp] = React.useState();
-  const [isClaiming, setIsClaiming] = React.useState(true);
-  
-  React.useEffect(() => {
-    if (!isConnected) return;
-    const token = tokens.find(t => t.symbol === 'PXLs');
-    const gasToken = tokens.find(t => !t.address);
-    if (token) {
-      setToken(token);
-    }
-    if (gasToken) {
-      setGasToken(gasToken);
-    }
-  }, [isConnected, tokens]);
-  
-  const increaseMined = () => {
-    const seconds = (Date.now() - start) / 1000;
-    setMined(_mined + seconds * _reward);
-    setTimestamp(Date.now());
-  }
-  
-  const loadData = async () => {
-    try {
-      const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-      let data = await Promise.all([
-        contract.methods.getStorage(telegramId).call(),
-      ]);
-      if (!data[0].claimTimestamp) {
-        await apiGetTelegramUser(true);
-        data = await Promise.all([
-          contract.methods.getStorage(telegramId).call(),
-        ]);
-      }
-      setClaimed(wei.from(data[0].balance));
-      _mined = wei.from(data[0].mined);
-      _reward = wei.from(data[0].rewardPerSecond);
-      setMined(_mined);
-      setRewardPerSecond(_reward);
-      setSizeLimit(wei.from(data[0].sizeLimit));
-      
-      start = Date.now();
-      setTimestamp(Date.now());
-      
-      clearInterval(interval);
-      interval = setInterval(increaseMined, 1000);
-    } catch (error) {
-      console.error('[Portfolio]', error);
-    }
-    setIsClaiming(false);
-  }
-  
-  React.useEffect(() => {
-    if (!telegramId || !isConnected || !token) return;
-    if (!network.contractAddresses.mining) return;
-    loadData();
-    
-    return () => {
-      clearInterval(interval);
-    }
-  }, [accountAddress, token])
-  
-  const value = mined > sizeLimit
-    ? sizeLimit
-    : mined;
-  
-  const percents = sizeLimit
-    ? value / sizeLimit * 100
-    : 0;
-  
-  const onClaim = async () => {
-    setIsClaiming(true);
-    haptic.click();
-    try {
-      let tx;
-      if (gasless) {
-        tx = await apiClaim();
-        dispatch(appSetGasless(tx.gasless));
-      } else {
-        const contract = await getContract(PXLsABI, network.contractAddresses.mining);
-        tx = await transaction(contract, 'claimReward', [telegramId]);
-      }
-      toaster.success('Pixel Shards claimed');
-      haptic.success();
-      console.log('[onClaim]', tx);
-      await loadData();
-      haptic.tiny();
-    } catch (error) {
-      console.error('[onClaim]', error);
-      const details = processError(error);
-      haptic.error();
-      if (details.isGas) {
-        toaster.gas(details.gas);
-      } else {
-        toaster.error(details.message);
-      }
-    }
-    setIsClaiming(false);
-  }
   
   const onNavigate = async (route) => {
     haptic.click();
@@ -153,8 +53,8 @@ function Mining() {
   }
   
   const notReady = isClaiming;
-  const isFull = value === sizeLimit;
-  const spaceLeft = sizeLimit - value;
+  
+  const spaceLeft = sizeLimit - minedValue;
   let secondsLeft = spaceLeft / rewardPerSecond;
   const hours = Math.floor(secondsLeft / 3600);
   secondsLeft %= 3600;
@@ -196,13 +96,13 @@ function Mining() {
           </div>
           <div className={styles.miningStorageTextStatus}>
             <span className={styles.miningStorageTextStatusStorage}>
-              In storage {getFinePrice(value)} PXLs
+              In storage {getFinePrice(minedValue)} PXLs
             </span>
           </div>
         </div>
         <div className={styles.miningStorageBar}>
           <div className={styles.miningStorageBarProgress} style={{
-            width: `${percents}%`,
+            width: `${minedPercents}%`,
           }} />
         </div>
       </div>
@@ -216,7 +116,7 @@ function Mining() {
             </>}
           </div>}
         <Button large
-                disabled={!value || isDisabled}
+                disabled={!minedValue || isDisabled}
                 loading={notReady}
                 onClick={onClaim}>
           CLAIM PXLs
@@ -225,7 +125,7 @@ function Mining() {
     </WalletBlock>
     <WalletBlock className={styles.token}
                  onClick={() => {
-                   window.open('https://docs.hellopixel.network/hello-pixel/pixel-wallet/how-to-mine-pixel');
+                   window.open('https://docs.hellopixel.network/hello-pixel/pixel-wallet/how-to-mine-pixel', '_blank');
                  }}>
       <div className={styles.tokenInfo}>
         <div className={styles.tokenInfoIcon}>

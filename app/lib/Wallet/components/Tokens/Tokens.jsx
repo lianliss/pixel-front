@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Tokens.module.scss';
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Web3Context} from "services/web3Provider";
 import getFinePrice from "utils/getFinePrice";
 import {Icon} from "@blueprintjs/core";

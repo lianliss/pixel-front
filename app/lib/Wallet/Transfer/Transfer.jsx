@@ -6,7 +6,7 @@ import {Web3Context} from "services/web3Provider";
 import getFinePrice from "utils/getFinePrice";
 import {TelegramContext} from "services/telegramProvider";
 import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
-import WalletBlock from "lib/Wallet/components/WalletBlock/WalletBlock";
+import WalletBlock from "ui/WalletBlock/WalletBlock";
 import {Button, Input} from "ui";
 import {Button as BPButton, Tooltip} from "@blueprintjs/core";
 import {isAddress as web3IsAddress, toChecksumAddress} from 'web3-utils';
