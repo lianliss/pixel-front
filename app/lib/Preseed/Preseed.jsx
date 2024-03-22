@@ -5,7 +5,6 @@ import {Button, Input, WalletBlock} from "ui";
 import {ModalContext} from "services/ModalProvider";
 import toaster from "services/toaster";
 import ABI from "const/ABI/PXLPreseed";
-import ERC20 from "const/ABI/Erc20Token";
 import {TelegramContext} from "services/telegramProvider";
 import {wei} from "utils";
 import getFinePrice from "utils/getFinePrice";
@@ -313,6 +312,8 @@ function Preseed() {
     </h1>
     <p>
       For early investors we offer to participate in the PRE-SEED round for which 2% of the maximum supply of our <a href={'https://docs.hellopixel.network/tokenomics/tokenomics'} target={"_blank"}>tokenomics</a> is allocated at the price of $0.01 per token.
+      <br/>
+      <a href={'https://docs.hellopixel.network/tokenomics/early-investors'} target={'_blank'}>Read more...</a>
     </p>
     {renderForm()}
     {renderButtons()}
