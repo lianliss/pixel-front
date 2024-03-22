@@ -74,6 +74,7 @@ export const CONTRACT_ADDRESSES = {
     exchangerRouter: '0xEcF8DeF47948321Ab0594462D154E9B78625AA20',
     narfexOracle: '0xC8f30866816fdab9Bb6BDbbb03d4a54103145c99',
     providerAddress: noderealRPC[POLYGON_MAINNET],
+    preseed: '0xc3C8aF5Cf071d35a2AeF21eF2369D2ea28109886',
   },
   [POLYGON_MUMBAI]: {
     factoryAddress: '0xc35DADB65012eC5796536bD9864eD8773aBc74C4',

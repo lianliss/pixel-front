@@ -23,7 +23,7 @@ export const noderealRPC = {
   [BSC_TESTNET]:
     'https://bsc-testnet.nodereal.io/v1/38d2b41600d44427ac26d968efff647a',
   [POLYGON_MAINNET]:
-    'https://rpc.ankr.com/polygon/6c2f34a42715fa4c50762b0069a7a658618c752709b7db32f7bfe442741117eb',
+    'https://polygon-rpc.com',
   [ARBITRUM_MAINNET]:
     'https://rpc.ankr.com/arbitrum/6c2f34a42715fa4c50762b0069a7a658618c752709b7db32f7bfe442741117eb',
   //[FLARE]: 'https://flare-api.flare.network/ext/bc/C/rpc',
@@ -184,7 +184,6 @@ export const getConnectorObject = (connector, chainID = DEFAULT_CHAIN) => {
  * @returns {Promise.<*>} - Fetch result.
  */
 export const fetchEthereumRequest = async function (requestObject, ethereum) {
-  console.log('fetchEthereumRequest', requestObject, ethereum, this.ethereum);
   if (!requestObject.method) return false;
   if (!this && !ethereum) return false;
 
@@ -197,7 +196,6 @@ export const fetchEthereumRequest = async function (requestObject, ethereum) {
  * @returns {number} - fine chainId.
  */
 export const getFineChainId = function (id) {
-  if (!this) return null;
   if (!id) return null;
 
   // If id is hex, use hexToNumber

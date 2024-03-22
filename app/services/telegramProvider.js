@@ -1,11 +1,12 @@
 import React from "react";
 import get from "lodash/get";
-import {useDispatch} from "react-redux";
+import toaster from "services/toaster";
 
 const IS_TRUE_TELEGRAM = !!get(window, 'Telegram.WebApp.initData', '').length;
 export const TelegramContext = React.createContext();
 
 const app = get(window, 'Telegram.WebApp');
+const bio = get(window, 'Telegram.WebApp.BiometricManager');
 const storage = get(window, 'Telegram.WebApp.CloudStorage');
 const COLOR_MAIN = '#A62CFF';
 const COLOR_MAIN_DISABLED = '#41275C';
@@ -314,6 +315,7 @@ function TelegramProvider(props) {
   //backActions = [];
   
   return <TelegramContext.Provider value={{
+    app,
     privateKey,
     setBackAction,
     setSettingsButton,

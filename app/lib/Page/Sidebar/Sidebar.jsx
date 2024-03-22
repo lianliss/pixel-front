@@ -66,10 +66,11 @@ const sections = [
         icon: 'git-repo',
       },
       routes.history,
+      routes.preseed,
       {
         title: 'Logout',
         icon: 'log-out',
-        isAvailable: account => !!account.isConnected,
+        isAvailable: account => !IS_TELEGRAM && !!account.isConnected,
         onClick: account => {
           account.logout();
           return false;

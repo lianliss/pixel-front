@@ -82,6 +82,14 @@ const POLYGON_BASE_TOKENS = [
     'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png'
   ),
   new Token(
+    'Tether USD',
+    'USDT',
+    '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    137,
+    6,
+    'https://polygonscan.com/token/images/tether_32.png'
+  ),
+  new Token(
     'Wrapped Ether',
     'WMATIC',
     '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',

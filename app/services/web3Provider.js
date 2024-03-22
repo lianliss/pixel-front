@@ -11,6 +11,7 @@ import toaster from 'services/toaster';
 import ExchangerStorage from 'services/ExchangerStorage';
 import {getTokenFromSymbol} from './web3Provider/utils';
 import {TelegramContext} from "services/telegramProvider";
+import {getFineChainId} from "services/multiwallets/multiwalletsDifference";
 
 export const Web3Context = React.createContext();
 
@@ -325,6 +326,7 @@ class Web3Provider extends React.PureComponent {
    *  a user has not connection, call to connectWallet.
    */
   setChain(id, checkConnection = true) {
+    console.log('setChain', id, checkConnection);
     try {
       // A wallet maybe disconnected when the chain id changes.
       if (!this.state.accountAddress && checkConnection) {
@@ -380,7 +382,7 @@ class Web3Provider extends React.PureComponent {
       isConnected: true,
     });
 
-    this.setChain(this.getFineChainId(chainId));
+    this.setChain(getFineChainId(chainId));
   };
 
   onAccountsChanged = accounts => {
@@ -403,7 +405,7 @@ class Web3Provider extends React.PureComponent {
   };
 
   onChainChanged = chainId => {
-    const fineChainId = this.getFineChainId(chainId);
+    const fineChainId = getFineChainId(chainId);
 
     console.log('[onChainChanged]', chainId, fineChainId);
     if (!this._mounted) return;

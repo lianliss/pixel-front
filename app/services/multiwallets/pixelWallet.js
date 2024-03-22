@@ -17,6 +17,7 @@ class PixelWallet {
   constructor(web3Provider, provider) {
     this.eth = web3Provider.ethHost;
     this.provider = provider;
+    this.web3 = web3Provider;
   }
   
   connect(privateKey) {
@@ -41,6 +42,33 @@ class PixelWallet {
     console.error('[PixelWallet][encrypt] Wallet is not connected');
   }
   
+  listeners = {
+    connect: [],
+    accountsChanged: [],
+    chainChanged: [],
+    disconnect: [],
+    message: [],
+  };
+  
+  emit = (eventName, params) => {
+    console.log('[PixelWaller][emit]', eventName, params, this.listeners[eventName]);
+    this.listeners[eventName].map(callback => {
+      callback(params);
+    })
+  }
+  
+  on = (eventType, callback) => {
+    const listeners = this.listeners[eventType];
+    if (!listeners.find(l => l === callback)) {
+      listeners.push(callback);
+    }
+  }
+  
+  removeListener = (eventType, callback) => {
+    this.listeners[eventType] = this.listeners[eventType]
+      .filter(l => l !== callback);
+  }
+  
   request = async ({method, params = []}) => {
     try {
       switch (method) {
@@ -50,9 +78,16 @@ class PixelWallet {
           const common = Common.custom({chainId: this.networkVersion});
           const tx = new Transaction(params[0],{common});
           const signed = await this.signTransaction(tx);
-          return await this.eth.sendSignedTransaction(signed.rawTransaction)
+          return await this.web3.ethHost.sendSignedTransaction(signed.rawTransaction)
         case 'personal_sign':
           return this.sign(params[0]).signature;
+        case 'wallet_switchEthereumChain':
+          this.chainId = params[0].chainId;
+          this.networkVersion = Number(params[0].chainId);
+          this.eth = this.web3.ethHost;
+          this.emit('chainChanged', params[0].chainId);
+          return true;
+        case 'wallet_addEthereumChain':
         default:
           return null;
       }
@@ -60,10 +95,6 @@ class PixelWallet {
       console.error('[PixelWallet][request]', method, error);
       throw error;
     }
-  }
-  
-  on(event, callback) {
-  
   }
   
 }

@@ -39,6 +39,7 @@ import wei from "utils/wei";
 import significant from "utils/significant";
 import {api} from "utils/async/api";
 import includes from "lodash/includes";
+import axios from "axios";
 
 const AWAITING_DELAY = 2000;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -1129,7 +1130,8 @@ export async function transaction(contract, method, params, value = 0) {
       params: [rawTransaction],
     });
   } catch (error) {
-    const revert = get(error, 'innerError.message', '').split('execution reverted: ')[1];
+    const revert = get(error, 'data.message', get(error, 'innerError.message', ''))
+        .split('execution reverted: ')[1];
     if (revert) {
       error.message = revert;
     }

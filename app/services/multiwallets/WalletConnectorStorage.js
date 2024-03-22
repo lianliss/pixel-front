@@ -1,5 +1,5 @@
 class WalletConnectorStorage {
-  storageName = 'walletConenctor';
+  storageName = 'walletConnector';
 
   constructor(provider) {
     this.connector = window.localStorage.getItem(this.storageName);

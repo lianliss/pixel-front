@@ -178,6 +178,13 @@ const routes = {
     lib: 'Dashboard',
     disabled: true,
   },
+  preseed: {
+    path: '/preseed/',
+    title: 'Invest',
+    icon: 'clean',
+    lib: 'Preseed',
+    disabled: false,
+  },
 };
 
 export default routes;
