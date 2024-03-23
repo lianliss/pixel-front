@@ -87,7 +87,7 @@ const POLYGON_BASE_TOKENS = [
     '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
     137,
     6,
-    'https://polygonscan.com/token/images/tether_32.png'
+    'https://seeklogo.com/images/T/tether-usdt-logo-FA55C7F397-seeklogo.com.png'
   ),
   new Token(
     'Wrapped Ether',

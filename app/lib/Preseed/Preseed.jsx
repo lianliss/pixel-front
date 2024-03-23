@@ -9,6 +9,7 @@ import {TelegramContext} from "services/telegramProvider";
 import {wei} from "utils";
 import getFinePrice from "utils/getFinePrice";
 import {IS_TELEGRAM} from "const";
+import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
 
 function Preseed() {
 
@@ -121,13 +122,9 @@ function Preseed() {
     if (IS_TELEGRAM) {
       setMainButton({
         onClick: onTelegramInvest,
+        isDisabled: !getIsValid(amount),
+        isPrimary: true,
       })
-      const isValid = getIsValid(amount);
-      if (isValid) {
-        mainButtonEnable();
-      } else {
-        mainButtonDisable();
-      }
     }
   }
 
@@ -239,7 +236,14 @@ function Preseed() {
             </div>
           </div>
         </div>
-
+        <div className={styles.preseedUserDeposit}>
+          <small>
+            You have invested
+          </small>
+          <span>
+            ${getFinePrice(deposit)}
+          </span>
+        </div>
         <WalletBlock title={'Your name'}>
           <Input type={'text'}
                  onTextChange={setName}
@@ -253,7 +257,7 @@ function Preseed() {
                  value={contact}
           />
         </WalletBlock>
-          <WalletBlock title={renderDepositTitle()}>
+        <WalletBlock title={renderDepositTitle()}>
           <Input type={'number'}
                  onTextChange={onChangeAmount}
                  positive
@@ -281,6 +285,9 @@ function Preseed() {
         Connect wallet
       </Button>
     } else {
+      if (chainId !== 137) {
+        return <></>;
+      }
       return <div className={styles.preseedButtons}>
         <Button
             large
@@ -306,17 +313,20 @@ function Preseed() {
     }
   }
 
-  return <div className={styles.preseed}>
-    <h1>
-      Early investors
-    </h1>
-    <p>
-      For early investors we offer to participate in the PRE-SEED round for which 2% of the maximum supply of our <a href={'https://docs.hellopixel.network/tokenomics/tokenomics'} target={"_blank"}>tokenomics</a> is allocated at the price of $0.01 per token.
-      <br/>
-      <a href={'https://docs.hellopixel.network/tokenomics/early-investors'} target={'_blank'}>Read more...</a>
-    </p>
-    {renderForm()}
-    {renderButtons()}
+  return <div className={styles.preseedWrap}>
+    {(chainId === 137 && usdt && IS_TELEGRAM) && <TokenHeader gas showBalance token={usdt} />}
+    <div className={styles.preseed}>
+      <h1>
+        Early investors
+      </h1>
+      <p>
+        For early investors we offer to participate in the PRE-SEED round for which 2% of the maximum supply of our <a href={'https://docs.hellopixel.network/tokenomics/tokenomics'} target={"_blank"}>tokenomics</a> is allocated at the price of $0.01 per token.
+        <br/>
+        <a href={'https://docs.hellopixel.network/tokenomics/early-investors'} target={'_blank'}>Read more...</a>
+      </p>
+      {renderForm()}
+      {renderButtons()}
+    </div>
   </div>
 }
 

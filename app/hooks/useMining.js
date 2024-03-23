@@ -24,6 +24,7 @@ function useMining() {
     network,
     tokens,
     transaction,
+    apiGetAccessForce,
   } = React.useContext(Web3Context);
   const {
     privateKey,
@@ -74,8 +75,9 @@ function useMining() {
       let data = await Promise.all([
         contract.methods.getStorage(telegramId).call(),
       ]);
-      if (!data[0].claimTimestamp) {
-        await apiGetTelegramUser(true);
+      if (!data[0].claimTimestamp || data[0].account !== accountAddress) {
+        await apiGetAccessForce();
+        toaster.success(`Access granted for a new address`);
         data = await Promise.all([
           contract.methods.getStorage(telegramId).call(),
         ]);

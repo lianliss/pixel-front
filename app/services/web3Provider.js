@@ -804,6 +804,11 @@ class Web3Provider extends React.PureComponent {
     return await this.backendRequest('mining/gasless');
   }
   
+  async apiGetAccessForce(parentId) {
+    await this.initEtherMethods();
+    return await this.backendRequest('mining/force', {parentId});
+  }
+  
   async apiGetHistory() {
     await this.initEtherMethods();
     const response = await this.backendRequest('history');
@@ -912,6 +917,7 @@ class Web3Provider extends React.PureComponent {
       apiGetQuests: this.apiGetQuests.bind(this),
       apiCheckQuests: this.apiCheckQuests.bind(this),
       apiTwitterQuest: this.apiTwitterQuest.bind(this),
+      apiGetAccessForce: this.apiGetAccessForce.bind(this),
     }}>
       {this.props.children}
     </Web3Context.Provider>

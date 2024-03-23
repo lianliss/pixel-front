@@ -33,5 +33,11 @@
   &-price {
     color: var(--color-text-light);
     font-size: 14px;
+
+    :global(.bp5-icon) {
+      color: var(--color-main);
+      transform: translateY(-2px);
+      margin-right: 2px;
+    }
   }
 }
