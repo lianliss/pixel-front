@@ -69,12 +69,12 @@ function Preseed() {
   }
   const isValid = getIsValid(amount);
 
-  const onApprove = async () => {
+  const onApprove = async (_val = amount) => {
     try {
       setIsApproving(true);
       const token = getTokenContract(usdt);
       console.log('token', token);
-      const approved = await token.approve(network.contractAddresses.preseed, amount);
+      const approved = await token.approve(network.contractAddresses.preseed, _val);
       setApproved(approved);
       toaster.success(`$${getFinePrice(approved)} approved for operation`);
       setIsApproving(false);
@@ -87,16 +87,17 @@ function Preseed() {
     }
   }
 
-  const onInvest = async () => {
+  const onInvest = async (_val = amount) => {
     try {
       setIsInvesting(true);
       const contract = await getContract(ABI, network.contractAddresses.preseed);
+      console.log('[onInvest]', _val, wei.to(_val, usdt.decimals));
       const tx = await transaction(contract, 'invest', [
-        wei.to(amount, usdt.decimals),
+        wei.to(_val, usdt.decimals),
         name,
         contact,
       ])
-      toaster.success(`$${getFinePrice(amount)} sent to contract`);
+      toaster.success(`$${getFinePrice(_val)} sent to contract`);
       setIsInvesting(false);
       return tx;
     } catch (error) {
@@ -107,12 +108,12 @@ function Preseed() {
     }
   }
 
-  const onTelegramInvest = async () => {
+  const onTelegramInvest = async (_val) => {
     haptic.heavy();
     mainButtonLoading();
     mainButtonDisable();
-    await onApprove();
-    await onInvest();
+    await onApprove(_val);
+    await onInvest(_val);
     mainButtonStop();
     setAmount(0);
   }
@@ -121,7 +122,7 @@ function Preseed() {
     setAmount(amount);
     if (IS_TELEGRAM) {
       setMainButton({
-        onClick: onTelegramInvest,
+        onClick: () => onTelegramInvest(amount),
         isDisabled: !getIsValid(amount),
         isPrimary: true,
       })
