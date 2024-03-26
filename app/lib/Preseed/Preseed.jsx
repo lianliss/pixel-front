@@ -10,6 +10,7 @@ import {wei} from "utils";
 import getFinePrice from "utils/getFinePrice";
 import {IS_TELEGRAM} from "const";
 import TokenHeader from "lib/Wallet/components/TokenHeader/TokenHeader";
+import {loadAccountBalances} from "services/web3Provider/methods";
 
 function Preseed() {
 
@@ -23,6 +24,7 @@ function Preseed() {
     tokens,
     getTokenContract,
     transaction,
+    loadAccountBalances,
   } = React.useContext(Web3Context);
   const {
     connectToWalletModal,
@@ -170,6 +172,7 @@ function Preseed() {
       if (IS_TELEGRAM) {
         switchToChain(137);
         toaster.warning('Network changed to Polygon');
+        loadAccountBalances();
       }
       return;
     }
@@ -181,6 +184,7 @@ function Preseed() {
       if (IS_TELEGRAM) {
         switchToChain(19);
         toaster.warning('Network changed to Songbird');
+        loadAccountBalances();
         hideMainButton();
       }
     }
@@ -216,7 +220,13 @@ function Preseed() {
           <br/>only in Polygon network
         </p>
         <Button icon={'link'}
-                onClick={() => switchToChain(137)}
+                onClick={async () => {
+                  try {
+                    await switchToChain(137);
+                    loadAccountBalances();
+                  } catch (error) {
+                  }
+                }}
                 large>
           Switch to Polygon
         </Button>

@@ -37,6 +37,8 @@ function Mining() {
     onClaim,
     gasless,
     isFull,
+    useGasless,
+    toggleUseGasless,
   } = mining;
   const {
     haptic,
@@ -63,7 +65,7 @@ function Mining() {
   const rewardPerHour = rewardPerSecond * 3600;
   const gas = wei.from(get(gasToken, 'balance', 0));
   
-  const isDisabled = !isFull && gasless;
+  const isDisabled = !isFull && gasless && useGasless;
 
   return <div className={styles.mining}>
     <div className={styles.miningHeader}>
@@ -77,14 +79,22 @@ function Mining() {
         <span className={styles.miningHeaderMinedStorage}>
           {getFinePrice(rewardPerHour)} PXLs / hour
         </span>
-        {!!gasless
-          ? <span className={styles.miningHeaderMinedGasless}>
+        {gasless && useGasless
+          ? <span className={styles.miningHeaderMinedGasless}
+                  onClick={toggleUseGasless}>
                 <Icon icon={'flame'} />
                 <span>{gasless} gas free claims</span>
+                <span>
+                  <Icon icon={'swap-vertical'} />
+                </span>
               </span>
-          : <span className={!gas ? styles.miningHeaderMinedEmpty : styles.miningHeaderMinedGas}>
+          : <span className={!gas ? styles.miningHeaderMinedEmpty : styles.miningHeaderMinedGas}
+                  onClick={toggleUseGasless}>
                 <Icon icon={'flame'} />
                 <span>{getFinePrice(gas)} SGB</span>
+                <span>
+                  <Icon icon={'swap-vertical'} />
+                </span>
               </span>}
       </div>
     </div>

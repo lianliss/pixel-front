@@ -28,9 +28,16 @@
       }
       &-gasless, &-gas, &-empty {
         margin-left: 12px;
+        cursor: pointer;
 
-        :global(.bp5-icon) {
+        & > :global(.bp5-icon) {
           margin-right: 4px;
+        }
+        & > span {
+          & > :global(.bp5-icon) {
+            margin-left: 4px;
+            color: var(--color-text-light);
+          }
         }
       }
       &-gasless {

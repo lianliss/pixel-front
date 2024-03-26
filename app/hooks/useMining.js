@@ -49,6 +49,7 @@ function useMining() {
   const [isClaiming, setIsClaiming] = React.useState(true);
   const [sizeLevel, setSizeLevel] = React.useState(0);
   const [speedLevel, setSpeedLevel] = React.useState(0);
+  const [useGasless, setUseGasless] = React.useState(window.localStorage.getItem('use-gasless') === 'true');
   const gasless = useSelector(gaslessSelector);
   
   React.useEffect(() => {
@@ -68,6 +69,18 @@ function useMining() {
     setMined(_mined + seconds * _reward);
     setTimestamp(Date.now());
   }
+  
+  const toggleUseGasless = () => {
+    const newValue = !useGasless;
+    window.localStorage.setItem('use-gasless', newValue);
+    setUseGasless(newValue);
+  }
+  
+  React.useEffect(() => {
+    if (window.localStorage.getItem('use-gasless') === null) {
+      toggleUseGasless();
+    }
+  }, [])
   
   const loadMiningData = async () => {
     try {
@@ -116,7 +129,7 @@ function useMining() {
     haptic.click();
     try {
       let tx;
-      if (gasless) {
+      if (gasless && useGasless) {
         tx = await apiClaim();
         dispatch(appSetGasless(tx.gasless));
       } else {
@@ -163,6 +176,8 @@ function useMining() {
     minedPercents,
     onClaim,
     gasless,
+    useGasless,
+    toggleUseGasless,
     isFull,
     sizeLevel,
     speedLevel,
