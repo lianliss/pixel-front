@@ -89,7 +89,7 @@ function Airdrop() {
             Participate in Airdrop
           </Button>
           <small>
-            Will be active in 7 days
+            {/*Will be active in 7 days*/}
           </small>
         </>
         : <Button
