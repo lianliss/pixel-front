@@ -73,9 +73,9 @@ function Header({isMenuOpen, setIsMenuOpen}) {
     <div className={"header-right"}>
       <BluePrintButton icon={<Icon icon="search" size={20} />} className={"header-round"} minimal />
       {!adaptive && <BluePrintButton icon={<Icon icon="layout-grid" size={20} />} className={"header-round"} minimal />}
-      {!adaptive && <Button icon={<img src={pixelLogo} />} minimal >
-        $0.04
-      </Button>}
+      {/*{!adaptive && <Button icon={<img src={pixelLogo} />} minimal >*/}
+      {/*  $0.04*/}
+      {/*</Button>}*/}
       <Button icon={"box"}
               minimal
               onClick={() => navigate(routes.airdrop.path)} >
